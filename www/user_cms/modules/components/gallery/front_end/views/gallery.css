@@ -1,0 +1,18 @@
+#gallery-box {
+	
+}
+#gallery-box.categories > div {
+	margin-bottom: 15px;
+	overflow: hidden;
+}
+#gallery-box.categories > div img {
+	float: left;
+	margin: 0 10px 10px 0;
+}
+#gallery-box.categories > div h2 {
+	margin: 0 0 10px;
+}
+#gallery-box .category-items > div {
+	float: left; 
+	margin: 5px;
+}

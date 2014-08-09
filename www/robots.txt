@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /modules/
+Disallow: /tmp/
+Disallow: /user_cms/
+
+#Host: domain.com
+#Sitemap: /sitemap.xml

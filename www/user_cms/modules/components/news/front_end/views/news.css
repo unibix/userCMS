@@ -1,0 +1,10 @@
+#news-box > div {
+	margin-bottom: 15px;
+}
+#news-box > div > h2{
+	margin: 0 0 8px;
+}
+#news-box .date {
+	text-align: right;
+	color: #999999;
+}

@@ -1,0 +1,11 @@
+/*------ Content ------*/
+#content h1, #content h2, #content h3, #content h4, #content h5, #content h6 {margin-bottom: 5px;}
+#content {text-align: justify;}
+#content ul {list-style: disc inside;} 
+#content ol {list-style: decimal inside;}
+#content p {padding-bottom: 5px;}
+#content a {text-decoration: underline;}
+#content a:hover {text-decoration: none;}
+#content img {margin: 5px;}
+#content table {border: 1px solid black; border-collapse: collapse; margin-bottom: 10px;}
+#content table tr td, #content table tr th {padding: 5px;}
