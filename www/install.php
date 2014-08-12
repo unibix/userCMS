@@ -1,6 +1,6 @@
 <?php
 
-// installator v 1.2
+// installator v 1.3
 
 /*
 	порядок
@@ -32,7 +32,7 @@ if (PHP_VERSION_ID < 50200) {
 $need_modules = array('SimpleXML', 'sqlite3', 'PDO', 'curl', 'pdo_sqlite', 'zip' ,'gd' ,'mbstring'  );
 foreach ($need_modules as $value) {
 	if (!in_array( $value, $php_modules)) {
-	    $errors[] = 'Не установлено расширение php ' . $value . '';
+	    $errors[] = 'Не установлено расширение php ' . $value . ' <a href="http://usercms.ru/documentation/admininstrator/nastroyka-servera-pered-ustanovkoy" target="_blank">Статья в документации</a>, <a href="#">топик на форуме</a>';
 	} 
 }
 
