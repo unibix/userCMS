@@ -15,7 +15,7 @@ class controller_component_core_news extends component {
 		$component_info = $this->model->get_component_info($this->component_name);
 		
 		$params = array(
-			'sort' => 'i.date_edit DESC',
+			'sort' => 'max(i.date_add, i.date_edit) DESC',
 			'join' => 'category_url',
 			'limit' => $this->component_config['main_page_count']
 		);
