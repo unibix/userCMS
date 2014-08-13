@@ -132,7 +132,7 @@ class module {
 		}
 	}
 	
-	public function set_global_data($key, $value) {
+	public static function set_global_data($key, $value) {
 		self::$_global_data[$key] = $value;
 	}
 }
