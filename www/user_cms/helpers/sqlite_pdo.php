@@ -1,4 +1,4 @@
-<?
+<?php
 class DB extends PDO
 {
     public $error = false; // выводить сообщения об ошибках на экран? (true/false)
