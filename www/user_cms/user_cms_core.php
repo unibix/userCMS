@@ -518,24 +518,9 @@ function __autoload($class_name) {
 	$module_type_dir = '/components';
 	$module_name_dir = '/pages';
 	$end_name        = '';
-	if($class_name == 'component') {
-		require_once(ROOT_DIR . '/user_cms/modules/component.php');
-	}
-    elseif($class_name == 'model') {
-		require_once(ROOT_DIR . '/user_cms/modules/model.php');
-	}
-    elseif($class_name == 'addon') {
-		require_once(ROOT_DIR . '/user_cms/modules/addon.php');
-	}
-    elseif($class_name == 'block') {
-		require_once(ROOT_DIR . '/user_cms/modules/block.php');
-	}
-    elseif($class_name == 'plugin') {
-		require_once(ROOT_DIR . '/user_cms/modules/plugin.php');
-	}
-    elseif($class_name == 'module') {
-		require_once(ROOT_DIR . '/user_cms/modules/module.php');
-	}
+    if (in_array($class_name, array('component', 'model', 'addon', 'block', 'plugin', 'module'))) {
+        require_once(ROOT_DIR . '/user_cms/modules/' . $class_name . '.php');
+    }
     elseif(strpos($class_name, 'controller_') === 0 OR strpos($class_name, 'model_') === 0) {
     	$file_name =  str_replace( array('controller_','model_'), '', $class_name);
         
