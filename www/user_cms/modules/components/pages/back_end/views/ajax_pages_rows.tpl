@@ -18,7 +18,7 @@
 					<a href="<?php echo SITE_URL;?>/admin/pages/delete/<?php echo $page['id'] ?>" >Удалить</a>
 				</td>
 			</tr>
-		<? } ?>
+		<?php } ?>
 		</table>
 		</div>
 	</td>
