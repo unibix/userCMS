@@ -133,7 +133,7 @@ function update_htaccess() {
             $dir = str_replace($_SERVER['HTTP_HOST'], '', rtrim($_POST['site_url'], '/'));
             //echo $dir;
             $t = file_get_contents('.htaccess');
-            $t = str_replace('# RewriteBase /dir/', 'RewriteBase ' . $dir .'/', $t, $count);
+            $t = str_replace('# RewriteBase /test', 'RewriteBase ' . $dir .'/', $t, $count);
             $fp = fopen('.htaccess',"w");
             fwrite($fp, $t);
             fclose($fp);
