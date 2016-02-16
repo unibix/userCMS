@@ -105,7 +105,7 @@ class controller_component_core_gallery extends component {
 			} else {
 				$this->data['dir'] = $this->str2url($this->data['name']);
 			}
-			if(is_dir(ROOT_DIR . '/uploads/images/gallery/' . $this->data['dir'])){
+			if(is_dir(ROOT_DIR . '/uploads/modules/gallery/' . $this->data['dir'])){
 				$this->data['errors'][] = 'Папка с таким названием уже существует';
 			}
 		} else {
@@ -116,7 +116,7 @@ class controller_component_core_gallery extends component {
 		
 		if(isset($_POST['submit_gallery']) && !$this->data['errors']){
 		
-			$upload_dir = ROOT_DIR . '/uploads/images/gallery/' . $this->data['dir'];
+			$upload_dir = ROOT_DIR . '/uploads/modules/gallery/' . $this->data['dir'];
 			
 			mkdir($upload_dir);
 			mkdir($upload_dir . '/mini');
@@ -219,7 +219,7 @@ class controller_component_core_gallery extends component {
 		
 		if(isset($_POST['submit_gallery']) && !$this->data['errors']){
 
-			$upload_dir = ROOT_DIR . '/uploads/images/gallery/' . $this->data['dir'];
+			$upload_dir = ROOT_DIR . '/uploads/modules/gallery/' . $this->data['dir'];
 			
 			if (isset($_POST['image'])) {
 				$this->model->delete_image($this->data['image'], $this->data['dir']);
@@ -262,8 +262,8 @@ class controller_component_core_gallery extends component {
 	
 		$this->load_helper('image');
 		$category = $this->model->get_category($this->url['actions'][1]);
-		$category['path'] = SITE_URL . '/uploads/images/gallery/' . $category['dir'];
-		$upload_dir = ROOT_DIR . '/uploads/images/gallery/' . $category['dir'];
+		$category['path'] = SITE_URL . '/uploads/modules/gallery/' . $category['dir'];
+		$upload_dir = ROOT_DIR . '/uploads/modules/gallery/' . $category['dir'];
 		
 		if(isset($_POST['submit']) || isset($_POST['submit_exit'])) {
 			$data = array();
@@ -312,7 +312,7 @@ class controller_component_core_gallery extends component {
 							$data['image'] = $next_tmp_name;
 							
 							if (isset($_POST['stamp'])) { //Здесь ставится водяной знак
-								$this->helper_image->stamp(ROOT_DIR . '/uploads/images/gallery/' . $category['dir'], $data['image']);
+								$this->helper_image->stamp(ROOT_DIR . '/uploads/modules/gallery/' . $category['dir'], $data['image']);
 							}
 							
 							$this->model->add_item($data);
@@ -327,7 +327,7 @@ class controller_component_core_gallery extends component {
 					$data['image'] = $this->helper_image->img_upload('image', $this->component_config['item_full_width'], $upload_dir . '/', $mini_width, $mini_height, $this->component_config['item_full_height']);
 				
 					if (isset($_POST['stamp'])) { //Здесь ставится водяной знак
-						$this->helper_image->stamp(ROOT_DIR . '/uploads/images/gallery/' . $category['dir'], $data['image']);
+						$this->helper_image->stamp(ROOT_DIR . '/uploads/modules/gallery/' . $category['dir'], $data['image']);
 					}
 					
 					$this->model->add_item($data);

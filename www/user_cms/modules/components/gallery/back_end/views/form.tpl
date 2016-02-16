@@ -37,7 +37,7 @@
       
       <div class="image-box">  
         <?php if($image) { ?>
-        <img width="120" src="<?php echo SITE_URL . '/uploads/images/gallery/' . $dir . '/mini/' . $image; ?>">
+        <img width="120" src="<?php echo SITE_URL . '/uploads/modules/gallery/' . $dir . '/mini/' . $image; ?>">
         <style type="text/css">
 .image-box {overflow: hidden;}
 .image-box img {
