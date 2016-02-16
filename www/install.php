@@ -32,7 +32,7 @@ if (PHP_VERSION_ID < 50200) {
 $need_modules = array('SimpleXML', 'sqlite3', 'PDO', 'curl', 'pdo_sqlite', 'zip' ,'gd' ,'mbstring'  );
 foreach ($need_modules as $value) {
 	if (!in_array( $value, $php_modules)) {
-	    $errors[] = 'Не установлено расширение php ' . $value . ' <a href="http://usercms.ru/documentation/admininstrator/nastroyka-servera-pered-ustanovkoy" target="_blank">Статья в документации</a>, <a href="#">топик на форуме</a>';
+	    $errors[] = 'Не установлено расширение php ' . $value . ' <a href="http://usercms.ru/documentation/admininstrator/nastroyka-servera-pered-ustanovkoy" target="_blank">Статья в документации</a>, <a href="http://usercms.ru/forum">топик на форуме</a>';
 	} 
 }
 
@@ -133,7 +133,7 @@ function update_htaccess() {
             $dir = str_replace($_SERVER['HTTP_HOST'], '', rtrim($_POST['site_url'], '/'));
             //echo $dir;
             $t = file_get_contents('.htaccess');
-            $t = str_replace('# RewriteBase /dir/', 'RewriteBase ' . $dir .'/', $t, $count);
+            $t = str_replace('# RewriteBase /test', 'RewriteBase ' . $dir .'/', $t, $count);
             $fp = fopen('.htaccess',"w");
             fwrite($fp, $t);
             fclose($fp);
