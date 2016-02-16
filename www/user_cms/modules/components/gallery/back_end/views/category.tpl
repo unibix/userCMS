@@ -21,7 +21,8 @@
 		<input type="text" name="text">
 		<label for="page_name">Выберите файл загрузки</label>
 		<input type="file"  name="image">
-		<input type="submit" name="submit" value="Закачать"> 
+		<input type="checkbox" name="stamp" /><label for="image_stamp">Применить водяной знак</label><br>
+		<input type="submit" name="submit" value="Закачать">
 	</form>
   <?php if($items) { ?>
   <div style="overflow: hidden;">

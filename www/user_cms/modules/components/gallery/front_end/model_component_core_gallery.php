@@ -8,8 +8,8 @@ class model_component_core_gallery extends model {
 		return $this->dbh->row("SELECT * FROM main WHERE component = '" . $this->dbh->escape($component) . "' LIMIT 1");
 	}
 	
-	public function get_categories() {
-		$sql = "SELECT c.*, COUNT(i.id) AS count_items FROM gallery_categories c LEFT JOIN gallery_items i ON i.category_id = c.id GROUP BY c.id ORDER BY c.id DESC";
+	public function get_categories($sub=0) {
+		$sql = "SELECT c.*, COUNT(i.id) AS count_items FROM gallery_categories c LEFT JOIN gallery_items i ON i.category_id = c.id WHERE c.sub=".$sub." GROUP BY c.id ORDER BY c.id DESC";
 		return $this->dbh->query($sql);
 	}
 	

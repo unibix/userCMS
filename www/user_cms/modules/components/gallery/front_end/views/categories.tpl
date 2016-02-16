@@ -15,6 +15,7 @@
           <?php echo $category['preview']; ?>
         </div>
       </div>
+  	  <div style="clear:both; height:0px; width:0px; margin:0 0 10px 0; padding:0px; "></div>
       <?php } ?>
     <?php } ?>
   </div>
