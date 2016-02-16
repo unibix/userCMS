@@ -17,8 +17,8 @@ class controller_component_core_gallery extends component {
 		
 		if (!empty($categories)) foreach($categories as $key => $category) {
 			if($category['image']){
-				$categories[$key]['image'] = SITE_URL . '/uploads/images/gallery/' . $category['dir'] . '/mini/' . $category['image'];
-				$categories[$key]['full'] = SITE_URL . '/uploads/images/gallery/' . $category['dir'] . '/' . $category['image'];
+				$categories[$key]['image'] = SITE_URL . '/uploads/modules/gallery/' . $category['dir'] . '/mini/' . $category['image'];
+				$categories[$key]['full'] = SITE_URL . '/uploads/modules/gallery/' . $category['dir'] . '/' . $category['image'];
 			}
 			$categories[$key]['href'] = SITE_URL . '/' . $gallery_info['url'] . '/' . $category['url'];
 		}
@@ -68,8 +68,8 @@ class controller_component_core_gallery extends component {
 			$categories = $this->model->get_categories($category['id']);
 			if (!empty($categories)) foreach($categories as $key => $cat) {
 				if($cat['image']){
-					$categories[$key]['image'] = SITE_URL . '/uploads/images/gallery/' . $cat['dir'] . '/mini/' . $cat['image'];
-					$categories[$key]['full'] = SITE_URL . '/uploads/images/gallery/' . $cat['dir'] . '/' . $cat['image'];
+					$categories[$key]['image'] = SITE_URL . '/uploads/modules/gallery/' . $cat['dir'] . '/mini/' . $cat['image'];
+					$categories[$key]['full'] = SITE_URL . '/uploads/modules/gallery/' . $cat['dir'] . '/' . $cat['image'];
 				}
 				$categories[$key]['href'] = SITE_URL . '/' . $gallery_info['url'] . '/' . $cat['url'];
 			}
@@ -77,8 +77,8 @@ class controller_component_core_gallery extends component {
 			
 			$items = $this->model->get_items($category['id']);
 			if (!empty($items)) foreach($items as $key => $item) {
-				$items[$key]['image'] = SITE_URL . '/uploads/images/gallery/' . $category['dir'] . '/mini/' . $item['image'];
-				$items[$key]['full'] = SITE_URL . '/uploads/images/gallery/' . $category['dir'] . '/' . $item['image'];
+				$items[$key]['image'] = SITE_URL . '/uploads/modules/gallery/' . $category['dir'] . '/mini/' . $item['image'];
+				$items[$key]['full'] = SITE_URL . '/uploads/modules/gallery/' . $category['dir'] . '/' . $item['image'];
 			}
 			
 			$this->data['items'] = $items;

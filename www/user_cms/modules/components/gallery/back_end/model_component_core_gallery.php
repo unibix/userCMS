@@ -146,12 +146,12 @@ class model_component_core_gallery extends model {
 			$category_dir = $result['dir'];
 		}
 		$count_deleted = 0;
-		if(file_exists(ROOT_DIR . '/uploads/images/gallery/' . $category_dir . '/' . $image)) {
-			@unlink(ROOT_DIR . '/uploads/images/gallery/' . $category_dir . '/' . $image);
+		if(file_exists(ROOT_DIR . '/uploads/modules/gallery/' . $category_dir . '/' . $image)) {
+			@unlink(ROOT_DIR . '/uploads/modules/gallery/' . $category_dir . '/' . $image);
 			$count_deleted++;
 		}
-		if(file_exists(ROOT_DIR . '/uploads/images/gallery/' . $category_dir . '/mini/' . $image)) {
-			@unlink(ROOT_DIR . '/uploads/images/gallery/' . $category_dir . '/mini/' . $image);
+		if(file_exists(ROOT_DIR . '/uploads/modules/gallery/' . $category_dir . '/mini/' . $image)) {
+			@unlink(ROOT_DIR . '/uploads/modules/gallery/' . $category_dir . '/mini/' . $image);
 			$count_deleted++;
 		}
 		return $count_deleted;
@@ -169,7 +169,7 @@ class model_component_core_gallery extends model {
 		foreach($results as $result) {
 			$this->delete_item($result['id']);
 		}
-		@rmdir(ROOT_DIR . '/uploads/images/gallery/' . $category_info['dir']);
+		@rmdir(ROOT_DIR . '/uploads/modules/gallery/' . $category_info['dir']);
 		return $this->dbh->query("DELETE FROM gallery_categories WHERE id = '" . (int)$id . "'");
 	}
 	
