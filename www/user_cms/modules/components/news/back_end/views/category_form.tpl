@@ -35,6 +35,13 @@
 			<div id="tab_main" style="display: block;">
 				<label for="page_name">Название категории:</label>
 				<input type="text"  name="name" value="<?php echo $name; ?>">
+				<label for="page_category">Род. категория:</label>
+				<select name="parent_category">
+					<option value="0">Новости</option>
+					<?php if (!empty ($parent_categories)) foreach ($parent_categories as $parent_categorie) { ?>
+						<option value="<?php echo $parent_categorie['id']; ?>" <?php if ($sub==$parent_categorie['id']) { ?>selected<?php } ?>><?php echo $parent_categorie['name']; ?></option>
+					<?php } ?>
+				</select>
 				<label for="page_text">Краткое описание (можно оставить пустым):</label>
 				<textarea name="preview" ><?php echo $preview; ?></textarea>
 				<label for="page_text">Текст:</label>

@@ -360,6 +360,14 @@ class controller_component_core_news extends component {
 			$this->data['date_add'] = date('d.m.Y H:i');
 		}
 		
+		if (isset($_POST['parent_category'])){
+			$this->data['parent_category'] = (int)$_POST['parent_category'];
+			$this->data['sub'] = (int)$_POST['parent_category'];
+		} else {
+			$this->data['parent_category'] = 0;
+			$this->data['sub'] = 0;
+		}
+		
 		$this->data['date_edit'] = '';
 		
 		if(isset($_POST['submit_category']) && !$this->data['errors']) {
@@ -368,6 +376,7 @@ class controller_component_core_news extends component {
 			}
 		}
 		
+		$this->data['parent_categories'] = $this->model->dbh->query("SELECT * FROM news_categories WHERE 1");
 		$this->data['page_name'] = $this->page['title'] = 'Добавление категории';
 		$this->data['text_submit'] = 'Добавить';
 		
@@ -397,6 +406,12 @@ class controller_component_core_news extends component {
 			}
 			$this->data['name'] = $_POST['name'];
 		}
+		
+		if (isset($_POST['parent_category'])){
+			$this->data['parent_category'] = (int)$_POST['parent_category'];
+		} else {
+			$this->data['parent_category'] = 0;
+		}		
 		
 		if(isset($_POST['text'])){
 			$this->data['text'] = $_POST['text'];
@@ -458,6 +473,8 @@ class controller_component_core_news extends component {
 			}
 		}
 		
+		$this->data['parent_categories'] = $this->model->dbh->query("SELECT * FROM news_categories WHERE 1");
+
 		$this->data['page_name'] = $this->page['title'] = 'Редактирование категории "' . $this->data['name'] . '"';
 		$this->data['text_submit'] = 'Сохранить изменения';
 		

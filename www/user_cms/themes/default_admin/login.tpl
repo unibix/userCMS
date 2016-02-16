@@ -6,6 +6,7 @@
 <body>
 <div id="wrapper">
 <div id="wrapper_login">
+<div style="height:100px;"></div>
     [component]
     <!--
     <div id="content"> 
