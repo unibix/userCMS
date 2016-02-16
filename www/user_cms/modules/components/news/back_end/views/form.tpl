@@ -22,6 +22,8 @@
 		<?php } ?>
 	</div>
 	<?php } ?>
+	<?php if ($categories) { ?>
+	
 	<div id="add_tabs" class="tabs">
 		<ul>
 			<li><a class="tab_main active">Основное</a></li>
@@ -67,4 +69,10 @@
 			<p class="buttons"><input type="submit" name="submit_news" value="<?php echo $text_submit; ?>"></p>
 		</div>
 	</form>
+	<?php }  else { ?>
+	<div class="notice error">
+		<p>Необходимо сначала добавить категорию новостей...</p>
+	</div>	
+	<?php } ?>
+	
 </div>
