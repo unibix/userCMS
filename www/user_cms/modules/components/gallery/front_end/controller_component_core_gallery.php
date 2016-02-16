@@ -15,7 +15,7 @@ class controller_component_core_gallery extends component {
 		$not_found = false;
 		$categories = $this->model->get_categories();
 		
-		foreach($categories as $key => $category) {
+		if (!empty($categories)) foreach($categories as $key => $category) {
 			if($category['image']){
 				$categories[$key]['image'] = SITE_URL . '/uploads/images/gallery/' . $category['dir'] . '/mini/' . $category['image'];
 				$categories[$key]['full'] = SITE_URL . '/uploads/images/gallery/' . $category['dir'] . '/' . $category['image'];
@@ -60,9 +60,23 @@ class controller_component_core_gallery extends component {
 		if($category) {
 		
 			$this->data['category'] = $category;
+		//echo '<div style="position:absolute; top:10; left:10; z-index:1000; color:pink; font-size:30px;">'; 
+		//print_r($category); 
+		//echo '</div>';
+			
+			$gallery_info = $this->model->get_component_info('gallery');
+			$categories = $this->model->get_categories($category['id']);
+			if (!empty($categories)) foreach($categories as $key => $cat) {
+				if($cat['image']){
+					$categories[$key]['image'] = SITE_URL . '/uploads/images/gallery/' . $cat['dir'] . '/mini/' . $cat['image'];
+					$categories[$key]['full'] = SITE_URL . '/uploads/images/gallery/' . $cat['dir'] . '/' . $cat['image'];
+				}
+				$categories[$key]['href'] = SITE_URL . '/' . $gallery_info['url'] . '/' . $cat['url'];
+			}
+			$this->data['categories'] = $categories;
 			
 			$items = $this->model->get_items($category['id']);
-			foreach($items as $key => $item) {
+			if (!empty($items)) foreach($items as $key => $item) {
 				$items[$key]['image'] = SITE_URL . '/uploads/images/gallery/' . $category['dir'] . '/mini/' . $item['image'];
 				$items[$key]['full'] = SITE_URL . '/uploads/images/gallery/' . $category['dir'] . '/' . $item['image'];
 			}
@@ -79,7 +93,7 @@ class controller_component_core_gallery extends component {
 			$this->page['description'] = 'Страница не найдена';
 			$this->action_404();
 			$view = 'index';
-		} else {
+		} else {			
 			$this->page['title'] = $category['title'];
 			$this->page['keywords'] = $category['keywords'];
 			$this->page['description'] = $category['description'];
@@ -89,6 +103,8 @@ class controller_component_core_gallery extends component {
 		
 		$this->data['item_thumb_width'] = $this->component_config['item_thumb_width'];
 		$this->data['item_thumb_height'] = $this->component_config['item_thumb_height'];
+		$this->data['category_thumb_width'] = $this->component_config['category_thumb_width'];
+		$this->data['category_thumb_height'] = $this->component_config['category_thumb_height'];
 
 		$this->page['html'] = $this->load_view($view);
 		return $this->page;

@@ -17,4 +17,38 @@ class helper_zip {
 		}
 		return $zip;
 	}
+	
+	public function extract_zip_archive($zip_name_full, $zip_folder_full) { //полный путь файла zip, полный путь папки для распаковки
+		if (!is_dir($zip_folder_full)) mkdir($zip_folder_full);
+		$zip = new ZipArchive(); //Создаём объект для работы с ZIP-архивами
+		//Открываем архив archive.zip и делаем проверку успешности открытия
+		if ($zip->open($zip_name_full) === true) {
+			$zip->extractTo($zip_folder_full); //Извлекаем файлы в указанную директорию
+			$zip->close(); //Завершаем работу с архивом
+		}
+		//else echo "Архива не существует!"; //Выводим уведомление об ошибке	
+	}
+	
+	function deleteDirectory($dir) {
+		if (!file_exists($dir)) {
+			return true;
+		}
+
+		if (!is_dir($dir)) {
+			return unlink($dir);
+		}
+
+		foreach (scandir($dir) as $item) {
+			if ($item == '.' || $item == '..') {
+				continue;
+			}
+
+			if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) {
+				return false;
+			}
+
+		}
+
+		return rmdir($dir);
+	}	
 }

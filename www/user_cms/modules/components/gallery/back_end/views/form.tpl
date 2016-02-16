@@ -53,6 +53,14 @@
 				<input type="file"  name="image">
       </div>
       
+				<label for="page_text">Родительская категория:</label>
+				<select name="parent">
+					<option value="0">Галерея</option>
+					<?php if (!empty($parents)) foreach($parents as $prt) { ?>
+					<option value="<?php echo $prt['id']; ?>"<?php if ($prt['id']==$parent) { ?> selected<?php } ?>><?php echo $prt['name']; ?></option>
+					<?php } ?>
+				</select>
+				
 				<label for="page_text">Краткое описание (можно оставить пустым):</label>
 				<textarea name="preview" ><?php echo $preview; ?></textarea>
         

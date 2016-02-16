@@ -1,6 +1,42 @@
 <?php 
 
+//$mycs = array(1=>0);
+
 class model_component_core_gallery extends model {
+
+	public function req_cats($sub, $step){
+		//print_r($this->mycs);
+		$this->mycs[] = array('id'=>$sub, 'step'=>$step);
+		if (!empty($this->cats[$sub])) foreach ($this->cats[$sub] as $cat){
+			$this->req_cats($cat, $step+1);
+		}
+	}
+
+	public function sort_cats($categories){
+		$newcats = array();
+		if (!empty($categories)) { 
+			foreach ($categories as $category){
+				$tmp[$category['id']] = $category;
+			}
+			$categories = $tmp;
+			unset($tmp);
+			$cats = array();
+			foreach ($categories as $category){
+				$cats[$category['sub']][] = $category['id'];
+			}
+			$this->mycs = array();//$cats;
+			$this->cats = $cats;
+			$this->req_cats(0, -1);
+			unset($this->mycs[0]);
+			$i=0;
+			//print_r($this->mycs);
+			foreach ($this->mycs as $v) {$newcats[$i] = $categories[$v['id']]; $newcats[$i]['step'] = $v['step']; $i++;}
+			unset($this->mycs);
+			unset($this->cats);
+			//print_r ($newcats);
+		}
+		return ($newcats);
+	}
 
 	public function get_categories() {
 		$sql = "SELECT c.*, COUNT(i.id) AS count_items FROM gallery_categories c LEFT JOIN gallery_items i ON i.category_id = c.id GROUP BY c.id ORDER BY c.id DESC";
@@ -51,10 +87,15 @@ class model_component_core_gallery extends model {
 		";
 		return $this->dbh->exec($sql);
 	}
+
+	public function get_parents($category_id=0){
+		$sql = "SELECT * FROM gallery_categories WHERE id<>'".(int)$category_id."'";
+		return $this->dbh->query($sql);
+	}
 	
 	public function add_category($data) {
 		
-		$sql = "INSERT INTO gallery_categories (name, text, preview, image, url, title, keywords, description, dir) VALUES (
+		$sql = "INSERT INTO gallery_categories (name, text, preview, image, url, title, keywords, description, dir, sub) VALUES (
 					'" . $this->dbh->escape($data['name']) . "',
 					'" . $this->dbh->escape($data['text']) . "',
 					'" . $this->dbh->escape($data['preview']) . "',
@@ -63,7 +104,8 @@ class model_component_core_gallery extends model {
 					'" . $this->dbh->escape($data['title']) . "',
 					'" . $this->dbh->escape($data['keywords']) . "',
 					'" . $this->dbh->escape($data['description']) . "',
-					'" . $this->dbh->escape($data['dir']) . "'
+					'" . $this->dbh->escape($data['dir']) . "',
+					'" . $this->dbh->escape($data['parent']) . "'
 		)";
 		
 		$this->dbh->exec($sql);
@@ -84,7 +126,8 @@ class model_component_core_gallery extends model {
 					url = '" . $this->dbh->escape($data['url']) . "',
 					title = '" . $this->dbh->escape($data['title']) . "',
 					keywords = '" . $this->dbh->escape($data['keywords']) . "',
-					description = '" . $this->dbh->escape($data['description']) . "'
+					description = '" . $this->dbh->escape($data['description']) . "',
+					sub = '" . $this->dbh->escape($data['parent']) . "'
 				WHERE id = '" . (int)$data['id'] . "'";
 		
 		return $this->dbh->exec($sql);

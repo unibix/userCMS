@@ -28,7 +28,7 @@
     </tr>
     <?php foreach($categories as $category) { ?>
     <tr>
-      <td><?php echo $category['name']; ?></td>
+      <td><div style="margin-left:<?php echo $category['step']*10;?>px;"><?php echo $category['name']; ?></div></td>
       <td><?php echo $category['count_items']; ?></td>
       <td class="actions">
         <a href="<?php echo SITE_URL; ?>/admin/gallery/category/<?php echo $category['id']; ?>">Изображения</a>
