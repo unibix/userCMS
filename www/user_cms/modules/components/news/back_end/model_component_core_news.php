@@ -95,9 +95,10 @@ class model_component_core_news extends model {
 	}
 		
 	public function add_category($data) {
-		$sql = "INSERT INTO news_categories (name, text, preview, title, keywords, description, url, date_add, date_edit)
+		$sql = "INSERT INTO news_categories (name, text, sub, preview, title, keywords, description, url, date_add, date_edit)
 							VALUES ('" . $this->dbh->escape($data['name']) . "', 
 									'" . $this->dbh->escape($data['text']) . "', 
+									'" . $this->dbh->escape($data['parent_category']) . "', 
 									'" . $this->dbh->escape($data['preview']) . "', 
 									'" . $this->dbh->escape($data['title']) . "', 
 									'" . $this->dbh->escape($data['keywords']) . "', 
@@ -114,6 +115,7 @@ class model_component_core_news extends model {
 		$sql = "UPDATE news_categories SET 
 					name = '" . $this->dbh->escape($data['name']) . "',
 					text = '" . $this->dbh->escape($data['text']) . "',
+					sub = '" . $this->dbh->escape($data['parent_category']) . "',
 					preview = '" . $this->dbh->escape($data['preview']) . "',
 					title = '" . $this->dbh->escape($data['title']) . "',
 					keywords = '" . $this->dbh->escape($data['keywords']) . "',
@@ -127,7 +129,7 @@ class model_component_core_news extends model {
 		
 	public function delete_category($id) {
 		foreach($this->get_news($id, array('type'=>'by_category')) as $news_item) {
-			$this->delete_new_item($news_item['id']);
+			$this->delete_news_item($news_item['id']);
 		}
 		return $this->dbh->exec("DELETE FROM news_categories WHERE id = '" . (int)$id . "'");
 	}

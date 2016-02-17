@@ -12,4 +12,19 @@
       <?php } ?>
     <?php } ?>
   </div>
+
+  <div style="clear:both"></div>
+  <?php if ($count_pages > 1) { ?>
+  <div id="paginations">
+	<?php for($i=1; $i<=$count_pages; $i++){ ?>
+		<span class="pagination">
+			<?php if ($i==$this_page) { ?>
+				<?php echo $i; ?>
+			<?php } else { ?>
+				<a href="<?php echo SITE_URL . '/' . $full_category_url . '/page=' . $i;?>"><?php echo $i;?></a>
+			<?php } ?>
+		</span>
+	<?php } ?>
+  </div>
+  <?php } ?>
 </div>

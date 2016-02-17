@@ -14,12 +14,12 @@ class model_component_core_news extends model {
 			if($params['join'] == 'category_name') {
 				$sql .= "SELECT i.*, c.name AS cat_name FROM news_items i LEFT JOIN news_categories c ON c.id = i.category_id ";
 			} elseif ($params['join'] == 'category_url') {
-				$sql .= "SELECT i.*, c.url AS cat_url FROM news_items i LEFT JOIN news_categories c ON c.id = i.category_id ";
+				$sql .= "SELECT i.*, c.url AS cat_url FROM news_items i LEFT JOIN news_categories c ON c.id = i.category_id "; //
 			} else {
 				$sql .= "SELECT * FROM news_items i ";
 			}
 		} else {
-			$sql .= "SELECT * FROM news_items i ";
+			$sql .= "SELECT * FROM news_items i "; //cat
 		}
 		
 		if(isset($params['type'])) {
@@ -41,7 +41,7 @@ class model_component_core_news extends model {
 		if(isset($params['limit'])) {
 			$sql .= " LIMIT " . $params['limit'] . " ";
 		}
-		
+		//print_r($sql);
 		return $this->dbh->query($sql);
 	}
 	
@@ -53,7 +53,7 @@ class model_component_core_news extends model {
 		}
 		return array();
 	}
-	
+		
 	public function get_categories($data, $params = array()) {
 		
 		if(isset($params['join'])) {
@@ -93,6 +93,32 @@ class model_component_core_news extends model {
 			return $result[0];
 		}
 		return array();
+	}
+	
+	public function get_category_full_url($category_id){
+		$urls = array();
+		$names = array();
+		$cat_id = $category_id;
+		$doned = array();
+		while ($cat_id > 0) {
+			if (isset($doned[$cat_id])) {
+				return FALSE;
+			}
+			$doned[$cat_id] = 1;
+			
+			$next_category = $this->dbh->query("SELECT * FROM news_categories WHERE id=" . $cat_id . " LIMIT 1");
+			if ($next_category) $next_category = $next_category[0];
+			//$url = '/' . $next_category['url'] . $url; // $url = '/.../.../...';
+			$urls[] = $next_category['url']; // $url = '/.../.../...';
+			$names[] = $next_category['name'];
+			$cat_id = $next_category['sub'];
+			
+		}
+		return array('urls'=>$urls, 'names'=>$names);
+	}
+	
+	public function get_count_news($category_id){
+		return $this->dbh->query("SELECT COUNT(id) AS count_news FROM news_items WHERE category_id=" . $category_id);
 	}
 	
 }
