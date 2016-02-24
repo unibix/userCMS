@@ -1,6 +1,6 @@
-<div class="feedback">
+<div class="feedback"  id="plugin-feedback-<?php echo $plugin_id; ?>">
   <form action="#plugin-feedback-<?php echo $plugin_id; ?>" method="POST">
-    <a name="plugin-feedback-<?php echo $plugin_id; ?>"></a>
+  
   <?php if ($success) { ?>
   <div class="notice success"><?php echo $success; ?></div>
   <?php } else { ?>
