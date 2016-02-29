@@ -28,6 +28,7 @@ class controller_component_core_backup extends component {
 	}
 	
 	public function action_create_backup() {
+		unset($_SESSION['backup_name']);
 		if (isset($_POST['type'])) {
 			ini_set('max_execution_time', 300);
 			if  (!is_dir(ROOT_DIR . '/temp')) mkdir (ROOT_DIR . '/temp');
@@ -77,19 +78,14 @@ class controller_component_core_backup extends component {
 			unset($req_arr);
 
 			$_SESSION['number_backup_files'] = count($_SESSION['backup_files']);
-			
 			$zip = new ZipArchive();
 			$zip->open(ROOT_DIR . '/temp/backups/' . $zip_name . '.zip', ZIPARCHIVE::CREATE);
 			$zip->addFile(ROOT_DIR . '/install.php', 'install.php');
 			$zip->close();
 			
-			//$this->create_backup($zip_name, $exceptions);
-			
 			if (file_exists(ROOT_DIR . '/install.php')) {
 				@unlink(ROOT_DIR . '/install.php');
 			}
-			
-			//$this->redirect(SITE_URL . '/admin/backup');
 		}
 		
 		$this->page['title'] = 'Резервное копирование';
@@ -116,24 +112,24 @@ class controller_component_core_backup extends component {
 		$zip->open(ROOT_DIR . '/temp/backups/' . $_SESSION['backup_name'] . '.zip', ZIPARCHIVE::CREATE);
 		$path = $_SESSION['backup_files'][$_SESSION['last_backup_file']];
 		
-		if (!is_dir(ROOT_DIR . '/' . $path)) {
-			$zip->addFile(ROOT_DIR . '/' . $path, $path);
+		if (!is_dir(ROOT_DIR . $path)) {
+			$zip->addFile(ROOT_DIR . $path, trim($path, '/'));
 			$_SESSION['last_backup_file']++;
-			echo 1;
 			$zip->close();
+			echo 1;
 			exit;
 		} else {
-			$zip->addEmptyDir($path);
+			$zip->addEmptyDir(trim($path, '/'));
 			$_SESSION['last_backup_file']++;
-			echo 1;
 			$zip->close();
+			echo 1;
 			exit;
 		}
 		
 		echo 'ERROR';
 		$zip->close();
 	}	
-
+	
 	function arr_req_dir(&$arr, $dir, $step=0, $exceptions){ //получение массива путей всех Нужных файлов
 		$files = scandir($dir, $step);
 		foreach ($files as $file){ //обход директории
@@ -200,16 +196,7 @@ class controller_component_core_backup extends component {
 		$this->page['description'] = 'Резервное копирование';
 		$this->page['html'] = $this->load_view('backup_form');
 		return $this->page;
-	}
-
-	/*
-	public function action_nah(){
-		$zip = new ZipArchive();
-		$zip->open(ROOT_DIR . '/temp/backups/nah.zip', ZIPARCHIVE::CREATE);
-		$zip->addFile(ROOT_DIR . '/db.sqlite', 'db.sqlite');
-		$zip->close();
-	}
-	*/
+	}	
 	
 	protected function create_backup ($archive_name, $exceptions = array()) {
 		$this->load_helper('zip');

@@ -14,6 +14,8 @@
 	</div>
 	<div id="greenline" style="position:absolute; z-index:3; top:0px; left:0px; width:0px; height:20px; background:#1A9E1A;"></div>
   </div>
+  <div style="min-width:200px; height:20px; text-align:left; color:red;">*не закрывайте вкладку в браузере</div>
+
 <?php } ?>
 </div>
 <?php if (isset($_SESSION['backup_name'])) { ?>
@@ -28,11 +30,12 @@ function postXmlHttp(url, params){
 
 	http.onreadystatechange = function() {//Call a function when the state changes.
 		if(http.readyState == 4 && http.status == 200) {
+			console.log(http.responseText);
 			if (http.responseText==1) {
 				document.getElementById("innernumber").innerHTML = parseInt(document.getElementById("innernumber").innerHTML) + 1;
 				document.getElementById("greenline").style.width = (200 * parseInt(document.getElementById("innernumber").innerHTML) / parseInt(document.getElementById("outernumber").innerHTML))  + "px";
-				//console.log(parseInt(document.getElementById("innernumber").innerHTML));
-				//console.log(http.responseText);
+				console.log(parseInt(document.getElementById("innernumber").innerHTML));
+				console.log(http.responseText);
 				postXmlHttp(url, params);
 			} else if (http.responseText==0){
 				window.location = "<?php echo SITE_URL . '/admin/backup'; ?>";
