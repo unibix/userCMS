@@ -28,7 +28,6 @@ function postXmlHttp(url, params){
 
 	http.onreadystatechange = function() {//Call a function when the state changes.
 		if(http.readyState == 4 && http.status == 200) {
-			alert(http.responseText);
 			if (http.responseText==1) {
 				document.getElementById("innernumber").innerHTML = parseInt(document.getElementById("innernumber").innerHTML) + 1;
 				document.getElementById("greenline").style.width = (200 * parseInt(document.getElementById("innernumber").innerHTML) / parseInt(document.getElementById("outernumber").innerHTML))  + "px";
