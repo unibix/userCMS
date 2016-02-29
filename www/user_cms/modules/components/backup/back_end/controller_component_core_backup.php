@@ -28,7 +28,7 @@ class controller_component_core_backup extends component {
 	}
 	
 	public function action_create_backup() {
-		unset($_SESSION['backup_name']);
+		if (isset($_SESSION['backup_name'])) unset($_SESSION['backup_name']);
 		if (isset($_POST['type'])) {
 			ini_set('max_execution_time', 300);
 			if  (!is_dir(ROOT_DIR . '/temp')) mkdir (ROOT_DIR . '/temp');
