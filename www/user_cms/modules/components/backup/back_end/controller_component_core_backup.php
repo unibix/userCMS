@@ -28,6 +28,124 @@ class controller_component_core_backup extends component {
 	}
 	
 	public function action_create_backup() {
+		if (isset($_SESSION['backup_name'])) unset($_SESSION['backup_name']);
+		if (isset($_POST['type'])) {
+			ini_set('max_execution_time', 300);
+			if  (!is_dir(ROOT_DIR . '/temp')) mkdir (ROOT_DIR . '/temp');
+			if  (!is_dir(ROOT_DIR . '/temp/backups')) mkdir (ROOT_DIR . '/temp/backups');
+
+			$domain = parse_url(SITE_URL , PHP_URL_HOST);
+
+			if (preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i', $domain, $list)) {
+				$zip_name = $domain;
+			} else {
+				$zip_name = 'backup';
+			}
+			
+			$zip_name .= '_' . date('Y-m-d_H-i_');
+			
+			if ($_POST['type'] === 'full') {
+				$exceptions = array(
+					'temp'
+				);
+				$zip_name .= 'full';
+				
+			} else {
+				$exceptions = array(
+					'temp', 'uploads'
+				);
+				$zip_name .= 'no_uploads';
+			}
+			// Все это было получение имени бэкапа
+			
+			//В любом случае (есть он или нет) мы записываем install.php в корень, чтобы он был добавлен в бэкап. После создания бэкапа инсталл грохнем. 
+			foreach (scandir(ROOT_DIR . '/user_cms') as $path) {
+				if (strpos($path, 'install') === 0 && is_readable(ROOT_DIR . '/user_cms/' . $path)) {
+					$install_content = file_get_contents(ROOT_DIR . '/user_cms/' . $path);
+					file_put_contents(ROOT_DIR . '/install.php', $install_content);
+					break;
+				}
+			}
+			
+			$_SESSION['backup_name'] = $zip_name;
+			$_SESSION['last_backup_file'] = 0;
+			$_SESSION['exceptions'] = $exceptions;
+			
+			$req_arr = array();
+			$this->arr_req_dir($req_arr, ROOT_DIR, 0, $exceptions);
+			if (!empty($req_arr)) foreach ($req_arr as $k=>$rq) $req_arr[$k] = str_replace(ROOT_DIR, '', $req_arr[$k]);
+			$_SESSION['backup_files'] = $req_arr;
+			unset($req_arr);
+
+			$_SESSION['number_backup_files'] = count($_SESSION['backup_files']);
+			$zip = new ZipArchive();
+			$zip->open(ROOT_DIR . '/temp/backups/' . $zip_name . '.zip', ZIPARCHIVE::CREATE);
+			$zip->addFile(ROOT_DIR . '/install.php', 'install.php');
+			$zip->close();
+			
+			if (file_exists(ROOT_DIR . '/install.php')) {
+				@unlink(ROOT_DIR . '/install.php');
+			}
+		}
+		
+		$this->page['title'] = 'Резервное копирование';
+		$this->page['keywords'] = 'Резервное копирование';
+		$this->page['description'] = 'Резервное копирование';
+		$this->page['html'] = $this->load_view('backup_form');
+		return $this->page;
+	}
+	
+	
+	public function action_ajax_create_backup () {
+
+		if (!isset($_SESSION['backup_files'][$_SESSION['last_backup_file']])){
+			echo 0;
+			unset($_SESSION['backup_name']);
+			unset($_SESSION['last_backup_file']);
+			unset($_SESSION['backup_files']);
+			unset($_SESSION['number_backup_files']);
+			exit;
+		}
+		
+		$this->load_helper('zip');
+		$zip = new ZipArchive();
+		$zip->open(ROOT_DIR . '/temp/backups/' . $_SESSION['backup_name'] . '.zip', ZIPARCHIVE::CREATE);
+		$path = $_SESSION['backup_files'][$_SESSION['last_backup_file']];
+		
+		if (!is_dir(ROOT_DIR . $path)) {
+			$zip->addFile(ROOT_DIR . $path, trim($path, '/'));
+			$_SESSION['last_backup_file']++;
+			$zip->close();
+			echo 1;
+			exit;
+		} else {
+			$zip->addEmptyDir(trim($path, '/'));
+			$_SESSION['last_backup_file']++;
+			$zip->close();
+			echo 1;
+			exit;
+		}
+		
+		echo 'ERROR';
+		$zip->close();
+	}	
+	
+	function arr_req_dir(&$arr, $dir, $step=0, $exceptions){ //получение массива путей всех Нужных файлов
+		$files = scandir($dir, $step);
+		foreach ($files as $file){ //обход директории
+			if (($file!='..')and($file!='.')){ //непроверяемые файлы
+				if (is_dir($dir.'/'.$file)){
+					$arr[] = $dir.'/'.$file;
+					if (!in_array($file, $exceptions)) $this->arr_req_dir($arr, $dir.'/'.$file, $step+1, $exceptions); //ПРАВДА ГДЕ-ТО МОЖЕТ БЫТЬ СВОЯ ПАПКА `temp`
+				}
+				else { //если файл - файл	
+					$arr[] = $dir.'/'.$file;
+				}
+			}
+		}		
+	}	
+	
+	public function action_stable_create_backup() { //ПРОШЛАЯ ФУНКЦИЯ БЕЗ AJAX. ПАДАЕТ НА БЭКАПЕ В ~200М
 		if (isset($_POST['type'])) {
 			ini_set('max_execution_time', 300);
 			
@@ -53,7 +171,9 @@ class controller_component_core_backup extends component {
 				);
 				$zip_name .= 'no_uploads';
 			}
+			// Все это было получение имени бэкапа
 			
+			//В любом случае (есть он или нет) мы записываем install.php в корень, чтобы он был добавлен в бэкап. После создания бэкапа инсталл грохнем. 
 			foreach (scandir(ROOT_DIR . '/user_cms') as $path) {
 				if (strpos($path, 'install') === 0 && is_readable(ROOT_DIR . '/user_cms/' . $path)) {
 					$install_content = file_get_contents(ROOT_DIR . '/user_cms/' . $path);
@@ -76,7 +196,7 @@ class controller_component_core_backup extends component {
 		$this->page['description'] = 'Резервное копирование';
 		$this->page['html'] = $this->load_view('backup_form');
 		return $this->page;
-	}
+	}	
 	
 	protected function create_backup ($archive_name, $exceptions = array()) {
 		$this->load_helper('zip');
@@ -93,7 +213,7 @@ class controller_component_core_backup extends component {
 			}
 
 			if (in_array($path, $exceptions)) {
-				$zip = $this->helper_zip->zip_directory(ROOT_DIR . '/' . $path . '/', $zip, $path, false);
+				$zip = $this->helper_zip->zip_directory(ROOT_DIR . '/' . $path . '/', $zip, $path, false); // ???
 			} else {
 				$zip->addEmptyDir($path);
 				$zip = $this->helper_zip->zip_directory(ROOT_DIR . '/' . $path . '/', $zip, $path);
