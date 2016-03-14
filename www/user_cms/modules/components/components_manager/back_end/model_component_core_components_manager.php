@@ -8,8 +8,29 @@ class model_component_core_components_manager {
 	public $dbh;
 	
 	function __construct($dbh){
-		$this->dbh = $dbh;
+		$this->dbh = $dbh;		
+		$this->confirm_core_components();
 	}
+	
+	public function confirm_core_components(){
+		$dir = ROOT_DIR . '/user_cms/modules/components';
+		$dirto = ROOT_DIR . '/modules/components';
+		$files = scandir($dir);
+		foreach ($files as $file){
+			if (($file!='..')and($file!='.')){
+				if (is_dir($dir.'/'.$file)){
+					if ((is_dir($dir.'/'.$file . '/front_end')) && (!is_dir($dirto . '/' . $file . '/front_end'))) {
+						create_module_on_fly('', '/components', $file, '/front_end', 'controller_component_' . $file);
+						create_module_on_fly('', '/components', $file, '/front_end', 'model_component_' . $file);
+					}
+					if ((is_dir($dir.'/'.$file . '/back_end')) && (!is_dir($dirto . '/' . $file . '/back_end'))) {
+						create_module_on_fly('', '/components', $file, '/back_end', 'controller_component_' . $file);
+						create_module_on_fly('', '/components', $file, '/back_end', 'model_component_' . $file);
+					}
+				}
+			}
+		}
+	} 
 	
 	public function get_components(){
 		if ($handle = opendir(ROOT_DIR . '/modules/components')) {
@@ -17,7 +38,7 @@ class model_component_core_components_manager {
 		    while (false !== ($entry = readdir($handle))) {
 		    	if($entry != '.' and $entry != '..') {
 			    	$list[$i]['dir']=$entry;
-			    	$file = ROOT_DIR . '/modules/components/'.$entry.'/back_end/component.ini';
+			    	$file = file_exists(ROOT_DIR . '/modules/components/'.$entry.'/back_end/component.ini') ? ROOT_DIR . '/modules/components/'.$entry.'/back_end/component.ini' : ROOT_DIR . '/user_cms/modules/components/'.$entry.'/back_end/component.ini';
 			    	if(file_exists($file)) {
 			    		$config = parse_ini_file($file, true);
 			    	}
@@ -50,7 +71,7 @@ class model_component_core_components_manager {
 		$results = $this->dbh->query($sql);
 		
 		foreach ($results as &$result) {
-			$file = ROOT_DIR . '/modules/components/' . $result['component'] . '/back_end/component.ini';
+			$file = file_exists(ROOT_DIR . '/modules/components/' . $result['component'] . '/back_end/component.ini') ? ROOT_DIR . '/modules/components/' . $result['component'] . '/back_end/component.ini' : ROOT_DIR . '/user_cms/modules/components/' . $result['component'] . '/back_end/component.ini';
 			if (file_exists($file)) {
 				$result['config'] = parse_ini_file($file);
 			} else {
@@ -125,8 +146,8 @@ class model_component_core_components_manager {
 	}
 	
 	public function get_component_full_config($component_name) {
-		$ini_path = ROOT_DIR . '/modules/components/' . $component_name . '/back_end/component.ini';
-
+		$ini_path = file_exists(ROOT_DIR . '/modules/components/' . $component_name . '/back_end/component.ini') ? ROOT_DIR . '/modules/components/' . $component_name . '/back_end/component.ini' : ROOT_DIR . '/user_cms/modules/components/' . $component_name . '/back_end/component.ini';
+//echo $ini_path;
 		if (file_exists($ini_path) && is_readable($ini_path)) {
 			return parse_ini_file($ini_path, true);
 		} else {

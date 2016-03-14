@@ -542,12 +542,53 @@ function __autoload($class_name) {
   		$module_name_dir =  str_replace('core_', '', $module_name_dir);
 
   		$f = ROOT_DIR . $core_dir .  '/modules' . $module_type_dir . '/' . $module_name_dir . $end_name . '/' . $class_name . '.php';
-  		
+  		//echo ROOT_DIR . 'cd=' . $core_dir .  '/modules' . 'mtd=' . $module_type_dir . '/' . 'mnd=' . $module_name_dir . 'en=' . $end_name . '/' . 'cn=' . $class_name . '.php' . '<br>';
+  		//echo $f . '<br>';
+		//exit;
     	if(  file_exists($f)) {
            	require_once($f);
         }
         else {
+			create_module_on_fly($core_dir, $module_type_dir, $module_name_dir, $end_name, $class_name);
+           	require_once($f);
+			/*
+			echo $core_dir.'<br>';
+			echo $f.'<br>';
             exit('Error #2: wrong class name: '.$class_name);
+			*/
         } 
     }
 } 
+
+function create_module_on_fly($core_dir, $module_type_dir, $module_name_dir, $end_name, $class_name){
+	if_not_isdir_mkdir(ROOT_DIR . $core_dir);
+	if_not_isdir_mkdir(ROOT_DIR . $core_dir . '/modules');
+	if_not_isdir_mkdir(ROOT_DIR . $core_dir . '/modules' . $module_type_dir);
+	if_not_isdir_mkdir(ROOT_DIR . $core_dir . '/modules' . $module_type_dir . '/' . $module_name_dir);
+	if_not_isdir_mkdir(ROOT_DIR . $core_dir . '/modules' . $module_type_dir . '/' . $module_name_dir . $end_name);
+	if (!file_exists(ROOT_DIR . $core_dir .  '/modules' . $module_type_dir . '/' . $module_name_dir . $end_name . '/' . $class_name . '.php')){
+		if ($module_type_dir=='/addons') {
+			$content_module_type = 'addon';
+		} else if ($module_type_dir=='/plugins'){
+			$content_module_type = 'plugin';			
+		} else if ($module_type_dir=='/blocks'){
+			$content_module_type = 'block';			
+		} else if ($module_type_dir=='/components'){
+			$content_module_type = 'component';			
+		}
+		
+		$controller_or_model = strpos($class_name, 'controller') !== FALSE ? 'controller' : 'model';
+		
+		file_put_contents(ROOT_DIR . $core_dir .  '/modules' . $module_type_dir . '/' . $module_name_dir . $end_name . '/' . $class_name . '.php', '<?php class ' . $controller_or_model . '_' . $content_module_type . '_' . $module_name_dir . ' extends ' . $controller_or_model . '_' . $content_module_type . '_core_' . $module_name_dir . ' {} ');
+			
+	}
+	
+}
+
+function if_not_isdir_mkdir($dir){
+	if (!is_dir($dir)) mkdir($dir);
+}
+
+function echolow(){
+	echo 'low';
+}
