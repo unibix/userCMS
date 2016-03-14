@@ -6,7 +6,8 @@ class controller_block_core_custom_html extends block
 {
 	function action_index($data) {
 		$file = $data['params'];
-		$this->page['html'] = file_get_contents(ROOT_DIR . '/modules/blocks/custom_html/html/' . $file . '.html');
+		$this->page['html'] = file_exists(ROOT_DIR . '/uploads/modules/custom_html/' . $file . '.html') ? file_get_contents(ROOT_DIR . '/uploads/modules/custom_html/' . $file . '.html') : '';
+		//$this->page['html'] = file_exists(ROOT_DIR . '/modules/blocks/custom_html/html/' . $file . '.html') ? file_get_contents(ROOT_DIR . '/modules/blocks/custom_html/html/' . $file . '.html') : '';
 		//$this->page['head'] = '<!-- start -->' . "\n\t";
 		return $this->page;
 	}
@@ -16,7 +17,7 @@ class controller_block_core_custom_html extends block
 		$this->data['text'] = '';
 		
 		if(isset($_POST['html_code'])) {
-			$file_name = ROOT_DIR . '/modules/blocks/custom_html/html/' . $_POST['file_name'] . '.html';
+			$file_name = ROOT_DIR . '/uploads/modules/custom_html/' . $_POST['file_name'] . '.html';
 			file_put_contents($file_name, $_POST['html_code']);
 			$this->page['params'] = $_POST['file_name'];
 		}
@@ -26,7 +27,7 @@ class controller_block_core_custom_html extends block
 	}
 	
 	public function action_settings($info) {
-		$file_name = ROOT_DIR . '/modules/blocks/custom_html/html/' . $info['params'] . '.html';
+		$file_name = ROOT_DIR . '/uploads/modules/custom_html/' . $info['params'] . '.html';
 		
 		if(isset($_POST['html_code'])) {
 			file_put_contents($file_name, $_POST['html_code']);
@@ -48,7 +49,7 @@ class controller_block_core_custom_html extends block
 	}
 	
 	public function action_deactivate($info) {
-		$file_name = ROOT_DIR . '/modules/blocks/custom_html/html/' . $info['params'] . '.html';
+		$file_name = ROOT_DIR . '/uploads/modules/custom_html/' . $info['params'] . '.html';
 		if(file_exists($file_name)) {
 			unlink($file_name);
 		}

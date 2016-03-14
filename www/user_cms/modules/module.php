@@ -95,7 +95,7 @@ class module {
 	}
 	
 	private function _get_component_config($component_name) {
-		$ini_path = ROOT_DIR . '/modules/components/' . $component_name . '/back_end/component.ini';
+		$ini_path = file_exists(ROOT_DIR . '/modules/components/' . $component_name . '/back_end/component.ini') ? ROOT_DIR . '/modules/components/' . $component_name . '/back_end/component.ini' : ROOT_DIR . '/user_cms/modules/components/' . $component_name . '/back_end/component.ini';
 		$config = array();
 		
 		if (file_exists($ini_path) && is_readable($ini_path)) {
