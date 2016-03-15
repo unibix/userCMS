@@ -20,15 +20,17 @@ class component extends module {
 		parent::__construct($config, $url, $component, $dbh);
 		
 		$this->view   = $component['view'];
-  		$this->view_dir         = ROOT_DIR .          '/modules/components/'.$component['name'].'/'.END_NAME.'/views';
   		$this->view_dir_core    = ROOT_DIR . '/user_cms/modules/components/'.$component['name'].'/'.END_NAME.'/views';
+  		$this->view_dir         = ROOT_DIR .          '/modules/components/'.$component['name'].'/'.END_NAME.'/views';
+		//$this->view_dir = is_dir($this->view_dir) ? $this->view_dir : $this->view_dir_core;
   		$this->page['title']            = '';
   		$this->page['keywords']         = '';
   		$this->page['description']      = '';
   		$this->page['html']             = '';
 		$this->page['head']             = '';
-		$this->component_dir            = ROOT_DIR . '/modules/components/'.$component['name'].'/'.END_NAME;
 		$this->component_dir_core       = ROOT_DIR . '/user_cms/modules/components/'.$component['name'].'/'.END_NAME;
+		$this->component_dir            = ROOT_DIR . '/modules/components/'.$component['name'].'/'.END_NAME;
+		//$this->component_dir = is_dir($this->component_dir) ? $this->component_dir : $this->component_dir_core;
 		$this->component_name           = $component['name'];
 		$this->model                    = $this->load_model();
 		$this->component_config         = $this->get_component_config($component['name']);
@@ -93,11 +95,12 @@ class component extends module {
 
 	public function load_model($type = '', $name = '') {
 		if(!$name || !$type) { // подгружаем родной компонент
-			$model_full_name = 'model_component_' . $this->component_name;
+			$model_full_name = class_exists('model_component_' . $this->component_name, true) ? 'model_component_' . $this->component_name : 'model_component_core_' . $this->component_name;
 			return new $model_full_name($this->dbh);
 		} else {
 			$model_full_name = 'model_' . $type . '_' . $name;
-			$this->$model_full_name = new $model_full_name($this->dbh);
+			$really_model_full_name = class_exists('model_' . $type . '_' . $name, true) ? 'model_' . $type . '_' . $name : 'model_' . $type . '_core_' . $name;
+			$this->$model_full_name = new $really_model_full_name($this->dbh);
 		}
 	}
 	

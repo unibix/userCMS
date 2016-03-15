@@ -43,16 +43,16 @@ class user_cms_core {
 		$this -> component['action']   = 'index'; 
 		$this -> component['view']     = 'index';
 		$this -> component['html']     = '';
-		$this -> component['dir']      = ROOT_DIR .          '/modules/components/' . END_NAME . '/pages';
 		$this -> component['dir_core'] = ROOT_DIR . '/user_cms/modules/components/' . END_NAME . '/pages';
+		$this -> component['dir']      = ROOT_DIR .          '/modules/components/' . END_NAME . '/pages';
 		$this -> component['info']     = array();
 
 		$this -> theme['name']         = $this -> config['site_theme'];
 		$this -> theme['file']         = 'index';
-		$this -> theme['url']          = SITE_URL .          '/themes/' . $this -> theme['name']  ;
 		$this -> theme['url_core']     = SITE_URL . '/user_cms/themes/' . $this -> theme['name']  ;
-		$this -> theme['dir']          = ROOT_DIR .          '/themes/' . $this -> theme['name']  ;
+		$this -> theme['url']          = SITE_URL .          '/themes/' . $this -> theme['name']  ;
 		$this -> theme['dir_core']     = ROOT_DIR . '/user_cms/themes/' . $this -> theme['name']  ;
+		$this -> theme['dir']          = ROOT_DIR .          '/themes/' . $this -> theme['name']  ;
 
 
 		$this -> page['title']         = '';
@@ -133,6 +133,8 @@ class user_cms_core {
 						
 						if (method_exists('controller_component_' . $this -> component['name'], 'action_' . $this->url['actions'][0])) {
 							$this->component['action'] = $this->url['actions'][0];
+						} else if (method_exists('controller_component_core_' . $this -> component['name'], 'action_' . $this->url['actions'][0])) {
+							$this->component['action'] = $this->url['actions'][0];
 						} else {
 							$this->component['action'] = 'else';
 						}
@@ -168,9 +170,18 @@ class user_cms_core {
 		}
 
    		$component_full_name = 'controller_component_' . $this -> component['name'];
+   		//$model_component_full_name = 'model_component_' . $this -> component['name'];
+   		$component_full_name_core = 'controller_component_core_' . $this -> component['name'];
+   		//$model_component_full_name_core = 'model_component_core_' . $this -> component['name'];
    		//core::print_r ($component_full_name,'component_full_name');
-		$c = new $component_full_name($this -> config, $this -> url,$this -> component, $this -> dbh);
+		//if ((class_exists($component_full_name, true)) && (class_exists($model_component_full_name, true))) {
+		if (class_exists($component_full_name, true)) {
+			$c = new $component_full_name($this -> config, $this -> url,$this -> component, $this -> dbh);
+		} else {
+			$c = new $component_full_name_core($this -> config, $this -> url,$this -> component, $this -> dbh);			
+		}
 		$component_action_name = 'action_' . $this -> component['action'];
+		//echo 'zzz' . 'action_' . $this -> component['action'] . '_zzz<br>';
 		//core::print_r ($component_action_name,'component_action_name');
 		$page = $c -> $component_action_name();
 		
@@ -422,20 +433,35 @@ class user_cms_core {
 	
 	function load_addon($addon) {
 		$full_name = 'controller_addon_' . $addon['module_dir'];
-		$a = new $full_name($this->config, $this->url, $addon['module_dir'], $this->dbh);
+		$full_name_core = 'controller_addon_core_' . $addon['module_dir'];
+		if (class_exists($full_name, true)) {
+			$a = new $full_name($this->config, $this->url, $addon['module_dir'], $this->dbh);
+		} else {
+			$a = new $full_name_core($this->config, $this->url, $addon['module_dir'], $this->dbh);
+		}
 		return $a->action_index($addon);
 	}
 	
 	function load_block($block, $action='index') {
         $full_name = 'controller_block_' . $block['module_dir'];
-        $b = new $full_name($this->config, $this->url, $block['module_dir'], $this->dbh);
+        $full_name_core = 'controller_block_core_' . $block['module_dir'];
+		if (class_exists($full_name, true)) {
+			$b = new $full_name($this->config, $this->url, $block['module_dir'], $this->dbh);
+		} else {
+			$b = new $full_name_core($this->config, $this->url, $block['module_dir'], $this->dbh);			
+		}
         $full_action_name = 'action_' . $action;
         return $b->$full_action_name($block);
     }
 	
 	function load_plugin($plugin, $run_params='') {
 		$full_name = 'controller_plugin_' . $plugin['module_dir'];
-		$p = new $full_name($this->config, $this->url, $plugin['module_dir'], $this->dbh);
+		$full_name_core = 'controller_plugin_core_' . $plugin['module_dir'];
+		if (class_exists($full_name, true)) {
+			$p = new $full_name($this->config, $this->url, $plugin['module_dir'], $this->dbh);
+		} else {
+			$p = new $full_name_core($this->config, $this->url, $plugin['module_dir'], $this->dbh);			
+		}
 		$p->run_params = $run_params; // добавляем объекту свойство, содержащее строку с параметрами, передаваемыми в шаблоне
 		return $p->action_index($plugin);
 	}
@@ -542,53 +568,12 @@ function __autoload($class_name) {
   		$module_name_dir =  str_replace('core_', '', $module_name_dir);
 
   		$f = ROOT_DIR . $core_dir .  '/modules' . $module_type_dir . '/' . $module_name_dir . $end_name . '/' . $class_name . '.php';
-  		//echo ROOT_DIR . 'cd=' . $core_dir .  '/modules' . 'mtd=' . $module_type_dir . '/' . 'mnd=' . $module_name_dir . 'en=' . $end_name . '/' . 'cn=' . $class_name . '.php' . '<br>';
-  		//echo $f . '<br>';
-		//exit;
+		//echo $f. '<br>';
     	if(  file_exists($f)) {
            	require_once($f);
         }
         else {
-			create_module_on_fly($core_dir, $module_type_dir, $module_name_dir, $end_name, $class_name);
-           	require_once($f);
-			/*
-			echo $core_dir.'<br>';
-			echo $f.'<br>';
-            exit('Error #2: wrong class name: '.$class_name);
-			*/
+            if ($core_dir) exit('Error #2: wrong class name: '.$class_name);
         } 
     }
 } 
-
-function create_module_on_fly($core_dir, $module_type_dir, $module_name_dir, $end_name, $class_name){
-	if_not_isdir_mkdir(ROOT_DIR . $core_dir);
-	if_not_isdir_mkdir(ROOT_DIR . $core_dir . '/modules');
-	if_not_isdir_mkdir(ROOT_DIR . $core_dir . '/modules' . $module_type_dir);
-	if_not_isdir_mkdir(ROOT_DIR . $core_dir . '/modules' . $module_type_dir . '/' . $module_name_dir);
-	if_not_isdir_mkdir(ROOT_DIR . $core_dir . '/modules' . $module_type_dir . '/' . $module_name_dir . $end_name);
-	if (!file_exists(ROOT_DIR . $core_dir .  '/modules' . $module_type_dir . '/' . $module_name_dir . $end_name . '/' . $class_name . '.php')){
-		if ($module_type_dir=='/addons') {
-			$content_module_type = 'addon';
-		} else if ($module_type_dir=='/plugins'){
-			$content_module_type = 'plugin';			
-		} else if ($module_type_dir=='/blocks'){
-			$content_module_type = 'block';			
-		} else if ($module_type_dir=='/components'){
-			$content_module_type = 'component';			
-		}
-		
-		$controller_or_model = strpos($class_name, 'controller') !== FALSE ? 'controller' : 'model';
-		
-		file_put_contents(ROOT_DIR . $core_dir .  '/modules' . $module_type_dir . '/' . $module_name_dir . $end_name . '/' . $class_name . '.php', '<?php class ' . $controller_or_model . '_' . $content_module_type . '_' . $module_name_dir . ' extends ' . $controller_or_model . '_' . $content_module_type . '_core_' . $module_name_dir . ' {} ');
-			
-	}
-	
-}
-
-function if_not_isdir_mkdir($dir){
-	if (!is_dir($dir)) mkdir($dir);
-}
-
-function echolow(){
-	echo 'low';
-}

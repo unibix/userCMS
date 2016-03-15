@@ -9,53 +9,43 @@ class model_component_core_components_manager {
 	
 	function __construct($dbh){
 		$this->dbh = $dbh;		
-		$this->confirm_core_components();
 	}
-	
-	public function confirm_core_components(){
-		$dir = ROOT_DIR . '/user_cms/modules/components';
-		$dirto = ROOT_DIR . '/modules/components';
-		$files = scandir($dir);
-		foreach ($files as $file){
-			if (($file!='..')and($file!='.')){
-				if (is_dir($dir.'/'.$file)){
-					if ((is_dir($dir.'/'.$file . '/front_end')) && (!is_dir($dirto . '/' . $file . '/front_end'))) {
-						create_module_on_fly('', '/components', $file, '/front_end', 'controller_component_' . $file);
-						create_module_on_fly('', '/components', $file, '/front_end', 'model_component_' . $file);
+
+	public function get_components(){
+		$list = array();
+		$tmp_saved_modules = array();
+		$core_dirs = array(0=>'', 1=>'/user_cms');
+		for ($core_key=0; $core_key<2; $core_key++) {
+			if (is_dir(ROOT_DIR . $core_dirs[$core_key] . '/modules/components')) {
+				if ($handle = opendir(ROOT_DIR . $core_dirs[$core_key] . '/modules/components')) {
+					$i=0;
+					while (false !== ($entry = readdir($handle))) {
+						if($entry != '.' and $entry != '..') {
+							if (!isset($tmp_saved_modules[$entry])) {
+								$list[$i]['dir']=$entry;
+								$file = file_exists(ROOT_DIR . $core_dirs[$core_key] . '/modules/components/'.$entry.'/back_end/component.ini') ? ROOT_DIR . $core_dirs[$core_key] . '/modules/components/'.$entry.'/back_end/component.ini' : ROOT_DIR . '/user_cms/modules/components/'.$entry.'/back_end/component.ini';
+								if(file_exists($file)) {
+									$config = parse_ini_file($file, true);
+								}
+								else {
+									$config=array('name'=>$entry,'dir'=>$entry);
+								}
+								$list[$i]['name']=$config['name'];
+								foreach($config as $key => $value) {
+									$list[$i][$key]=$value;
+								}
+								$i++;
+								$tmp_saved_modules[$entry] = 1;
+								//echo $entry . '---' . $core_key . "<br>";
+							}
+						}
+						
 					}
-					if ((is_dir($dir.'/'.$file . '/back_end')) && (!is_dir($dirto . '/' . $file . '/back_end'))) {
-						create_module_on_fly('', '/components', $file, '/back_end', 'controller_component_' . $file);
-						create_module_on_fly('', '/components', $file, '/back_end', 'model_component_' . $file);
-					}
+					closedir($handle);
 				}
 			}
 		}
-	} 
-	
-	public function get_components(){
-		if ($handle = opendir(ROOT_DIR . '/modules/components')) {
-			$i=0;
-		    while (false !== ($entry = readdir($handle))) {
-		    	if($entry != '.' and $entry != '..') {
-			    	$list[$i]['dir']=$entry;
-			    	$file = file_exists(ROOT_DIR . '/modules/components/'.$entry.'/back_end/component.ini') ? ROOT_DIR . '/modules/components/'.$entry.'/back_end/component.ini' : ROOT_DIR . '/user_cms/modules/components/'.$entry.'/back_end/component.ini';
-			    	if(file_exists($file)) {
-			    		$config = parse_ini_file($file, true);
-			    	}
-			    	else {
-			    		$config=array('name'=>$entry,'dir'=>$entry);
-			    	}
-			    	$list[$i]['name']=$config['name'];
-			    	foreach($config as $key => $value) {
-			    		$list[$i][$key]=$value;
-			    	}
-			    	$i++;
-			        //echo $entry . "<br>";
-		    	}
-		    	
-		    }
-		    closedir($handle);
-		}
+		unset($tmp_saved_modules);
 		return $list;
 	}
 	
