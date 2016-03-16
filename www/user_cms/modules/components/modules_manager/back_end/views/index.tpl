@@ -1,4 +1,4 @@
-<div id="content">
+zzz<div id="content">
 	<h1 id="module_name"><?=$page_name;?></h1>
 	<?php if($success) { ?>
 	<div class="notice success">
@@ -14,11 +14,12 @@
 	<table class="main front_end">
     <thead>
       <tr>
-        <th>Название</th><th class="td_50">Тип</th><th class="td_190">Позиция</th><th class="td_70">Порядок загрузки</th><th class="td_115">Дата изменения</th><th class="td_115">Действия</th>
+        <th>ID</th><th>Название</th><th class="td_50">Тип</th><th class="td_190">Позиция</th><th class="td_70">Порядок загрузки</th><th class="td_115">Дата изменения</th><th class="td_115">Действия</th>
       </tr>
     </thead>
 		<?php foreach($front_end_modules_list as $module) { ?>
 		<tr data-item-id="<?php echo $module['id']; ?>">
+			<td><?php echo $module['id']; ?></td>
 			<td><?php echo $module['name']; ?></td>
 			<td title="<?php echo $module['module_dir']; ?>"><?php echo $module['type']; ?></td>
 			<td>
@@ -43,11 +44,12 @@
   <table class="main back_end">
     <thead>
       <tr>
-        <th>Название</th><th class="td_50">Тип</th><th class="td_190">Позиция</th><th class="td_70">Порядок загрузки</th><th class="td_115">Дата изменения</th><th class="td_115">Действия</th>
+         <th>ID</th><th>Название</th><th class="td_50">Тип</th><th class="td_190">Позиция</th><th class="td_70">Порядок загрузки</th><th class="td_115">Дата изменения</th><th class="td_115">Действия</th>
       </tr>
     </thead>
 		<?php foreach($back_end_modules_list as $module) { ?>
 		<tr data-item-id="<?php echo $module['id']; ?>">
+			<td><?php echo $module['id']; ?></td>
       <td><?php echo $module['name']; ?></td>
 			<td title="<?php echo $module['module_dir']; ?>" class="td_50"><?php echo $module['type']; ?></td>
 			<td class="td_190">
