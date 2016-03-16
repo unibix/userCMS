@@ -33,7 +33,7 @@
       <td>
         <a href="<?php echo $backup['href_download']; ?>">скачать</a> |
         <a href="<?php echo $backup['href_restore']; ?>">восстановить</a> |
-        <a href="<?php echo $backup['href_delete']; ?>">удалить</a>
+        <a class="confirmButton" href="<?php echo $backup['href_delete']; ?>">удалить</a>
       </td>
     </tr>
     <?php } ?>

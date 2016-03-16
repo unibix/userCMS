@@ -23,7 +23,7 @@
 			<td><?php echo date('d.m.Y H:i', $user['date_edit']); ?></td>
 			<td>
 				<a href="<?php echo SITE_URL . '/admin/users/edit/' . $user['id']; ?>">Изменить</a> |
-				<a href="<?php echo SITE_URL . '/admin/users/delete/' . $user['id']; ?>">Удалить</a>
+				<a class="confirmButton" href="<?php echo SITE_URL . '/admin/users/delete/' . $user['id']; ?>">Удалить</a>
 			</td>
 		</tr>
 	<?php } ?>

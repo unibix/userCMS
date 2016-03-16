@@ -33,7 +33,7 @@
       <td class="actions">
         <a href="<?php echo SITE_URL; ?>/admin/gallery/category/<?php echo $category['id']; ?>">Изображения</a>
         <a href="<?php echo SITE_URL; ?>/admin/gallery/edit/<?php echo $category['id']; ?>">Изменить</a>
-        <a href="<?php echo SITE_URL; ?>/admin/gallery/delete/<?php echo $category['id']; ?>">Удалить</a>
+        <a class="confirmButton" href="<?php echo SITE_URL; ?>/admin/gallery/delete/<?php echo $category['id']; ?>">Удалить</a>
       </td>
     </tr>
     <?php } ?>

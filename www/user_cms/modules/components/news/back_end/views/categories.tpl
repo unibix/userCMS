@@ -32,7 +32,7 @@
         <a href="<?php echo SITE_URL; ?>/admin/news/add/category_id=<?php echo $category['id']; ?>">Добавить новость</a>
         <a href="<?php echo SITE_URL; ?>/admin/news/category_id=<?php echo $category['id']; ?>">Обзор новостей</a> |
         <a href="<?php echo SITE_URL; ?>/admin/news/edit_category/<?php echo $category['id']; ?>">Изменить</a>
-        <a href="<?php echo SITE_URL; ?>/admin/news/delete_category/<?php echo $category['id']; ?>">Удалить</a>
+        <a class="confirmButton" href="<?php echo SITE_URL; ?>/admin/news/delete_category/<?php echo $category['id']; ?>">Удалить</a>
       </td>
     </tr>
     <?php } ?>

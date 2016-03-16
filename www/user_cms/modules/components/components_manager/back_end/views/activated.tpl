@@ -29,7 +29,7 @@
 			<td class="actions">
 				<a href="<?php echo SITE_URL;?>/admin/<?php echo $component['component'] ?>" >Управление</a>
 				<a href="<?php echo SITE_URL;?>/admin/components_manager/edit/<?php echo $component['id'] ?>" >Изменить</a>
-				<a href="<?php echo SITE_URL;?>/admin/components_manager/deactivate/<?php echo $component['id'] ?>" >Деактивировать</a>
+				<a class="confirmButton" href="<?php echo SITE_URL;?>/admin/components_manager/deactivate/<?php echo $component['id'] ?>" >Деактивировать</a>
 				<?php foreach($component['config'] as $key => $value) { 
 					if(strpos($key, 'action_') === 0) {
 						$key = str_replace('action_', '', $key);
