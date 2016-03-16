@@ -12,13 +12,13 @@ class model_component_core_components_manager {
 	}
 
 	public function get_components(){
+		$i=0;
 		$list = array();
 		$tmp_saved_modules = array();
 		$core_dirs = array(0=>'', 1=>'/user_cms');
 		for ($core_key=0; $core_key<2; $core_key++) {
 			if (is_dir(ROOT_DIR . $core_dirs[$core_key] . '/modules/components')) {
 				if ($handle = opendir(ROOT_DIR . $core_dirs[$core_key] . '/modules/components')) {
-					$i=0;
 					while (false !== ($entry = readdir($handle))) {
 						if($entry != '.' and $entry != '..') {
 							if (!isset($tmp_saved_modules[$entry])) {

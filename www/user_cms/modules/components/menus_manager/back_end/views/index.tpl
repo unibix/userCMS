@@ -38,7 +38,7 @@
 			<td class="actions">
 				<a href="<?php echo SITE_URL;?>/admin/menus_manager/menu/<?php echo $menu['id']; ?>" >Элементы</a>
 				<a href="<?php echo SITE_URL;?>/admin/menus_manager/edit/<?php echo $menu['id']; ?>" >Изменить</a>
-				<a href="<?php echo SITE_URL;?>/admin/menus_manager/delete/<?php echo $menu['id']; ?>" >Удалить</a>
+				<a class="confirmButton" href="<?php echo SITE_URL;?>/admin/menus_manager/delete/<?php echo $menu['id']; ?>" >Удалить</a>
 			</td>
 		</tr>
   <?php } ?>

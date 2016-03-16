@@ -24,7 +24,7 @@
 			<td><?php echo $module['date_add']; ?></td>
 			<td class="actions">
 				<a href="<?php echo SITE_URL;?>/admin/modules_manager/activate/<?php echo $module['id']; ?>" >Активировать</a>
-				<a href="<?php echo SITE_URL;?>/admin/modules_manager/delete/<?php echo $module['id']; ?>" >Удалить</a>
+				<a class="confirmButton" href="<?php echo SITE_URL;?>/admin/modules_manager/delete/<?php echo $module['id']; ?>" >Удалить</a>
 			</td>
 		</tr>
 		<?php } ?>

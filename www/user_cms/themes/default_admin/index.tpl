@@ -50,6 +50,18 @@
 </div>
 </div>
 <!-- end #footer -->
+<script>
+function confirmDelete() {
+		if (confirm("Вы уверены?")) {
+			return true;
+		} else {
+			return false;
+		}
+}
 
+$(".confirmButton").click(function(){
+	return confirmDelete();
+});
+</script>
 </body>
 </html>

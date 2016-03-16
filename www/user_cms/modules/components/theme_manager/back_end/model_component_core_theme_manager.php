@@ -13,7 +13,7 @@ class model_component_core_theme_manager extends model
 		$themes_dir = scandir($path);
 		
 		foreach($themes_dir as $theme_name) {
-			if($theme_name != '.' && $theme_name != '..') {
+			if($theme_name != '.' && $theme_name != '..' && is_dir($path . '/' . $theme_name)) {
 			
 				$themes[$theme_name] = array();
 				$themes[$theme_name]['name'] = $theme_name;
