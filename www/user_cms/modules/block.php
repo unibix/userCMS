@@ -47,7 +47,7 @@ class block extends module
 	
 	public function load_model($type = '', $name = '') {
 		if(!$name || !$type) { // подгружаем родной компонент
-			$model_full_name = 'model_block_' . $this->block_name;
+			$model_full_name = class_exists('model_block_' . $this->block_name) ? 'model_block_' . $this->block_name : 'model_block_core_' . $this->block_name;
 			if (file_exists($this->block_dir . '/' . $model_full_name . '.php')) {
 				return new $model_full_name($this->dbh);
 			} else {
@@ -55,7 +55,8 @@ class block extends module
 			}
 		} else {
 			$model_full_name = 'model_' . $type . '_' . $name;
-			$this->$model_full_name = new $model_full_name($this->dbh);
+			$really_model_full_name = class_exists('model_' . $type . '_' . $name) ? 'model_' . $type . '_' . $name : 'model_' . $type . '_core_' . $name;
+			$this->$model_full_name = new $really_model_full_name($this->dbh);
 		}
 	}
 	
