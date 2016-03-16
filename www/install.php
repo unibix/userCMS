@@ -97,8 +97,8 @@ if(count($errors) == 0) {
     if($show_form) {
         // выводим форму для заполнения
         $config['site_name'] = $config['site_name'];
-        $config['site_url'] =   rtrim($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], '/') ;
-        $config['login'] = (isset($_POST['login'])) ? $_POST['login'] : 'admin';
+        $config['site_url'] =   check_url(rtrim($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], '/'));
+		$config['login'] = (isset($_POST['login'])) ? $_POST['login'] : 'admin';
         $config['password'] = (isset($_POST['password'])) ? $_POST['password'] : 'admin';
         require('user_cms/themes/default_admin/install.tpl');
     }
@@ -109,6 +109,21 @@ if(count($errors) == 0) {
 	}
 }
 
+function check_url($url){
+	$root_exp = explode(DIRECTORY_SEPARATOR, ROOT_DIR);
+	$site_exp = explode('/', $url);
+	$i=0;
+	$j=0;
+	$str = '';
+	while (($i<count($root_exp)) && ($j<count($site_exp))) {
+		if ($site_exp[$j]==$root_exp[$i]) {
+			$str .= $site_exp[$j] . '/'; 
+			$j++;
+		}
+		$i++;
+	}
+	return rtrim($str, '/');
+}
 
 function update_config($array) {
     if ( file_exists('config.ini') ) {
