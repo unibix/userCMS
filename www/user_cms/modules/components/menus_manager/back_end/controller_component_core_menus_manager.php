@@ -414,7 +414,7 @@ class controller_component_core_menus_manager extends component {
 				$menu .= '<td class="sort td_115"><span class="before">↑</span> <span class="after">↓</span></td>';
 				$menu .= '<td class="td_190 actions">';
 					$menu .= '[<a href="' . SITE_URL . '/admin/menus_manager/edit_item/' . $item['id'] . '">изменить</a> | ';
-					$menu .= '<a href="' . SITE_URL . '/admin/menus_manager/delete_item/' . $item['id'] . '/menu_id=' . $item['menu_id'] . '">удалить</a>]';
+					$menu .= '<a class="confirmButton" href="' . SITE_URL . '/admin/menus_manager/delete_item/' . $item['id'] . '/menu_id=' . $item['menu_id'] . '">удалить</a>]';
 				$menu .= '</td>';
 			$menu .= '</tr>';
 			

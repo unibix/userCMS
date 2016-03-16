@@ -46,7 +46,7 @@
       <td><?php echo $item['cat_name']; ?></td>
       <td class="actions">
         <a href="<?php echo SITE_URL; ?>/admin/news/edit/<?php echo $item['id']; ?>">Изменить</a>
-        <a href="<?php echo SITE_URL; ?>/admin/news/delete/<?php echo $item['id']; ?>">Удалить</a>
+        <a class="confirmButton" href="<?php echo SITE_URL; ?>/admin/news/delete/<?php echo $item['id']; ?>">Удалить</a>
       </td>
     </tr>
     <?php } ?>

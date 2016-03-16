@@ -33,7 +33,7 @@
 			<td><?php echo date('d-m-Y', $module['date_edit']); ?></td>
 			<td class="actions">
 				<a href="<?php echo SITE_URL;?>/admin/modules_manager/settings/<?php echo $module['id']; ?>" >Настройки</a>
-				<a href="<?php echo SITE_URL;?>/admin/modules_manager/deactivate/<?php echo $module['id']; ?>" >Деактивировать</a>
+				<a class="confirmButton" href="<?php echo SITE_URL;?>/admin/modules_manager/deactivate/<?php echo $module['id']; ?>" >Деактивировать</a>
 			</td>
 		</tr>
 		<?php } ?>
@@ -62,7 +62,7 @@
 			<td class="td_115"><?php echo date('d-m-Y', $module['date_edit']); ?></td>
 			<td class="actions td_115">
 				<a href="<?php echo SITE_URL;?>/admin/modules_manager/settings/<?php echo $module['id']; ?>" >Настройки</a>
-				<a href="<?php echo SITE_URL;?>/admin/modules_manager/deactivate/<?php echo $module['id']; ?>" >Деактивировать</a>
+				<a class="confirmButton" href="<?php echo SITE_URL;?>/admin/modules_manager/deactivate/<?php echo $module['id']; ?>" >Деактивировать</a>
 			</td>
 		</tr>
 		<?php } ?>

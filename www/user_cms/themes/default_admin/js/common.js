@@ -50,3 +50,4 @@ function uncheckAll(selector) {
 	$(selector + ' input:checkbox:enabled').attr('checked', false);
 	return false;
 }
+
