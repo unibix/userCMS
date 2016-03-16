@@ -25,7 +25,7 @@
       </td>
 			<td class="actions">
 				[
-        <?php if (file_exists(ROOT_DIR . '/modules/components/' . $component['dir'] . '/back_end/controller_component_' . $component['dir'] . '.php')) { ?>
+       <?php if ((file_exists(ROOT_DIR . '/modules/components/' . $component['dir'] . '/back_end/controller_component_' . $component['dir'] . '.php')) OR (file_exists(ROOT_DIR . '/user_cms/modules/components/' . $component['dir'] . '/back_end/controller_component_core_' . $component['dir'] . '.php'))) { ?>
           <a href="<?php echo SITE_URL;?>/admin/<?php echo $component['dir']; ?>" >Управление</a> |
         <?php } ?>
         <a href="<?php echo SITE_URL;?>/admin/components_manager/settings/<?php echo $component['dir']; ?>" >Настройки</a>
