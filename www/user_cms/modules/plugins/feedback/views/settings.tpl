@@ -18,7 +18,7 @@
     <?php if ($fields) { $i = 0; ?>
       <?php foreach ($fields as $field) { ?>
         <div>
-          <h3><span class="remove" title="Удалить">x</span><span class="text">Поле №<?php echo $i + 1; ?></span> - <?php echo $field_types[$field['type']]; ?></h3>
+          <h3><span class="remove" title="Удалить">x</span><span class="text">Поле №<?php echo $i + 1; ?>: <?=$field['label'];?> </span> - <?php echo $field_types[$field['type']]; ?></h3>
           <div class="field-content">
             <input type="hidden" name="fields[<?php echo $i; ?>][type]" value="<?php echo $field['type']; ?>">
             
@@ -157,8 +157,14 @@
       }
     });
   </script>
+  <?php
+  if(isset($plugin_id)) { ?>
+  <h4>Для вставки формы на сайт используйте следующий код: { plugin:feedback=<?=$plugin_id;?> } без пробелов.</h4>
+  <?php } ?>
 </div>
 <style type="text/css">
   .validation-block {display: none;}
   input[type="checkbox"]:checked + .validation-block {display: block;}
+  #form_selected_fields div h3{position:relative;}
+  #form_selected_fields .remove { padding:0px;position:absolute;top:0px;right:0px; }
 </style>
