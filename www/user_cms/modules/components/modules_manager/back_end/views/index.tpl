@@ -1,4 +1,4 @@
-zzz<div id="content">
+<div id="content">
 	<h1 id="module_name"><?=$page_name;?></h1>
 	<?php if($success) { ?>
 	<div class="notice success">
