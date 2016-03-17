@@ -33,8 +33,8 @@ class controller_plugin_core_feedback extends plugin
 		}
 		
 		$params = unserialize($plugin['params']);
-		
-		$this->plugin_id = $plugin['id'];
+		//core::print_r($params);
+		$this->plugin_id = $this->data['plugin_id'] = $plugin['id'];
 		
 		if (isset($_SESSION['feedback_success_' . $this->plugin_id])) {
 			$this->data['success'] = $_SESSION['feedback_success_' . $this->plugin_id];
@@ -67,7 +67,9 @@ class controller_plugin_core_feedback extends plugin
 					}
 				
 					$message .= '<br>';
+					
 				}
+				$message .= 'Форма заполнена на странице: '. SITE_URL . '/' . $this->url['request_uri'] .'<br>';
 				
 				$this->load_helper('mail');
 				
@@ -132,7 +134,7 @@ class controller_plugin_core_feedback extends plugin
 				);
 			}
 			
-			$this->data['plugin_id'] = $plugin['id'];
+			
 			$this->page['head'] = $this->add_css_file(SITE_URL . '/user_cms/modules/plugins/' . $this->plugin_name . '/views/style.css');
 			$this->page['html'] = $this->load_view();
 		}
@@ -174,8 +176,9 @@ class controller_plugin_core_feedback extends plugin
 	
 	public function action_settings($plugin) {
 		$params = unserialize($plugin['params']);
-		
+		$this->data['plugin_id'] = $plugin['id'];
 		if (isset($_POST['edit_settings'])) {
+			$this->page['plugin_id'] = $plugin['id'];
 			$this->page['params'] = serialize(array(
 				'fields'            => isset($_POST['fields']) ? $_POST['fields'] : array(),
 				'mail_to'           => $_POST['mail_to'],

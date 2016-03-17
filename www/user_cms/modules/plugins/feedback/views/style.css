@@ -18,10 +18,11 @@
     box-shadow: 0 -5px 6px #B7C6D6 inset, 0 0 2px rgba(0, 0, 0, 0.4);
     color: #4F4F4F;
     cursor: pointer;
-    padding: 3px 10px;
+    padding: 5px 20px;
     text-shadow: 0 1px #DDDDDD;
+	font-size: 120%;
 }
-.feedback input[type="submit"]:focus {
+.feedback input[type="submit"]:focus,.feedback input[type="submit"]:hover {
     box-shadow: 0 3px 8px #B7C6D6 inset, 0 0 3px #DDDDDD inset, 0 0 1px rgba(0, 0, 0, 0.2);
 }
 .feedback input[type="text"], .feedback textarea, .feedback select {
@@ -32,3 +33,6 @@
     box-shadow: 1px 1px 1px #CCCCCC inset;
     padding: 3px 5px;
 }
+.notice {padding: 10px 20px;margin:5px 0;font-size:130%;}
+.success {background:#C3FCBD;border: 1px solid green;}
+.error {background:#F9B3B3;border: 1px solid red;}

@@ -5,7 +5,7 @@
   <div class="notice success"><?php echo $success; ?></div>
   <?php } else { ?>
     <?php foreach ($fields as $i => $field) { ?>
-      <div>
+      <div class="elem_<?=$plugin_id.'_'.$i;?>">
         <?php if ($field['type'] == 'text') { ?>
           <label for="<?php echo $field['name']; ?>"><?php echo $field['label']; ?></label>
           <?php if ($field['error']) { ?><span class="notice error"><?php echo $field['error']; ?></span><?php } ?>
@@ -43,7 +43,7 @@
           <?php } ?>
           
         <?php } elseif ($field['type'] == 'submit') { ?>
-          <input type="submit" name="<?php echo $field['name']; ?>" value="<?php echo $field['label']; ?>">
+          <input type="submit" name="<?php echo $field['name']; ?>" value="<?php echo $field['label']; ?>" class="submit_<?=$plugin_id;?>">
         <?php } ?>
         
       </div>

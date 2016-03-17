@@ -53,7 +53,7 @@ class controller_component_core_modules_manager extends component {
 		$this->data['errors'] = array();
 		
 		if(isset($_FILES['file'])) {
-		
+		/*
 			$archive_types = array(
 				'application/force-download',
 				'application/x-zip-compressed',
@@ -66,7 +66,11 @@ class controller_component_core_modules_manager extends component {
 			if(!in_array($_FILES['file']['type'], $archive_types)) {
 				$this->data['errors'][] = 'Для установки модуля необходим архив ZIP';
 			}
-			else {
+		*/
+		 		
+			if (strtolower(end(explode('.', $_FILES['file']['name'])))!='zip') {
+				$this->data['errors'][] = 'Для установки модуля необходим архив ZIP';
+			} else {
 				$zip = new ZipArchive;
 				$zip->open($_FILES['file']['tmp_name']);
 				if($zip->getFromName('install.php') === false) {
@@ -162,6 +166,9 @@ class controller_component_core_modules_manager extends component {
 	public function action_activate() {
 		$module_info = $this->model->get_module_info($this->url['actions'][1]);
 		$class_name = 'controller_' . $module_info['type'] . '_' . $module_info['dir'];	
+		if (!class_exists($class_name, true)) {
+			$class_name = 'controller_' . $module_info['type'] . '_core_' . $module_info['dir'];				
+		}
 		$obj = new $class_name($this->config, $this->url, $module_info['dir'], $this->dbh);
 		if (method_exists($obj, 'action_activate')) {
 			$page = $obj->action_activate();
@@ -232,6 +239,9 @@ class controller_component_core_modules_manager extends component {
 		if(isset($this->url['actions'][1])) {
 			$module_info = $this->model->get_active_module_info($this->url['actions'][1]);
 			$class_name = 'controller_' . $module_info['type'] . '_' . $module_info['module_dir'];	
+			if (!class_exists($class_name, true)){
+				$class_name = 'controller_' . $module_info['type'] . '_core_' . $module_info['module_dir'];		
+			}
 			$obj = new $class_name($this->config, $this->url, $module_info['module_dir'], $this->dbh);
 			
 			if(method_exists($obj,'action_deactivate')) {
@@ -260,6 +270,9 @@ class controller_component_core_modules_manager extends component {
 		
 		$module_info = $this->model->get_active_module_info($this->url['actions'][1]);
 		$class_name = 'controller_' . $module_info['type'] . '_' . $module_info['module_dir'];	
+		if (!class_exists($class_name, true)) {
+			$class_name = 'controller_' . $module_info['type'] . '_core_' . $module_info['module_dir'];				
+		}
 		$obj = new $class_name($this->config, $this->url, $module_info['module_dir'], $this->dbh);
 		$page = array();
 		if(method_exists($obj,'action_settings')) {
@@ -336,6 +349,9 @@ class controller_component_core_modules_manager extends component {
 			$module_id = $this->url['actions'][1];
 			$module = $this->model->get_module_info($module_id);
 			$class_name = 'controller_' . $module['type'] . '_' . $module['dir'];
+			if (!class_exists($class_name, true)) {
+				$class_name = 'controller_' . $module['type'] . '_core_' . $module['dir'];
+			}
 			$module_controller = new $class_name($this->config, $this->url, $module['name'], $this->dbh);
 			
 			if(method_exists($module_controller,'action_delete')) {
