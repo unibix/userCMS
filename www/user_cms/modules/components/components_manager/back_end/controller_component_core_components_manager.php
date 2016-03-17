@@ -66,7 +66,7 @@ class controller_component_core_components_manager extends component {
 		
 		foreach($installed_components as $component) { 
 			if (!in_array($component['dir'], $activated_components)  // исключаем из списка уже установленные компоненты
-			 && file_exists(ROOT_DIR . '/modules/components/' . $component['dir'] . '/front_end/controller_component_' . $component['dir'] . '.php') // исключаем из списка компоненты, используемые только в backend
+			 && (file_exists(ROOT_DIR . '/modules/components/' . $component['dir'] . '/front_end/controller_component_' . $component['dir'] . '.php') || file_exists(ROOT_DIR . '/user_cms/modules/components/' . $component['dir'] . '/front_end/controller_component_core_' . $component['dir'] . '.php')) // исключаем из списка компоненты, используемые только в backend
 			 && $component['dir'] != 'pages') {
 				
 				$this->data['components'][] = $component;
@@ -128,6 +128,9 @@ class controller_component_core_components_manager extends component {
 			
 			if (file_exists(ROOT_DIR . '/modules/components/' . $component . '/back_end/controller_component_' . $component . '.php')) {
 				$class_name = 'controller_component_' . $component;
+				if (!class_exists($class_name)) {
+					$class_name = 'controller_component_core_' . $component;
+				}
 				$obj = new $class_name($this->config, $this->url, array('name' => $component, 'view' => 'index'), $this->dbh);
 				if (method_exists($obj,'action_activate')) {
 					$obj->action_activate();
@@ -232,7 +235,9 @@ class controller_component_core_components_manager extends component {
 		}
 		
 		$class_name = 'controller_component_' . $component_info['component'];
-		
+		if (!class_exists($class_name, true)) {
+			$class_name = 'controller_component_core_' . $component_info['component'];			
+		}
 		$obj = new $class_name($this->config, $this->url, array('name' => $component_info['component'], 'view' => $component_info['view']), $this->dbh);
 		
 		if (method_exists($obj,'action_deactivate')) {
