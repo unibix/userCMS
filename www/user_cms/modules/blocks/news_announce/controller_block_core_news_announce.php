@@ -34,7 +34,9 @@ class controller_block_core_news_announce extends block {
 		if(isset($_POST['activate'])) {
 			$data = array(
 				'count_news' => $_POST['count_news'],
-				'category_id' => $_POST['category_id']
+				'category_id' => $_POST['category_id'],
+				'show_preview'         => $_POST['show_preview'],
+				'show_link_all_news'         => $_POST['show_link_all_news']
 			);
 			$page['params'] = serialize($data);
 		}
@@ -62,6 +64,7 @@ class controller_block_core_news_announce extends block {
 		$this->data['category_id'] = $params['category_id'];
 		$this->data['show_preview'] = isset($params['show_preview']) ? $params['show_preview'] : 1;
 		$this->data['show_link_all_news'] = isset($params['show_link_all_news']) ? $params['show_link_all_news'] : 0;
+		$this->data['categories'] = $this->dbh->query("SELECT * FROM news_categories ORDER BY id ASC");
 		
 		$this->page['html'] = $this->load_view('settings');		
 		return $this->page;		
