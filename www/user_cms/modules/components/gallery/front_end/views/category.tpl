@@ -1,41 +1,26 @@
 <div id="content">
-	<h1 id="page_name"><?=$page_name;?></h1>
-	<p class="bread_crumbs"><?php echo $bread_crumbs; ?></p>
-  <div id="gallery-box">
-    <div class="category-info"><?php echo $category['text']; ?></div>
-
-
-    <?php if($items) { ?>
-      <div class="category-items">
-        <?php foreach($items as $item) { ?>
-        <div>
-          <a class="fancybox" rel="gallery" href="<?php echo $item['full']; ?>" title="<?php echo $item['text']; ?>">
-            <img width="<?php echo $item_thumb_width; ?>" height="<?php echo $item_thumb_height; ?>" src="<?php echo $item['image']; ?>">
-          </a>
+    <h1 id="page_name"><?=$page_name;?></h1>
+    <p class="bread_crumbs"><?=$bread_crumbs?></p>
+    <div id="gallery-box">
+        <div class="category-info"><?=$category['text']?></div>
+        <?php if ($items) foreach ($items as $item) {?>
+        <div class="item-box">
+            <a class="fancybox" rel="gallery" href="<?=$item['full']?>" title="<?=$item['text']?>">
+                <img width="<?=$item_thumb_width?>" height="<?=$item_thumb_height?>" src="<?=$item['image']?>">
+            </a>
         </div>
         <?php } ?>
-      </div>
-    <?php } ?>
-  </div>
-  
-    <?php if($categories) { ?>
-  <div id="gallery-box" class="categories">
-      <?php foreach($categories as $category) { ?>
-      <div>
-        <h2><a href="<?php echo $category['href']; ?>"><?php echo $category['name']; ?></a></h2>
-        <?php if($category['image']) { ?>
-          <a href="<?php echo $category['href']; ?>" title="<?php echo $category['name']; ?>">
-            <img width="<?php echo $category_thumb_width; ?>" height="<?php echo $category_thumb_height; ?>" src="<?php echo $category['image']; ?>">
-          </a>
-        <?php } ?>
-        <div>
-          <?php echo $category['preview']; ?>
+        <div class="item-separator"></div>
+        <?php if ($categories) foreach ($categories as $category) {?>
+        <div class="item-box">
+            <a href="<?=$category['href']?>" title="<?=$category['name']?>">
+                <?php if ($category['image']) {?>
+                <img width="<?=$category_thumb_width?>" height="<?=$category_thumb_height?>" src="<?=$category['image']?>">
+                <div class="category-name"><?=$category['name']?></div>
+                <?php } ?>
+                <div class="category-preview" style="width:<?=$category_thumb_width?>px"><?=$category['preview']?></div>
+            </a>
         </div>
-      </div>
-  	  <div style="clear:both; height:0px; width:0px; margin:0 0 10px 0; padding:0px; "></div>
-      <?php } ?>
-  </div>
-    <?php } ?>
-
-  
+        <?php } ?>
+    </div>
 </div>
