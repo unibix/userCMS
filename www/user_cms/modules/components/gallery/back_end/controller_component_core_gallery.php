@@ -280,7 +280,7 @@ class controller_component_core_gallery extends component {
 					$mini_height = round($mini_width / ($this->component_config['item_thumb_width'] / $this->component_config['item_thumb_height']));
 				}
 				
-				if (end(explode('.', $_FILES['image']['name']))=='zip'){
+				if (pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION) == 'zip'){
 					set_time_limit(3600);
 					$this->load_helper('zip');
 					
@@ -303,7 +303,7 @@ class controller_component_core_gallery extends component {
 						while (($next_file = readdir($dh)) !== false) {
 							set_time_limit(200);
 							if (($next_file=='.')or($next_file=='..')) continue;
-							$next_ext = strtolower(end(explode('.', $next_file)));
+							$next_ext = strtolower(pathinfo($next_file, PATHINFO_EXTENSION));
 							if (($next_ext!='jpeg') && ($next_ext!='jpg') && ($next_ext!='png') && ($next_ext!='gif')) continue;
 							
 							$next_tmp_name = $this->helper_image->get_rand_name().'.'.$next_ext;

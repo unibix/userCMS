@@ -98,7 +98,110 @@ class helper_image {
 		}
 		return strtolower($rand_name);
 	}
+
+
+	public function resize($src, $dest, $w=0, $h=0) {
+		$i = getimagesize($src);
+		$src_w = $i[0];
+		$src_h = $i[1];
+
+		$save_alpha = (strtolower(pathinfo($dest, PATHINFO_EXTENSION)) == 'png');
+
+		switch ($i['mime']) {
+			case 'image/jpeg':
+			$src_img = imagecreatefromjpeg($src);
+			break;
+
+			case 'image/gif':
+			$src_img = imagecreatefromgif($src);
+			break;
+
+			case 'image/png':
+			$src_img = imagecreatefrompng($src);
+			break;
+
+			default:
+			$src_img = null;
+		}
+
+		if (!is_null($src_img)) {
+			if ($h == 0 || !is_numeric($h)) {
+				$dest_w = $w;
+				$dest_h = round($w*$src_h/$src_w);
+			} else {
+				// Resize in two steps (through $pre_img)
+				// 1 Crop part with needed aspect ratio (and maximum size) from center of source (part placed to $pre_img)
+				// 2 Replace $src_img by $pre_img;
+				$dest_w = $w;
+				$dest_h = $h;
+				$src_ar = $src_w/$src_h; //source image aspect ratio
+				$dest_ar = $dest_w/$dest_h; //destination image aspect ratio
+				// 1
+	            if ($src_ar > $dest_ar) {
+	            	$pre_h = $src_h;
+	            	$pre_w = round($dest_ar*$pre_h);
+	            	$src_x = round(($src_w-$pre_w)/2);
+	            	$src_y = 0;
+	            } else {
+	                $pre_w = $src_w;
+	                $pre_h = round($pre_w/$dest_ar);
+	                $src_x = 0;
+	                $src_y = round(($src_h-$pre_h)/2);
+	            }
+ 	            $pre_img = imagecreatetruecolor($pre_w, $pre_h);
+ 	            imagealphablending($pre_img, true);
+ 	            $bg = imagecolorallocatealpha($pre_img, 0, 0, 0, 127); 
+				imagefill($pre_img, 0, 0, $bg); 
+	            imagecopy($pre_img, $src_img, 0, 0, $src_x, $src_y, $pre_w, $pre_h);
+	            // 2
+				imagedestroy($src_img);
+				$src_img = $pre_img;
+				$src_w = $pre_w;
+				$src_h = $pre_h;
+			}
+
+			$dest_img = imagecreatetruecolor($dest_w, $dest_h);
+			if ($save_alpha) {
+				imagealphablending($dest_img, true);
+ 	            $bg = imagecolorallocatealpha($dest_img, 0, 0, 0, 127); 
+				imagefill($dest_img, 0, 0, $bg); 
+			} else {
+				$bg = imagecolorallocate($dest_img, $this->background['r'], $this->background['g'], $this->background['b']);
+				imagefill($dest_img, 0, 0, $bg);
+			}
+			imagecopyresampled($dest_img, $src_img, 0, 0, 0, 0, $dest_w, $dest_h, $src_w, $src_h);
+			imagedestroy($src_img);
+
+			$ext = strtolower(pathinfo($dest, PATHINFO_EXTENSION));
+			switch ($ext) {
+				case 'jpeg':
+				case 'jpg':
+				imagejpeg($dest_img, $dest, $this->quality);
+				$ret = true;
+				break;
+
+				case 'png':
+				imagealphablending($dest_img, false);
+				imagesavealpha($dest_img, true);
+				imagepng($dest_img, $dest);
+				$ret = true;
+				break;
+
+				case 'gif':
+				imagegif($dest_img, $dest);
+				$ret = true;
+				break;
+
+				default:
+				$ret = false;
+			}
+			return $ret;
+		} else {
+			return false;
+		}
+	}
 	
+    /* 	СТАРАЯ ФУНКЦИЯ
     public function resize($image_name_old, $image_name_new, $width = 0, $height = 0) {
 		$info = getimagesize($image_name_old);
 		
@@ -179,7 +282,7 @@ class helper_image {
 		imagedestroy($img);
 		
 		return $ret_val;
-    }
+    }*/
 	
 	public function set_background($r = 255, $g = 255, $b = 255, $a = 127) {
 		$this->background = array('r' => $r, 'g' => $g, 'b' => $b, 'a' => $a);
