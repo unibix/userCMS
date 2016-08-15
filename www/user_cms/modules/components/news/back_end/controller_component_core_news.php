@@ -26,7 +26,7 @@ class controller_component_core_news extends component {
 		}
 		
 		$params = array(
-			'sort'=>'c.date_add DESC',
+			'sort'=>'c.date DESC, i.date DESC',
 		  //'limit'=>'0,10',
 			'join'=>'category_name'
 		);
@@ -40,8 +40,8 @@ class controller_component_core_news extends component {
 			$this->data['category_id'] = 0;
 		}
 
-
-		$items_on_page = 25;
+		$config = $this->model->get_config();
+		$items_on_page = $config['items_per_page'];
 		$this->data['news_count'] = $this->model->get_total_news($this->data['category_id']);
 		$this->data['pages_amount'] = ceil($this->data['news_count']/$items_on_page);
 		if (isset($this->url['params']['page'])) {

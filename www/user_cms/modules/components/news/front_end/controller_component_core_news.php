@@ -15,7 +15,7 @@ class controller_component_core_news extends component {
 		$component_info = $this->model->get_component_info($this->component_name);
 		
 		$params = array(
-			'sort' => 'i.date_edit DESC, i.date_add DESC, i.id DESC',
+			'sort' => 'c.date DESC, i.date DESC',
 			'join' => 'category_url',
 			'limit' => $this->component_config['main_page_count']
 		);
@@ -103,6 +103,7 @@ class controller_component_core_news extends component {
 				$start_news_number = isset($this->url['params']['page']) ? ($this->url['params']['page']-1) * $count_news_on_page : 0;
 				
 				$params = array(
+					'sort' => 'i.date DESC',
 					'type' => 'by_category',
 					'limit' => $start_news_number . ', ' . $count_news_on_page
 				);

@@ -37,7 +37,7 @@ class model_component_core_news extends model {
 	}
 	
 	public function add_news_item($data = array()) {
-		$sql = "INSERT INTO news_items (category_id, name, text, preview, title, keywords, description, url, date_add, date_edit)
+		$sql = "INSERT INTO news_items (category_id, name, text, preview, title, keywords, description, url, date_add, date_edit, date)
 							VALUES ('" . (int)$data['category_id'] . "', 
 									'" . $this->dbh->escape($data['name']) . "', 
 									'" . $this->dbh->escape($data['text']) . "', 
@@ -47,7 +47,8 @@ class model_component_core_news extends model {
 									'" . $this->dbh->escape($data['description']) . "', 
 									'" . $this->dbh->escape($data['url']) . "', 
 									'" . (int)$data['date_add'] . "', 
-									'" . (int)$data['date_edit'] . "' )";
+									'" . (int)$data['date_edit'] . "',
+									'" . time() . "')";
 									
 		$this->dbh->exec($sql);
 		return $this->dbh->lastInsertId();
@@ -64,7 +65,8 @@ class model_component_core_news extends model {
 					description = '" . $this->dbh->escape($data['description']) . "',
 					url = '" . $this->dbh->escape($data['url']) . "',
 					date_add = '" . (int)$data['date_add'] . "',
-					date_edit = '" . (int)$data['date_edit'] . "'
+					date_edit = '" . (int)$data['date_edit'] . "',
+					date = '" . time() . "'
 				WHERE id = '" . (int)$data['id'] . "'";
 		$this->dbh->exec($sql);
 		return false;
@@ -95,7 +97,7 @@ class model_component_core_news extends model {
 	}
 		
 	public function add_category($data) {
-		$sql = "INSERT INTO news_categories (name, text, sub, preview, title, keywords, description, url, date_add, date_edit)
+		$sql = "INSERT INTO news_categories (name, text, sub, preview, title, keywords, description, url, date_add, date_edit, date)
 							VALUES ('" . $this->dbh->escape($data['name']) . "', 
 									'" . $this->dbh->escape($data['text']) . "', 
 									'" . $this->dbh->escape($data['parent_category']) . "', 
@@ -105,7 +107,8 @@ class model_component_core_news extends model {
 									'" . $this->dbh->escape($data['description']) . "', 
 									'" . $this->dbh->escape($data['url']) . "', 
 									'" . (int)$data['date_add'] . "', 
-									'" . (int)$data['date_edit'] . "' )";
+									'" . (int)$data['date_edit'] . "',
+									'" . time() . "')";
 									
 		$this->dbh->exec($sql);
 		return $this->dbh->lastInsertId();
@@ -122,7 +125,8 @@ class model_component_core_news extends model {
 					description = '" . $this->dbh->escape($data['description']) . "',
 					url = '" . $this->dbh->escape($data['url']) . "',
 					date_add = '" . (int)$data['date_add'] . "',
-					date_edit = '" . (int)$data['date_edit'] . "'
+					date_edit = '" . (int)$data['date_edit'] . "',
+					date = '" . time() . "'
 				WHERE id = '" . (int)$data['id'] . "'";
 		return $this->dbh->exec($sql);
 	}
@@ -138,7 +142,7 @@ class model_component_core_news extends model {
 		return array(
 			'substr_preview' => 1,
 			'preview_count'  => 300,
-			'items_per_page' => 10
+			'items_per_page' => 25
 		);
 	}
 	

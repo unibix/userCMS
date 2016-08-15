@@ -9,7 +9,7 @@ class controller_block_core_news_announce extends block {
 			$sql .= " WHERE category_id = '" . (int)$params['category_id'] . "'";
 		}
 
-		$sql .= " ORDER BY date_add DESC, id DESC LIMIT 0, '" . (int)$params['count_news'] . "'";
+		$sql .= " ORDER BY date DESC, id DESC LIMIT 0, '" . (int)$params['count_news'] . "'";
 		
 		$this->data['news'] = $this->dbh->query($sql);
 		
