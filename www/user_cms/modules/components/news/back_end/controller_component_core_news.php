@@ -27,7 +27,7 @@ class controller_component_core_news extends component {
 		
 		$params = array(
 			'sort'=>'c.date_add DESC',
-			'limit'=>'0,10',
+		  //'limit'=>'0,10',
 			'join'=>'category_name'
 		);
 		
@@ -39,7 +39,23 @@ class controller_component_core_news extends component {
 		} else {
 			$this->data['category_id'] = 0;
 		}
+
+
+		$items_on_page = 25;
+		$this->data['news_count'] = $this->model->get_total_news($this->data['category_id']);
+		$this->data['pages_amount'] = ceil($this->data['news_count']/$items_on_page);
+		if (isset($this->url['params']['page'])) {
+			$this->data['current_page'] = (int)$this->url['params']['page'];
+			if ($this->data['current_page'] < 1) $this->data['current_page'] = 1;
+			if ($this->data['current_page'] > $this->data['pages_amount']) $this->data['current_page'] = $this->data['pages_amount'];
+		} else {
+			$this->data['current_page'] = 1;
+		}
+		$this->data['base_url'] = '/admin/news';
+		if ($this->data['category_id'] != 0) $this->data['base_url'] .= '/category_id='.$this->data['category_id'];
+		$params['limit'] = (($this->data['current_page']-1)*$items_on_page).','.$items_on_page;
 			
+
 		$this->data['news'] = $this->model->get_news($this->data['category_id'], $params);
 		
 		$this->data['categories'] = $this->model->get_categories();
@@ -53,6 +69,9 @@ class controller_component_core_news extends component {
 		
 		return $this->page;
 	}
+
+
+
 	
 	public function action_add() {
 		$this->data['errors'] = array();

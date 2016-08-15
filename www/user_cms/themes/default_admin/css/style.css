@@ -310,3 +310,25 @@ fieldset{
 #field_types_block {background: #F5F0E7; padding: 10px; border: 1px solid #D7D0C0; border-radius: 10px;}
 #field_types_block select {border-radius: 3px; background: #FFFFFF; width: 99%; height: 130px;}
 #field_types_block label {margin-bottom: 10px;}
+
+ul.pagination {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+    text-align: center;
+}
+ul.pagination > li {
+    display: inline-block;
+    border: 1px solid #bcbcbc;
+    border-right: none;
+}
+ul.pagination > li:last-of-type {border-right: 1px solid #bcbcbc;}
+ul.pagination > li.current, ul.pagination > li > a:hover {background-color: #e0e0e0;}
+ul.pagination > li > a, 
+ul.pagination > li > span {
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-decoration: none;
+}
