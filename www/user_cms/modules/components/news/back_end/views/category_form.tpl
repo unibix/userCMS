@@ -46,12 +46,12 @@
 				<textarea name="preview" ><?php echo $preview; ?></textarea>
 				<label for="page_text">Текст:</label>
 				<textarea class="wysiwyg" name="text" ><?php echo $text; ?></textarea>
-        <label for="page_name">Дата добавления:</label>
-				<input type="text"  name="date_add" value="<?php echo $date_add; ?>">
-      <?php if($date_edit) { ?>
-        <label for="page_name">Дата редактирования:</label>
-				<input type="text"  name="date_edit" value="<?php echo $date_edit; ?>">
-      <?php } ?>
+		        <label for="date">Дата публикации (до этой даты все новости из этой категории будут скрыты)</label>
+				<input type="text" name="date" value="<?=date('d.m.Y H:i', $date)?>">
+				<p>Дата создания: <?=date('d.m.Y H:i', $date_add)?></p>
+		      	<?php if($date_edit != 0) { ?>
+		        <p>Дата изменения: <?=date('d.m.Y H:i', $date_edit)?></p>
+		      	<?php } ?>
 			</div>
 			<div id="tab_seo">
 				<label for="page_title">Заголовок (title):</label>

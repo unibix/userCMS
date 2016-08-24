@@ -144,15 +144,15 @@ class controller_component_core_news extends component {
 			$this->data['category_id'] = 1;
 		}
 		
-		if(isset($_POST['date_add']) && !$this->data['errors']) {
-			if(!$this->data['date_add'] = strtotime($_POST['date_add'])) {
-				$this->data['date_add'] = time();
-			}
+		if (isset($_POST['date'])) {
+			$this->data['date'] = strtotime($_POST['date']);
+			if ($this->data['date'] === false) $this->data['errors'] = 'Время публикации указано неверно';
 		} else {
-			$this->data['date_add'] = date('d.m.Y H:i');
+			$this->data['date'] = time();
 		}
-		
-		$this->data['date_edit'] = '';
+
+		$this->data['date_add'] = time();
+		$this->data['date_edit'] = 0;
 		
 		if(isset($_POST['submit_news']) && !$this->data['errors']){
 
@@ -235,29 +235,12 @@ class controller_component_core_news extends component {
 			$this->data['category_id'] = $this->url['params']['category_id'];
 		}
 		
-		if(isset($_POST['date_add'])) {
-			$date_add = strtotime($_POST['date_add']);
-			if($this->data['errors']) {
-				$this->data['date_add'] = $_POST['date_add'];
-			} elseif($date_add) {
-				$this->data['date_add'] = $date_add;
-			}
-		} else {
-			$this->data['date_add'] = date('d.m.Y H:i', (int)$this->data['date_add']);
+		if (isset($_POST['date'])) {
+			$this->data['date'] = strtotime($_POST['date']);
+			if ($this->data['date'] === false) $this->data['errors'] = 'Время публикации указано неверно';
 		}
-		
-		if(isset($_POST['date_edit'])) {
-			$date_edit = strtotime($_POST['date_edit']);
-			if($this->data['errors']) {
-				$this->data['date_edit'] = $_POST['date_edit'];			
-			} elseif($date_edit) {
-				$this->data['date_edit'] = $date_edit;
-			}
-		} elseif(!$this->data['date_edit']) {
-			$this->data['date_edit'] = date('d.m.Y H:i');
-		} else {
-			$this->data['date_edit'] = date('d.m.Y H:i', (int)$this->data['date_edit']);
-		}
+
+		$this->data['date_edit'] = time();
 
 		if(isset($_POST['submit_news']) && !$this->data['errors']) {
 			$this->model->edit_news_item($this->data);
@@ -368,16 +351,15 @@ class controller_component_core_news extends component {
 			$this->data['url'] = '';
 		}
 		
-		if(isset($_POST['date_add'])) {
-			$date_add = strtotime($_POST['date_add']);
-			if($this->data['errors']) {
-				$this->data['date_add'] = $_POST['date_add'];
-			} elseif($date_add) {
-				$this->data['date_add'] = $date_add;
-			}
+		if (isset($_POST['date'])) {
+			$this->data['date'] = strtotime($_POST['date']);
+			if ($this->data['date'] === false) $this->data['errors'] = 'Время публикации указано неверно';
 		} else {
-			$this->data['date_add'] = date('d.m.Y H:i');
+			$this->data['date'] = time();
 		}
+
+		$this->data['date_add'] = time();
+		$this->data['date_edit'] = 0;
 		
 		if (isset($_POST['parent_category'])){
 			$this->data['parent_category'] = (int)$_POST['parent_category'];
@@ -386,8 +368,6 @@ class controller_component_core_news extends component {
 			$this->data['parent_category'] = 0;
 			$this->data['sub'] = 0;
 		}
-		
-		$this->data['date_edit'] = '';
 		
 		if(isset($_POST['submit_category']) && !$this->data['errors']) {
 			if($category_id = $this->model->add_category($this->data)) {
@@ -464,27 +444,12 @@ class controller_component_core_news extends component {
 			$this->data['url'] = $this->str2url($this->data['name']);
 		}
 		
-		if(isset($_POST['date_add'])) {
-			$date_add = strtotime($_POST['date_add']);
-			if($this->data['errors']) {
-				$this->data['date_add'] = $_POST['date_add'];
-			} elseif($date_add) {
-				$this->data['date_add'] = $date_add;
-			}
-		} else {
-			$this->data['date_add'] = date('d.m.Y H:i', $this->data['date_add']);
+		if (isset($_POST['date'])) {
+			$this->data['date'] = strtotime($_POST['date']);
+			if ($this->data['date'] === false) $this->data['errors'] = 'Время публикации указано неверно';
 		}
-		
-		if(isset($_POST['date_edit'])) {
-			$date_edit = strtotime($_POST['date_edit']);
-			if($this->data['errors']) {
-				$this->data['date_edit'] = $_POST['date_edit'];			
-			} elseif($date_edit) {
-				$this->data['date_edit'] = $date_edit;
-			}
-		} else {
-			$this->data['date_edit'] = date('d.m.Y H:i');
-		}
+
+		$this->data['date_edit'] = time();
 		
 		if(isset($_POST['submit_category']) && !$this->data['errors']) {
 			if($this->model->edit_category($this->data)) {

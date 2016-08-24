@@ -14,11 +14,23 @@ class controller_component_core_news extends component {
 		
 		$component_info = $this->model->get_component_info($this->component_name);
 		
+		$count_news_on_page = $this->component_config['index_page_count'];
+		$start_news_number = isset($this->url['params']['page']) ? ($this->url['params']['page']-1) * $count_news_on_page : 0;
+		
 		$params = array(
 			'sort' => 'c.date DESC, i.date DESC',
 			'join' => 'category_url',
-			'limit' => $this->component_config['main_page_count']
+			'limit' => $start_news_number . ', ' . $count_news_on_page
 		);
+		
+		$count_news = $this->model->get_count_news();
+		$count_news = $count_news ? $count_news[0]['count_news'] : 0;
+		$pages_amount = ceil($count_news/$count_news_on_page);
+						
+		$this->data['pages_amount'] = $pages_amount;
+		$this->data['current_page'] = isset($this->url['params']['page']) ? ($this->url['params']['page']) : 1;
+		$this->data['base_url'] = '/'.$this->url['component'];
+
 		$this->data['news_items'] = array();
 		$results = $this->model->get_news(0, $params);
 		
@@ -27,7 +39,7 @@ class controller_component_core_news extends component {
 				'name' => $result['name'],
 				'href' => SITE_URL . '/' . $component_info['url'] . '/' . $result['cat_url'] . '/' . $result['url'],
 				'preview' => $result['preview'],
-				'date_add' => date('d.m.Y H:i', $result['date_add'])
+				'date' => date('d.m.Y H:i', $result['date'])
 			);
 		}
 		
@@ -110,11 +122,11 @@ class controller_component_core_news extends component {
 				
 				$count_news = $this->model->get_count_news($category['id']);
 				$count_news = $count_news ? $count_news[0]['count_news'] : 0;
-				$count_pages = ceil($count_news/$count_news_on_page);
-				if ($count_pages<2) $count_pages=0;
-				
-				$this->data['count_pages'] = $count_pages;
-				$this->data['this_page'] = isset($this->url['params']['page']) ? ($this->url['params']['page']) : 1;
+				$pages_amount = ceil($count_news/$count_news_on_page);
+								
+				$this->data['pages_amount'] = $pages_amount;
+				$this->data['current_page'] = isset($this->url['params']['page']) ? ($this->url['params']['page']) : 1;
+				$this->data['base_url'] = '/'.$this->url['component'].'/'.implode('/', $this->url['actions']);
 								
 				$this->data['news_items'] = array();
 				$results = $this->model->get_news($category['id'], $params);
@@ -127,7 +139,7 @@ class controller_component_core_news extends component {
 						'name' => $result['name'],
 						'href' => SITE_URL . '/' . $component_info['url'] . '/' . $category['url'] . '/' . $result['url'],
 						'preview' => $result['preview'],
-						'date_add' => date('d.m.Y H:i', $result['date_add'])
+						'date' => date('d.m.Y H:i', $result['date'])
 					);
 				}
 

@@ -48,7 +48,7 @@ class model_component_core_news extends model {
 									'" . $this->dbh->escape($data['url']) . "', 
 									'" . (int)$data['date_add'] . "', 
 									'" . (int)$data['date_edit'] . "',
-									'" . time() . "')";
+									'" . (int)$data['date'] . "')";
 									
 		$this->dbh->exec($sql);
 		return $this->dbh->lastInsertId();
@@ -66,7 +66,7 @@ class model_component_core_news extends model {
 					url = '" . $this->dbh->escape($data['url']) . "',
 					date_add = '" . (int)$data['date_add'] . "',
 					date_edit = '" . (int)$data['date_edit'] . "',
-					date = '" . time() . "'
+					date = '" . (int)$data['date'] . "'
 				WHERE id = '" . (int)$data['id'] . "'";
 		$this->dbh->exec($sql);
 		return false;
@@ -108,7 +108,7 @@ class model_component_core_news extends model {
 									'" . $this->dbh->escape($data['url']) . "', 
 									'" . (int)$data['date_add'] . "', 
 									'" . (int)$data['date_edit'] . "',
-									'" . time() . "')";
+									'" . (int)$data['date'] . "')";
 									
 		$this->dbh->exec($sql);
 		return $this->dbh->lastInsertId();
@@ -126,7 +126,7 @@ class model_component_core_news extends model {
 					url = '" . $this->dbh->escape($data['url']) . "',
 					date_add = '" . (int)$data['date_add'] . "',
 					date_edit = '" . (int)$data['date_edit'] . "',
-					date = '" . time() . "'
+					date = '" . (int)$data['date'] . "'
 				WHERE id = '" . (int)$data['id'] . "'";
 		return $this->dbh->exec($sql);
 	}

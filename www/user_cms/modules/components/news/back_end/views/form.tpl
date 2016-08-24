@@ -41,20 +41,20 @@
 				<textarea class="wysiwyg" name="text" ><?php echo $text; ?></textarea>
 				<label for="page_parent_id">Категория:</label>
 				<select name="category_id">
-        <?php foreach($categories as $category) { ?>
-          <?php if($category['id'] == $category_id) { ?>
-					<option selected value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
-          <?php } else { ?>
-          <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
-          <?php } ?>
-        <?php } ?>
+		        <?php foreach($categories as $category) { ?>
+		          <?php if($category['id'] == $category_id) { ?>
+							<option selected value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
+		          <?php } else { ?>
+		          <option value="<?php echo $category['id']; ?>"><?php echo $category['name']; ?></option>
+		          <?php } ?>
+		        <?php } ?>
 				</select>
-        <label for="page_name">Дата добавления:</label>
-				<input type="text"  name="date_add" value="<?php echo $date_add; ?>">
-      <?php if($date_edit) { ?>
-        <label for="page_name">Дата редактирования:</label>
-				<input type="text"  name="date_edit" value="<?php echo $date_edit; ?>">
-      <?php } ?>
+		        <label for="date">Дата публикации (новость не будет отображаться до этой даты)</label>
+				<input type="text" name="date" value="<?=date('d.m.Y H:i', $date)?>">
+				<p>Дата создания: <?=date('d.m.Y H:i', $date_add)?></p>
+		      	<?php if($date_edit != 0) { ?>
+		        <p>Дата изменения: <?=date('d.m.Y H:i', $date_edit)?></p>
+		      	<?php } ?>
 			</div>
 			<div id="tab_seo">
 				<label for="page_title">Заголовок (title):</label>
