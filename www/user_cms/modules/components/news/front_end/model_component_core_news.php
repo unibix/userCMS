@@ -117,8 +117,16 @@ class model_component_core_news extends model {
 		return array('urls'=>$urls, 'names'=>$names);
 	}
 	
-	public function get_count_news($category_id){
-		return $this->dbh->query("SELECT COUNT(id) AS count_news FROM news_items WHERE category_id='$category_id' AND date <= '".time()."'");
+	public function get_count_news($category_id = 0){
+		if ($category_id != 0) {
+			return $this->dbh->query("SELECT COUNT(id) AS count_news FROM news_items WHERE category_id='$category_id' AND date <= '".time()."'");
+		} else {
+			return $this->dbh->query("
+				SELECT COUNT(i.id) AS count_news
+				FROM news_items i
+				LEFT JOIN news_categories c ON c.id = i.category_id
+				WHERE c.date <= '".time()."' AND i.date <= '".time()."'");
+		}
 	}
 	
 }
