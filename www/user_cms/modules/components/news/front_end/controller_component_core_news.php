@@ -27,7 +27,7 @@ class controller_component_core_news extends component {
 				'name' => $result['name'],
 				'href' => SITE_URL . '/' . $component_info['url'] . '/' . $result['cat_url'] . '/' . $result['url'],
 				'preview' => $result['preview'],
-				'date_add' => date('d.m.Y H:i', $result['date_add'])
+				'date' => date('d.m.Y H:i', $result['date'])
 			);
 		}
 		
@@ -127,7 +127,7 @@ class controller_component_core_news extends component {
 						'name' => $result['name'],
 						'href' => SITE_URL . '/' . $component_info['url'] . '/' . $category['url'] . '/' . $result['url'],
 						'preview' => $result['preview'],
-						'date_add' => date('d.m.Y H:i', $result['date_add'])
+						'date' => date('d.m.Y H:i', $result['date'])
 					);
 				}
 

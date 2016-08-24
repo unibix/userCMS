@@ -12,23 +12,23 @@ class model_component_core_news extends model {
 		
 		if(isset($params['join'])) {
 			if($params['join'] == 'category_name') {
-				$sql .= "SELECT i.*, c.name AS cat_name FROM news_items i LEFT JOIN news_categories c ON c.id = i.category_id ";
+				$sql .= "SELECT i.*, c.name AS cat_name FROM news_items i LEFT JOIN news_categories c ON c.id = i.category_id WHERE i.date <= '".time()."' AND c.date <= '".time()."'";
 			} elseif ($params['join'] == 'category_url') {
-				$sql .= "SELECT i.*, c.url AS cat_url FROM news_items i LEFT JOIN news_categories c ON c.id = i.category_id "; //
+				$sql .= "SELECT i.*, c.url AS cat_url FROM news_items i LEFT JOIN news_categories c ON c.id = i.category_id WHERE i.date <= '".time()."' AND c.date <= '".time()."'"; //
 			} else {
-				$sql .= "SELECT * FROM news_items i ";
+				$sql .= "SELECT * FROM news_items i WHERE i.date <= '".time()."'";
 			}
 		} else {
-			$sql .= "SELECT * FROM news_items i "; //cat
+			$sql .= "SELECT * FROM news_items i WHERE i.date <= '".time()."'"; //cat
 		}
 		
 		if(isset($params['type'])) {
 			if($params['type'] == 'by_category') {
-				$sql .= " WHERE i.category_id = '" . (int)$data . "'";
+				$sql .= " AND i.category_id = '" . (int)$data . "'";
 			} elseif($params['type'] == 'by_url') {
-				$sql .= " WHERE i.url = '" . $this->dbh->escape($data) . "'";
+				$sql .= " AND i.url = '" . $this->dbh->escape($data) . "'";
 			} elseif($params['type'] == 'by_id') {
-				$sql .= " WHERE i.id = '" . (int)$data . "'";
+				$sql .= " AND i.id = '" . (int)$data . "'";
 			}
 		}
 		
@@ -58,20 +58,20 @@ class model_component_core_news extends model {
 		
 		if(isset($params['join'])) {
 			if($params['join'] == 'count_news') {
-				$sql = "SELECT c.*, COUNT(i.id) AS count_news FROM news_categories c LEFT JOIN news_items i ON c.id = i.category_id ";
+				$sql = "SELECT c.*, COUNT(i.id) AS count_news FROM news_categories c LEFT JOIN news_items i ON c.id = i.category_id WHERE c.date <= '".time()."'";
 			} else {
-				$sql = "SELECT * FROM news_categories c ";
+				$sql = "SELECT * FROM news_categories c WHERE c.date <= '".time()."'";
 			}
 		} else {
-			$sql = "SELECT * FROM news_categories c ";
+			$sql = "SELECT * FROM news_categories c WHERE c.date <= '".time()."'";
 		}
 		
 		if(isset($params['type'])) {
 			if($params['type']=='by_url') {
-				$sql .= " WHERE c.url = '" . $this->dbh->escape($data) . "'";
+				$sql .= " AND c.url = '" . $this->dbh->escape($data) . "'";
 			}
 		} else {
-			$sql .= " WHERE c.id = '" . (int)$data . "'";
+			$sql .= " AND c.id = '" . (int)$data . "'";
 		}
 		
 		if(isset($params['sort'])) {
@@ -118,7 +118,7 @@ class model_component_core_news extends model {
 	}
 	
 	public function get_count_news($category_id){
-		return $this->dbh->query("SELECT COUNT(id) AS count_news FROM news_items WHERE category_id=" . $category_id);
+		return $this->dbh->query("SELECT COUNT(id) AS count_news FROM news_items WHERE category_id='$category_id' AND date <= '".time()."'");
 	}
 	
 }

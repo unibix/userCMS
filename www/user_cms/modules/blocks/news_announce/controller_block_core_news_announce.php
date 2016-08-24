@@ -4,12 +4,12 @@ class controller_block_core_news_announce extends block {
 	
 	public function action_index($block) {
 		$params = unserialize($block['params']);
-		$sql = "SELECT * FROM news_items ";
+		$sql = "SELECT i.* FROM news_items i LEFT JOIN news_categories c ON c.id = i.category_id WHERE i.date <= '".time()."' AND c.date <= '".time()."'";
 		if($params['category_id']) {
-			$sql .= " WHERE category_id = '" . (int)$params['category_id'] . "'";
+			$sql .= " AND i.category_id = '".(int)$params['category_id']."'";
 		}
 
-		$sql .= " ORDER BY date DESC, id DESC LIMIT 0, '" . (int)$params['count_news'] . "'";
+		$sql .= " ORDER BY c.date DESC, i.date DESC LIMIT 0, '" . (int)$params['count_news'] . "'";
 		
 		$this->data['news'] = $this->dbh->query($sql);
 		

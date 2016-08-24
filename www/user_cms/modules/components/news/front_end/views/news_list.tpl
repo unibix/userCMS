@@ -7,7 +7,7 @@
       <div>
         <h2><a href="<?php echo $item['href']; ?>"><?php echo $item['name']; ?></a></h2>
         <div><?php echo $item['preview']; ?></div>
-        <div class="date"><?php echo $item['date_add']; ?></div>
+        <div class="date"><?php echo $item['date']; ?></div>
       </div>
       <?php } ?>
     <?php } ?>
