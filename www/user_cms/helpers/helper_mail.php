@@ -2,11 +2,11 @@
 
 class helper_mail {
 
-	public $charset = 'UTF-8';
-	public $from_name = '';
-	public $from_email = '';
+	
+	public $from_name = 'Robot UserCMS';
+	public $from_email = 'noreply@usercms.ru';
 	public $mail_target = '';
-	public $subject = '';
+	public $subject = 'Re: no subject';
 	
 	public function __construct($data = array()) {
 		if(isset($data) && is_array($data)) {
@@ -20,20 +20,19 @@ class helper_mail {
 	
 	protected function message_headers(){
 		$headers = "Date: ".date("D, d M Y H:i:s")." UT\r\n";
-		$headers.= "Subject: =?".$this->charset."?B?".base64_encode($this->subject)."?=\r\n";
 		$headers.= "MIME-Version: 1.0\r\n";
-		$headers.= "Content-Type: text/html; charset=\"".$this->charset."\"\r\n";
+		$headers.= "Content-Type: text/html; charset=\"UTF-8\"\r\n";
 		$headers.= "Content-Transfer-Encoding: 8bit\r\n";
-		// $headers.= "To: ".$this->mail_target." <".$this->mail_target.">\r\n";
-		$headers.= "From: =?".$this->charset."?B?".base64_encode($this->from_name)."?= <".$this->from_email.">\r\n";
+		$headers.= "From: =?UTF-8?B?".base64_encode($this->from_name)."?= <".$this->from_email.">\r\n";
 		$headers.= "X-Priority: 3";
 		$headers.= "X-Mailer: PHP/".phpversion()."\r\n";
 		return $headers;
 	}
 	
-	public function send($data = '') {
+	public function send($message = '') {
 		$headers = $this->message_headers();
-		return mail($this->mail_target, $this->subject, $data, $headers);
+		$subject = "=?UTF-8?B?".base64_encode($this->subject)."?=";
+		return mail($this->mail_target, $subject , $message, $headers);
 	}
 }
 
