@@ -69,7 +69,7 @@ class controller_plugin_core_feedback extends plugin
 					$message .= '<br>';
 					
 				}
-				$message .= 'Форма заполнена на странице: '. SITE_URL . '/' . $this->url['request_uri'] .'<br>';
+				$message .= 'Форма заполнена на странице: '. SITE_URL  . $this->url['request_uri'] .'<br>';
 				
 				$this->load_helper('mail');
 				
@@ -80,7 +80,7 @@ class controller_plugin_core_feedback extends plugin
 				
 				if ($this->helper_mail->send($message)) {
 					$_SESSION['feedback_success_' . $this->plugin_id] = $params['mail_text_success'];
-					$this->redirect(SITE_URL . '/' . $this->url['request_uri']);
+					$this->redirect(SITE_URL  . $this->url['request_uri']);
 				}
 			}
 		
