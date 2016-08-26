@@ -2,9 +2,6 @@
 # Apache/PHP/UserCMS settings:
 #
 
-# Set default charset to utf-8
-#AddDefaultCharset utf-8
-
 ########################################
 # Locale settings
 ########################################
@@ -32,31 +29,7 @@ php_value mbstring.http_output UTF-8
 php_value mbstring.encoding_translation On
 php_value mbstring.func_overload 6
 
-# See also php functions:
-# mysql_set_charset
-# mysql_client_encoding
 
-# database settings
-#CREATE DATABASE db_name
-#   CHARACTER SET utf8
-#   DEFAULT CHARACTER SET utf8
-#   COLLATE utf8_general_ci
-#   DEFAULT COLLATE utf8_general_ci
-#   ;
-#
-#ALTER DATABASE db_name
-#   CHARACTER SET utf8
-#   DEFAULT CHARACTER SET utf8
-#   COLLATE utf8_general_ci
-#   DEFAULT COLLATE utf8_general_ci
-#   ;
-
-#ALTER TABLE tbl_name
-#   DEFAULT CHARACTER SET utf8
-#   COLLATE utf8_general_ci
-#   ;
-##########################################
-##########################################
 
 # Protect files and directories from prying eyes.
 # <FilesMatch "\.(ini|php|xml|sqlite|tpl|htaccess)$|^(themes|user_cms|modules)$">
@@ -98,6 +71,11 @@ php_value post_max_size 10M
 <IfModule mod_rewrite.c>
 RewriteEngine on
 
+# Redirect from OLD domain or aliases
+# RewriteCond %{HTTP_HOST} ^olddomain\.ru$ [NC]
+# RewriteRule ^(.*)$ http://newdomain.com/$1 [R=301,L]
+# RewriteCond %{HTTP_HOST} ^www.olddomain\.ru$ [NC]
+# RewriteRule ^(.*)$ http://www.newdomain.com/$1 [R=301,L]
 
 
 # If your site can be accessed both with and without the 'www.' prefix, you
