@@ -36,7 +36,7 @@ class helper_image {
 			else return '';
 		}
 
-		$final_extension = end(explode('.', $_FILES[$input_name]['name']));
+		$final_extension = pathinfo($_FILES[$input_name]['name'], PATHINFO_EXTENSION);
 		// генерируем имя
 		$img_name = $this->get_rand_name().'.'.$final_extension;
 		// полный путь
@@ -104,8 +104,8 @@ class helper_image {
 		$i = getimagesize($src);
 		$src_w = $i[0];
 		$src_h = $i[1];
-
-		$save_alpha = (strtolower(pathinfo($dest, PATHINFO_EXTENSION)) == 'png');
+		if (($w > 0 && $src_w < $w) || ($h > 0 && $src_h < $h)) return copy($src, $dest);
+		$save_alpha = strtolower(pathinfo($dest, PATHINFO_EXTENSION)) == 'png';
 
 		switch ($i['mime']) {
 			case 'image/jpeg':
