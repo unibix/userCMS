@@ -572,8 +572,5 @@ function __autoload($class_name) {
     	if(  file_exists($f)) {
            	require_once($f);
         }
-        else {
-            if ($core_dir) exit('Error #2: wrong class name: '.$class_name);
-        } 
     }
 } 
