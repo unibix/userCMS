@@ -14,7 +14,7 @@
             
             <?php } elseif ($field['type'] == 'textarea') { ?>
 
-                <label for="<?=$field['name']?>"><?=$field['label']?><?=$field['label']?><?=($field['required']) ? ' *' : ''?></label>
+                <label for="<?=$field['name']?>"><?=$field['label']?><?=($field['required']) ? ' *' : ''?></label>
                 <?php if ($field['error']) { ?><span class="text-danger"><?=$field['error']?></span><?php } ?>
                 <textarea id="<?=$field['name']?>" class="form-control" name="<?=$field['name']?>" <?=($field['required']) ? 'required' : ''?>><?=$field['value']?></textarea>
                 
