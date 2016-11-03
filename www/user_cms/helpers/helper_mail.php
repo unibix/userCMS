@@ -6,7 +6,7 @@ class helper_mail {
     public $from_email = '';
     public $mail_target = '';
     public $subject = '';
-    public $attach = Array();
+    private $attach = Array();
     
     public function __construct($data = array()) {
         if(isset($data) && is_array($data)) {
@@ -16,6 +16,10 @@ class helper_mail {
                 }
             }
         }
+    }
+
+    public function add_attach($filename) {
+        if (file_exists($filename)) $this->attach[] = $filename;
     }
     
     public function send($message)
@@ -29,10 +33,8 @@ class helper_mail {
 
         $subject = "=?UTF-8?B?".base64_encode($this->subject)."?=";
         if (strpos($message, '</')) $msgType = "text/html"; else $msgType = "text/plain";
-        $files = Array();
-        foreach ($attach as $path) if (file_exists($path)) $files[] = $path;
 
-        if ($files) {
+        if ($this->attach) {
             $boundary = md5(time());
             $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
 
@@ -42,7 +44,7 @@ class helper_mail {
             $body .= "\r\n";
             $body .= $message;
 
-            foreach ($files as $path) {
+            foreach ($this->attach as $path) {
                 $filename = mb_substr($path, mb_strrpos($path, '/'));
                 $body .= "\r\n--$boundary\r\n"; 
                 $body .= "Content-Type: application/octet-stream\r\n";  
