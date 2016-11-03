@@ -46,7 +46,7 @@
                 
             <?php } elseif ($field['type'] == 'submit') { ?>
 
-                <input type="submit" class="btn btn-primary" name="<?=$field['name']?>" value="<?=$field['label']?>" class="submit_<?=$plugin_id;?>">
+                <input type="submit" class="btn btn-primary" name="<?=$field['name']?>" value="<?=$field['label']?>">
 
             <?php } ?>
             </div>
