@@ -2,7 +2,7 @@
     <form action="#plugin-feedback-<?=$plugin_id?>" method="POST">
 
     <?php if ($success) { ?>
-        <div class="alert alert-danger"><?=$success?></div>
+        <div class="alert alert-success"><?=$success?></div>
     <?php } else { ?>
         <?php foreach ($fields as $i => $field) { ?>
             <div class="form-group <?=($field['error']) ? 'has-error' : ''?>">
