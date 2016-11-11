@@ -4,7 +4,7 @@
   
 	<?php echo $content; ?>
 	
-	<?php if ($children) { ?>
+	<?php if (isset($children) && !empty($children)) { ?>
 	  <div id="page_children">
 		<ul>
 		  <?php foreach ($children as $child) { ?>
