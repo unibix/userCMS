@@ -225,7 +225,6 @@ ul {
 
 #main ul li:first-child {
 	padding-top: 0;
-	border-top: 0;
 }
 table {
 	border-collapse: collapse
@@ -321,4 +320,26 @@ table {
 #sidebar1 ul li.first {
 	padding-top: 0;
 	border-top: 0;
+}
+
+ul.pagination {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+    text-align: center;
+}
+ul.pagination > li {
+    display: inline-block;
+    border: 1px solid #bcbcbc;
+    border-right: none;
+}
+ul.pagination > li:last-of-type {border-right: 1px solid #bcbcbc;}
+ul.pagination > li.current, ul.pagination > li > a:hover {background-color: #e0e0e0;}
+ul.pagination > li > a, 
+ul.pagination > li > span {
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-decoration: none;
 }

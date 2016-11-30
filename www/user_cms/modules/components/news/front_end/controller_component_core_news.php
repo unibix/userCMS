@@ -1,196 +1,108 @@
-<?php 
+<?php
+class controller_component_core_news extends component
+{
+    function __construct($config, $url, $component, $dbh)
+    {
+        parent::__construct($config, $url, $component, $dbh);
+        
+        $this->data['img_folder'] = 'news';
+        
+        $this->data['breadcrumbs'] = array(
+            'labels' => array('Главная', 'Новости'),
+            'hrefs' => array(SITE_URL, SITE_URL.'/'.$this->url['component'])
+        );
 
-class controller_component_core_news extends component {
-	
-	public function action_index() {
-		if (file_exists($this->view_dir . '/news.css')) {
-			$css = SITE_URL . '/modules/components/' . $this->component_name . '/front_end/views/news.css';
-		} else {
-			$css = SITE_URL . '/user_cms/modules/components/' . $this->component_name . '/front_end/views/news.css';
-		}
-		$this->page['head'] = $this->add_css_file($css);
-		
-		// выводим 5 последних новостей 
-		
-		$component_info = $this->model->get_component_info($this->component_name);
-		
-		$count_news_on_page = $this->component_config['index_page_count'];
-		$start_news_number = isset($this->url['params']['page']) ? ($this->url['params']['page']-1) * $count_news_on_page : 0;
-		
-		$params = array(
-			'sort' => 'c.date DESC, i.date DESC',
-			'join' => 'category_url',
-			'limit' => $start_news_number . ', ' . $count_news_on_page
-		);
-		
-		$count_news = $this->model->get_count_news();
-		$count_news = $count_news ? $count_news[0]['count_news'] : 0;
-		$pages_amount = ceil($count_news/$count_news_on_page);
-						
-		$this->data['pages_amount'] = $pages_amount;
-		$this->data['current_page'] = isset($this->url['params']['page']) ? ($this->url['params']['page']) : 1;
-		$this->data['base_url'] = '/'.$this->url['component'];
+        if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {;
+            $this->data['base_url'] = SITE_URL.'/'.$this->url['component'];
+        } else {
+            $this->data['base_url'] = SITE_URL.'/'.$this->url['component'].'/'.implode('/', $this->url['actions']);
+            foreach ($this->url['actions'] as $n => $url) {
+                $this->data['breadcrumbs']['hrefs'][$n+2] = $this->data['breadcrumbs']['hrefs'][$n+1].'/'.$url;
+            }
+        }
 
-		$this->data['news_items'] = array();
-		$results = $this->model->get_news(0, $params);
-		
-		foreach($results as $result) { 
-			$this->data['news_items'][$result['id']] = array(
-				'name' => $result['name'],
-				'href' => SITE_URL . '/' . $component_info['url'] . '/' . $result['cat_url'] . '/' . $result['url'],
-				'preview' => $result['preview'],
-				'date' => date('d.m.Y H:i', $result['date'])
-			);
-		}
-		
-		$this->data['page_name'] = $component_info['name'];
-		$this->data['bread_crumbs'] = '<a href="' . SITE_URL . '">Главная</a> &#8594 ';
-		$this->data['bread_crumbs'] .= '<a href="' . SITE_URL . '/' . $this->url['component'] . '">' . $component_info['name'] . '</a>';
-		$this->page['title'] = $component_info['title'];
-		$this->page['keywords'] = $component_info['keywords'];
-		$this->page['description'] = $component_info['description'];
-		$this->page['html'] = $this->load_view('main');
-		return $this->page;
-	}
-	
-	public function action_else() {
-		if (file_exists($this->view_dir . '/news.css')) {
-			$css = SITE_URL . '/modules/components/' . $this->component_name . '/front_end/views/news.css';
-		} else {
-			$css = SITE_URL . '/user_cms/modules/components/' . $this->component_name . '/front_end/views/news.css';
-		}
-		$this->page['head'] = $this->add_css_file($css);
-		
-		$component_info = $this->model->get_component_info($this->component_name);
-		$this->data['bread_crumbs'] = '<a href="' . SITE_URL . '">Главная</a>';
-		$view = 'index';
-		$not_found = false;
-		
-		$params = array(
-			'type' => 'by_url'
-		);
-		
-		$new_flag = false;
-		$category_url = $this->url['actions'][count($this->url['actions'])-1];
-		$category = $this->model->get_category($this->url['actions'][count($this->url['actions'])-1], $params); //это - категория
-		
-		if ((!$category) AND (count($this->url['actions'])>1)) {
-			$category = $this->model->get_category($this->url['actions'][count($this->url['actions'])-2], $params); // это - новость
-			$category_url = $this->url['actions'][count($this->url['actions'])-2];
-			$new_flag = true;
-		}
+        $this->page['head'] = $this->add_css_file('/user_cms/modules/components/'.$this->data['img_folder'].'/front_end/views/style.css');
+        $this->page['head'] .= $this->add_css('#content .article-preview img {max-width:'.$this->component_config['image_thumb_width'].'px}');
+    }
 
 
-		//echo (count($this->url['actions']));
-		//echo ($this->url['actions'][count($this->url['actions'])-2]);
-		//print_r($category);
-		
-		if (($category) AND ($category_full_url = $this->model->get_category_full_url($category['id'])) ){ //Последнее неверно в случае, если категории зациклены
-			
+    /**
+    * Отображение категории (статья и дочерние элементы)
+    * Если указан $parent_id = 0, то выводятся элементы, вложенные в корневую категорию
+    * @param int $parent_id идентификатор категории
+    * @return array готовую страницу $this->page
+    */
+    protected function show_category($parent_id)
+    {
+        $items_count = $this->model->count_childrens($parent_id);
+        $items_per_page = $this->component_config['index_page_count'];
+        $pages_count = ceil($items_count/$items_per_page);
+        $current_page = isset($this->url['params']['page']) ? intval($this->url['params']['page']) : 0;
+        if ($current_page > $pages_count) $current_page = $pages_count;
+        elseif ($current_page < 1) $current_page = 1;
 
-			//echo '<pre>';
-			//print_r($category_full_url);
-			//echo '</pre>';
-			
-			$href = SITE_URL . '/' . $component_info['url'];
-			$this->data['bread_crumbs'] .= ' &#8594 <a href="' . $href . '">' . $component_info['name'] . '</a>';
-			for ($key = count($category_full_url['urls'])-1; $key>=0; $key--){
-				$href .= '/' . $category_full_url['urls'][$key];
-				$this->data['bread_crumbs'] .= ' &#8594 <a href="' . $href . '">' . $category_full_url['names'][$key] . '</a>';
-			}
-			//$href .= '/' . $category['url'];
-			//$this->data['bread_crumbs'] .= ' &#8594 <a href="' . $href . '">' . $category['name'] . '</a>';
-			
-			
-			//if(!isset($this->url['actions'][1])) {
-			if(!$new_flag) {
-				// страница категории
-				$this->page['title'] = $category['title'];
-				$this->page['keywords'] = $category['keywords'];
-				$this->page['description'] = $category['description'];
-				$this->data['page_name'] = $category['name'];
-				
-				//print_r($this->component_config['index_page_count']);
-				$count_news_on_page = $this->component_config['index_page_count'];
-				$start_news_number = isset($this->url['params']['page']) ? ($this->url['params']['page']-1) * $count_news_on_page : 0;
-				
-				$params = array(
-					'sort' => 'i.date DESC',
-					'type' => 'by_category',
-					'limit' => $start_news_number . ', ' . $count_news_on_page
-				);
-				
-				$count_news = $this->model->get_count_news($category['id']);
-				$count_news = $count_news ? $count_news[0]['count_news'] : 0;
-				$pages_amount = ceil($count_news/$count_news_on_page);
-								
-				$this->data['pages_amount'] = $pages_amount;
-				$this->data['current_page'] = isset($this->url['params']['page']) ? ($this->url['params']['page']) : 1;
-				$this->data['base_url'] = '/'.$this->url['component'].'/'.implode('/', $this->url['actions']);
-								
-				$this->data['news_items'] = array();
-				$results = $this->model->get_news($category['id'], $params);
-				
-				$this->data['full_category_url'] = strpos($this->url['request_uri'], '/page=') ? substr($this->url['request_uri'], 0, strpos($this->url['request_uri'], '/page=')) : $this->url['request_uri'];
-				//print_r($this->data['full_category_url']);
-				
-				foreach($results as $result) {
-					$this->data['news_items'][$result['id']] = array(
-						'name' => $result['name'],
-						'href' => SITE_URL . '/' . $component_info['url'] . '/' . $category['url'] . '/' . $result['url'],
-						'preview' => $result['preview'],
-						'date' => date('d.m.Y H:i', $result['date'])
-					);
-				}
+        $items = $this->model->fetch_childrens($parent_id, ($current_page-1)*$items_per_page, $items_per_page);
+        if ($parent_id != 0) $category = $this->model->get($parent_id);
 
-				$view = 'news_list';
-				
-			} else {
-			
-				// страница новости
-				$params = array(
-					'type' => 'by_url'
-				);
-				//$item = $this->model->get_news_item($this->url['actions'][1], $params);
-				$item = $this->model->get_news_item($this->url['actions'][count($this->url['actions'])-1], $params);
-				if($item) {
+        $this->data = array_merge($this->data, compact('items_count', 'pages_count', 'current_page', 'items', 'category'));
+        
+        $this->page['title'] = $this->data['page_header'] = isset($category) ? $category['header'] : 'Все новости';
+        $this->page['keywords'] = isset($category) ? $category['keywords'] : 'новости, новости сайта '.SITE_NAME;
+        $this->page['description'] = isset($category) ? $category['description'] : 'Новости сайта '.SITE_NAME;
+        $this->page['html'] = $this->load_view('category');
+        return $this->page;
+    }
 
-					$href .= '/' . $item['url'];
-					$this->data['bread_crumbs'] .= ' -> <a href="' . $href . '">' . $item['name'] . '</a>';
-					$this->data['page_name'] = $item['name'];
-					$this->page['title'] = $item['title'];
-					$this->page['keywords'] = $item['keywords'];
-					$this->page['description'] = $item['description'];
-					$this->data['page_name'] = $item['name'];
-					$this->data['content'] = $item['text'];
-					
-				} else {
-					$not_found = true;
-				}
-			}
-			
-		} else {
-			$not_found = true;
-		}
-		
-		if($not_found) {
-			$this->page['title'] = '404!!1';
-			$this->page['keywords'] = 'Страница не найдена';
-			$this->page['description'] = 'Страница не найдена';
-			$this->action_404();
-			$view = 'index';
-		} else {
-			
-		}
-		$this->page['html'] = $this->load_view($view);
-		return $this->page;
-	}
-	
-	protected function news_category() {
-	
-	}
-	
-	protected function news_items() {
-	
-	}
+
+    /**
+    * Отображает статью или категорию в режиме редактирования
+    * @param array $article массив с данными из записи в БД 
+    * @return array готовую страницу $this->page
+    */
+    protected function show_article($article)
+    {
+        $this->data['article'] = $article;
+        $this->page['title'] = $this->data['page_header'] = $article['header'];
+        $this->page['keywords'] = $article['keywords'];
+        $this->page['description'] = $article['description'];
+        $this->page['html'] = $this->load_view('article');
+        return $this->page;
+    }
+
+
+    /**
+    * Отображает страницу ошибки 404
+    * @return array готовую страницу $this->page
+    */
+    protected function show_404()
+    {
+        $this->page['title'] = 'Элемент не найден';
+        $this->page['html'] = $this->load_view('404_not_found');
+        return $this->page;
+    }
+
+
+    public function action_index()
+    {
+        return $this->action_else();
+    }
+
+
+    /**
+    * Маршрутизация
+    * @return array готовую страницу $this->page
+    */
+    public function action_else()
+    {
+        if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {
+            return $this->show_category(0); // корневая категория
+        } else {
+            $result = $this->model->find_by_actions($this->url['actions']);
+            foreach($result['labels'] as $label) $this->data['breadcrumbs']['labels'][] = $label;
+            $item = $result['item'];
+            if ($item === false) return $this->show_404(); // элемент не найден
+            elseif ($item['is_category'] == 0) return $this->show_article($item); // статья
+            else return $this->show_category($item['id']); // категория
+        }
+    }
 }

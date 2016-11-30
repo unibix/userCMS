@@ -2,85 +2,83 @@
 
 class controller_block_core_news_announce extends block {
 	
-	public function action_index($block) {
+	public function action_index($block)
+    {
 		$params = unserialize($block['params']);
-		$sql = "SELECT i.* FROM news_items i LEFT JOIN news_categories c ON c.id = i.category_id WHERE i.date <= '".time()."' AND c.date <= '".time()."'";
-		if($params['category_id']) {
-			$sql .= " AND i.category_id = '".(int)$params['category_id']."'";
-		}
+        $r = $this->dbh->row("SELECT url FROM main WHERE component='news'");
+        if ($r) {
+            $component_url = $r['url'];
 
-		$sql .= " ORDER BY c.date DESC, i.date DESC LIMIT 0, '" . (int)$params['count_news'] . "'";
-		
-		$this->data['news'] = $this->dbh->query($sql);
-		
-		$component_news = $this->dbh->row("SELECT * FROM main WHERE component='news' LIMIT 1");
-		$this->data['news_url'] = $component_news ? $component_news['url'] : 'novosti';
-		
-		if (!empty($this->data['news'])){
-			foreach($this->data['news'] as $k=>$new){
-				$this->data['news'][$k]['url'] = '/' . $this->data['news_url'] . '/' . $this->get_full_news_url($this->data['news'][$k]);
-			}
-		}
-		
-		$this->data['params'] = $params;
-		
-		$page['head'] = '';
-		$page['html'] = $this->load_view('news');
-		return $page;
+            if ($params['category_id'] != -1) $category = " AND parent_id=".$params['category_id']." ";
+            else $category = ""; 
+            $today = time();
+            $items = $this->dbh->query("SELECT * FROM news WHERE is_category=0 AND date_publish<$today $category ORDER BY date_publish LIMIT 0,".$params['count_news']);
+
+            foreach ($items as $n => $item) $items[$n]['url'] = SITE_URL.'/'.$component_url.$this->get_full_url($item['id']);
+
+            $this->data['items'] = $items;
+            $this->data['params'] = $params;
+            $this->data['img_folder'] = 'news';
+            $this->data['component_url'] = $component_url;
+            $this->page['head'] = $this->add_css_file('/user_cms/modules/blocks/news_announce/views/style.css');
+    		$this->page['html'] = $this->load_view('news');
+        } else {
+            $this->page['html'] = 'Компонент новостей не активирован';
+        }
+        return $this->page;
 	}
+
+    protected function save_settings($params, $submit_name)
+    {
+        if (isset($_POST[$submit_name])) {
+            if ($params['count_news'] > 30) $params['count_news'] = 30;
+            if ($params['count_news'] < 1) $params['count_news'] = 1;
+            $this->page['params'] = serialize($params);
+        }
+        $this->data['params'] = $params;
+        $today = time();
+        $this->data['categories'] = $this->dbh->query("SELECT id, header FROM news WHERE is_category=1 AND date_publish<$today");
+        $this->data['categories'][] = array('id' => 0, 'header' => 'Родительская категория');
+        $this->data['categories'][] = array('id' => -1, 'header' => 'Из всех категорий');
+        $this->page['html'] = $this->load_view('settings');
+        return $this->page;
+    }
+
 	public function action_activate() {
-		$page = array();
-		
-		if(isset($_POST['activate'])) {
-			$data = array(
-				'count_news' => $_POST['count_news'],
-				'category_id' => $_POST['category_id'],
-				'show_preview'         => $_POST['show_preview'],
-				'show_link_all_news'         => $_POST['show_link_all_news']
-			);
-			$page['params'] = serialize($data);
-		}
-		$this->data['categories'] = $this->dbh->query("SELECT * FROM news_categories ORDER BY id ASC");
-		
-		$page['html'] = $this->load_view('activate');
-		return $page;
+		$params = array(
+            'count_news' => 5,
+            'category_id' => -1, //-1 - выбирать из всех категорий
+            'show_overview' => true,
+            'show_photo' => true,
+            'show_all_news_link' => true,
+        );
+		return $this->save_settings($params, 'activate');
 	}
 	
 	public function action_settings($block){
 		$params = unserialize($block['params']);
-		$this->data['block_id'] = $block['id'];
-		if (isset($_POST['edit_settings'])) {
-			$this->page['block_id'] = $block['id'];
-			$this->page['params'] = serialize(array(
-				'count_news'           => $_POST['count_news'],
-				'category_id'      => $_POST['category_id'],
-				'show_preview'         => $_POST['show_preview'],
-				'show_link_all_news'         => $_POST['show_link_all_news']
-			));
-			
-			return $this->page;
-		}	
-		$this->data['count_news'] = $params['count_news'];
-		$this->data['category_id'] = $params['category_id'];
-		$this->data['show_preview'] = isset($params['show_preview']) ? $params['show_preview'] : 1;
-		$this->data['show_link_all_news'] = isset($params['show_link_all_news']) ? $params['show_link_all_news'] : 0;
-		$this->data['categories'] = $this->dbh->query("SELECT * FROM news_categories ORDER BY id ASC");
-		
-		$this->page['html'] = $this->load_view('settings');		
-		return $this->page;		
+        if (isset($_POST['edit_settings'])) {
+            $params['count_news'] = intval($_POST['count_news']);
+            $params['category_id'] = intval($_POST['category_id']);
+            $params['show_overview'] = isset($_POST['show_overview']);
+            $params['show_photo'] = isset($_POST['show_photo']);
+            $params['show_all_news_link'] = isset($_POST['show_all_news_link']);
+        }
+		return $this->save_settings($params, 'edit_settings');		
 	}
 	
-	protected function get_full_news_url($news){
-		$url = $news['url'];
-		$category_id = $news['category_id'];
-		$maxcount=30;
-		do {
-			$cat = $this->dbh->row("SELECT * FROM news_categories WHERE id=" . $category_id);
-			if (!$cat) break;
-			$url = $cat['url'] . '/' . $url;
-			$category_id = $cat['sub'];
-			$maxcount--;
-		} while (($category_id > 0)&&($maxcount>0));
-		return($url);
-	} 
+	public function get_full_url($id)
+    {
+        $url = array();
+        while ($id > 0) {
+            $item = $this->dbh->row("SELECT * FROM news WHERE id=$id");
+            if (!empty($item)) {
+                $url[] = $item['url'];
+                $id = $item['parent_id'];
+            } else {
+                return '';
+            }
+        }
+        return '/'.implode('/', array_reverse($url));
+    }
 }

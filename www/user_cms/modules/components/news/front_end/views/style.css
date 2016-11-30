@@ -1,0 +1,36 @@
+#content h1, #content h2, #content h3, #content p {
+    margin-bottom: 0.5em;
+}
+
+#content .date {
+    font-size: 0.8em;
+    float: right;
+    background-color: #ddd;
+    padding: 3px;
+    line-height: 1em;
+}
+
+#content .category-preview {
+    background-color: #f0f0f0;
+    border-radius: 5px;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+#content .article-preview {
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+#content .article-preview img {
+    float: left;
+    margin-right: 1em;
+}
+
+#content .article-preview:after {
+    content: '';
+    display: block;
+    clear: both;
+}
