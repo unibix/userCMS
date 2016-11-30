@@ -340,6 +340,7 @@ class user_cms_core {
 		if (strpos($this->theme['file'], 'ajax') !== 0) {
 			$this->html .= "\n<!-- UserCms " . USER_CMS_VERSION . " - " . date('d.m.Y H:i') . " -->";
 		}
+
 	}
 
      function __destruct() {
@@ -377,9 +378,15 @@ class user_cms_core {
 			exit();
 		}
 		
+        $pos = strpos($pre, '?');
+        if ($pos !== false) $pre = substr($pre, 0, $pos);
+
 		$url['request_uri'] = $pre;
+        define('IS_MAIN_PAGE', $pre == '/');
 		
 		$pre = explode('/', $pre);
+
+
 		// разная разбивка URL в зависимости от того находимся ли мы в админ панели или нет
 		if($pre[1] == 'admin') {
 			define('END_NAME', 'back_end');
