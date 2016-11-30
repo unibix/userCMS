@@ -123,7 +123,7 @@ class controller_component_core_news extends component
                 }
             }
 
-            if ($item['is_category'] == 1) $this->model->adjust_childs_date_publish($item);
+            if ($item['id'] != 0 && $item['is_category'] == 1) $this->model->adjust_childs_date_publish($item);
             
             if (empty($errors) && $item['is_category'] == 0) {
                 $upload_dir = ROOT_DIR.'/uploads/modules/'.$this->url['component'].'/';

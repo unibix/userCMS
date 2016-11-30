@@ -73,6 +73,7 @@ if(count($errors) == 0) {
         $array['site_theme'] = isset($config['site_theme']) ? $config['site_theme'] : 'default';
         $array['error_reporting'] = 'E_ALL';
         $array['db_error_reporting'] = '1';
+        $array['maintenance'] = '0';
         // Обновляем config.ini
         update_config($array);
         // Обновляем логин и пароль
