@@ -147,7 +147,14 @@ class user_cms_core {
     		} else {
     			// загружаем компоненты из админки (активация им не требуется)
     			$this->component['name']   = $this->url['component'];
-    			$this->component['action'] = $this->url['actions'][0];
+
+                if (method_exists('controller_component_' . $this -> component['name'], 'action_' . $this->url['actions'][0])) {
+                    $this->component['action'] = $this->url['actions'][0];
+                } else if (method_exists('controller_component_core_' . $this -> component['name'], 'action_' . $this->url['actions'][0])) {
+                    $this->component['action'] = $this->url['actions'][0];
+                } else {
+                    $this->component['action'] = 'else';
+                }
 				
 				$component_info = $this->dbh->row("SELECT * FROM main WHERE component = '" . $this->component['name'] . "' ORDER BY id ASC LIMIT 1");
 				if ($component_info) {
@@ -342,12 +349,11 @@ class user_cms_core {
 		$url['actions'] = array();
 		$url['params'] = array();
 		
-		$protocol = (!isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
-        $pre =  $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ;
-        $pre = str_replace($this->config['site_url'],'',$pre);
-        if(strpos($pre, $protocol) === 0) {
-            exit('Error #1: Site URL in config.ini is wrong. Current value: '.$this->config['site_url']);
-        }
+		$pre =  'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ;
+		$pre = str_replace($this->config['site_url'],'',$pre);
+		if(strpos($pre, 'http://') === 0) {
+			exit('Error #1: Site URL in config.ini is wrong.');
+		}
 		
 		// обрезаем слэши в конце урла
 		$default_pre_len = $current_pre_len = mb_strlen(str_replace('//', '/', $pre), 'UTF-8');
@@ -377,10 +383,8 @@ class user_cms_core {
 				$url['component'] = $pre[2];
 			}
 			$i=3;
-		}
-		else {
+		} else {
 			define('END_NAME', 'front_end');
-			
 			if (strpos($pre[1], '=') === false) {
 				$url['component'] = $pre[1];
 				$i=2;

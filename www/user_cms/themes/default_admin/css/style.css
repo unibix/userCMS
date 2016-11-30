@@ -332,3 +332,13 @@ ul.pagination > li > span {
     line-height: 30px;
     text-decoration: none;
 }
+
+#content .link {
+    display: inline;
+    border: none;
+    background: transparent;
+    color:#107710;
+    cursor: pointer;
+    text-decoration: underline;
+}
+#content .link:hover{text-decoration:none;}
