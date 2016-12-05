@@ -28,14 +28,28 @@ class user_cms_core {
 		if (!isset($this->config['site_url'])) {
 			$this->config['site_url'] = 'http://' . $_SERVER['HTTP_HOST'];
 		}
-		define('SITE_URL', $this -> config['site_url']);
-		define('SITE_NAME', $this -> config['site_name']);
+
+		define('SITE_URL', $this->config['site_url']);
+		define('SITE_NAME', $this->config['site_name']);
+        define('SITE_SLOGAN', $this->config['site_slogan']);
+        define('SITE_EMAIL', $this->config['site_email']);
+        define('SITE_EMAIL2', $this->config['site_email2']);
+        define('SITE_PHONE', $this->config['site_phone']);
+        define('SITE_PHONE_F', $this->config['site_phone_f']);
+
 		if (is_dir(ROOT_DIR . '/user_cms/themes/' . $this->config['site_theme'])) {
 			define('THEME_URL', SITE_URL . '/user_cms/themes/' . $this->config['site_theme']);
+            $logo = '/user_cms/themes/'.$this->config['site_theme'].'/images/logo.png';
 		} else {
 			define('THEME_URL', SITE_URL . '/themes/' . $this->config['site_theme']);
-		} 
-		$this -> error_reporting();
+            $logo = '/themes/'.$this->config['site_theme'].'/images/logo.png';
+		}
+
+        if (file_exists(ROOT_DIR.$logo)) define('SITE_LOGO', '<img src="'.$logo.'" alt="Логотип '.SITE_NAME.'">');
+        else define('SITE_LOGO', SITE_NAME);
+
+
+		$this -> set_error_reporting();
 		$this -> url = $this -> parse_url();
 
         if ($this->config['maintenance'] == 1) {
@@ -445,9 +459,29 @@ class user_cms_core {
 		$this -> dbh = NULL;
 	}
 
-	function error_reporting() {
-
-		error_reporting($this -> config['error_reporting']);
+	function set_error_reporting() {
+        $constants = array(
+            'E_ERROR' => E_ERROR,
+            'E_WARNING' => E_WARNING,
+            'E_PARSE' => E_PARSE,
+            'E_NOTICE' => E_NOTICE,
+            'E_CORE_ERROR' => E_CORE_ERROR,
+            'E_CORE_WARNING' => E_CORE_WARNING,
+            'E_COMPILE_ERROR' => E_COMPILE_ERROR,
+            'E_COMPILE_WARNING' => E_COMPILE_WARNING,
+            'E_USER_ERROR' => E_USER_ERROR,
+            'E_USER_WARNING' => E_USER_WARNING,
+            'E_USER_NOTICE' => E_USER_NOTICE,
+            'E_STRICT' => E_STRICT,
+            'E_RECOVERABLE_ERROR' => E_RECOVERABLE_ERROR,
+            'E_USER_DEPRECATED' => E_USER_DEPRECATED,
+            'E_ALL' => E_ALL
+        );
+        $total_value = 0;
+        foreach ($constants as $name => $value) {
+            if (strpos($this->config['error_reporting'], $name) !== false) $total_value = $total_value | $value;
+        }
+		error_reporting($total_value);
 	}
 	
 	function load_addon($addon) {

@@ -12,7 +12,10 @@ class controller_component_core_config extends component {
         $this->data['themes'] = $this->model->get_themes();
         //$config = $this->model->get_config();
         $this->data['errors'] = array();
-        $data = array();
+        
+        if(!$data = $this->model->get_config()) {
+            $this->data['errors'][] = 'Не удалось загрузить файл с настройками';
+        }
         
         if(isset($_POST['edit_config'])){
         
@@ -31,7 +34,20 @@ class controller_component_core_config extends component {
             } else {
                 $data['site_slogan'] = '';
             }
-            
+
+            if(isset($_POST['site_email']) && !empty($_POST['site_email'])) {
+                $data['site_email'] = $_POST['site_email'];
+            }
+
+            if(isset($_POST['site_email2']) && !empty($_POST['site_email2'])) {
+                $data['site_email2'] = $_POST['site_email2'];
+            }
+
+            if(isset($_POST['site_phone']) && !empty($_POST['site_phone'])) {
+                $data['site_phone'] = $_POST['site_phone'];
+                $data['site_phone_f'] = preg_replace('/[^0-9\+]/', '', $_POST['site_phone']);
+            }
+           
             if(isset($_POST['site_theme']) && !empty($_POST['site_theme'])) {
                 $data['site_theme'] = $_POST['site_theme'];
             } else {
@@ -59,11 +75,6 @@ class controller_component_core_config extends component {
                 if($this->model->update_config($data)) {
                     $this->redirect(SITE_URL . '/admin/config/success=edited');
                 }
-            }
-            
-        } else {
-            if(!$data = $this->model->get_config()) {
-                $this->data['errors'][] = 'Не удалось загрузить файл с настройками';
             }
         }
         
