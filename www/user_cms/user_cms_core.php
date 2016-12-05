@@ -356,11 +356,12 @@ class user_cms_core {
 		$url['actions'] = array();
 		$url['params'] = array();
 		
-		$pre =  'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ;
-		$pre = str_replace($this->config['site_url'],'',$pre);
-		if(strpos($pre, 'http://') === 0) {
-			exit('Error #1: Site URL in config.ini is wrong.');
-		}
+        $protocol = (!isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
+            $pre =  $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ;
+            $pre = str_replace($this->config['site_url'],'',$pre);
+            if(strpos($pre, $protocol) === 0) {
+            exit('Error #1: Site URL in config.ini is wrong. Current value: '.$this->config['site_url']);
+        }
 		
 		// обрезаем слэши в конце урла
 		$default_pre_len = $current_pre_len = mb_strlen(str_replace('//', '/', $pre), 'UTF-8');
