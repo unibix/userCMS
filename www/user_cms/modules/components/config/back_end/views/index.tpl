@@ -18,6 +18,15 @@
         
         <label for="s_slogan">Слоган:</label><br>
         <input id="s_slogan" type="text" name="site_slogan" value="<?php echo $config['site_slogan']; ?>">
+
+        <label for="s_email">Основной e-mail:</label><br>
+        <input id="s_email" type="text" name="site_email" value="<?php echo $config['site_email']; ?>">
+
+        <label for="s_email2">Дополнительный e-mail:</label><br>
+        <input id="s_email2" type="text" name="site_email2" value="<?php echo $config['site_email2']; ?>">
+
+        <label for="s_phone">Контактный телефон:</label><br>
+        <input id="s_phone" type="text" name="site_phone" value="<?php echo $config['site_phone']; ?>">
         
         <label for="s_url">Адрес сайта:</label><br>
         <input id="s_url" type="text" name="site_url" value="<?php echo $config['site_url']; ?>" >  

@@ -67,23 +67,20 @@ if(count($errors) == 0) {
 	$config = parse_ini_file('config.ini');
 	
     if(isset($_POST['site_name'])) {
-        $array['site_name'] = $_POST['site_name'];
-        $array['site_url'] = 'http://' . rtrim($_POST['site_url'], '/')  ;;
-        $array['site_slogan'] = '';
-        $array['site_theme'] = isset($config['site_theme']) ? $config['site_theme'] : 'default';
-        $array['error_reporting'] = 'E_ALL';
-        $array['db_error_reporting'] = '1';
-        $array['maintenance'] = '0';
+        $config['site_name'] = $_POST['site_name'];
+        $config['site_url'] = 'http://' . rtrim($_POST['site_url'], '/')  ;;
+        
         // Обновляем config.ini
-        update_config($array);
+        update_config($config);
+
         // Обновляем логин и пароль
         $dbh = new PDO('sqlite:db.sqlite');
         $dbh->exec("UPDATE users SET login = '" . $_POST['login'] . "', password = '" . md5($_POST['password']) . "' WHERE id = '1' ; ");
         
 		// Меняем title главной на название сайта
 		$main_page = $dbh->query("SELECT * FROM main WHERE id = 1 LIMIT 1")->fetch();
-		if ($main_page['title'] == 'Название сайта' && $main_page['title'] != $array['site_name']) {
-			$dbh->exec("UPDATE main SET title = '" . $array['site_name'] . "' WHERE id = 1");
+		if ($main_page['title'] == 'Название сайта' && $main_page['title'] != $config['site_name']) {
+			$dbh->exec("UPDATE main SET title = '" . $config['site_name'] . "' WHERE id = 1");
 		}
 		
 		// Обновляем htaccess
@@ -92,7 +89,7 @@ if(count($errors) == 0) {
         //5. переносим install.php в user_cms/install.php_
         rename("install.php", "user_cms/install" . rand(100000,200000) . ".php_");
         //6. переадресация на сайт
-        header('Location: ' . $array['site_url']);
+        header('Location: ' . $config['site_url']);
     } 
 
     if($show_form) {
@@ -130,7 +127,7 @@ function update_config($array) {
     if ( file_exists('config.ini') ) {
         $fp = fopen('config.ini',"w");
         foreach ($array as $key => $value) {
-            fwrite($fp, $key . "=" . $value . "\r\n");
+            fwrite($fp, $key . "=\"" . $value . "\"\r\n");
         }
         
         fclose($fp);
