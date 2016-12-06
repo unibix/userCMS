@@ -1,8 +1,14 @@
+<style>
+    .symbol {
+        font-size: 20px;
+        text-decoration: none;
+    }
+</style>
 <div id="content">    
     <h1><?=$page_header?></h1><br>
     <p class="buttons">
         <?php if ($upper_url != '') { ?>
-            <a class="button" href="<?=$upper_url?>" title="Перейти в родительскую категорию"><i class="fa fa-lg fa-level-up"></i></a>
+            <a class="button" href="<?=$upper_url?>" title="Перейти в родительскую категорию"><span class="symbol">&larr;</span></a>
         <?php } ?>
         <a class="button" href="<?=$base_url?>/do=add_category">Добавить категорию</a>
         <a class="button" href="<?=$base_url?>/do=add_article">Добавить новость</a>
@@ -13,51 +19,51 @@
                 <th>
                     <a href="<?=$base_url?>/do=order/order_by=id">ID</a>
                     <?php if ($order_by == 'id') {
-                        if ($is_asc) echo '<i class="fa fa-sort-numeric-asc"></i>';
-                        else echo '<i class="fa fa-sort-numeric-desc"></i>';
+                        if ($is_asc) echo '<span class="symbol">&uarr;</span>';
+                        else echo '<span class="symbol">&darr;</span>';
                     } ?>
                 </th>
                 <th>
                     <a href="<?=$base_url?>/do=order/order_by=is_category">Тип</a>
                     <?php if ($order_by == 'is_category') {
-                        if ($is_asc) echo '<i class="fa fa-sort-amount-asc"></i>';
-                        else echo '<i class="fa fa-sort-amount-desc"></i>';
+                        if ($is_asc) echo '<span class="symbol">&uarr;</span>';
+                        else echo '<span class="symbol">&darr;</span>';
                     } ?>
                 </th>
                 <th>
                     <a href="<?=$base_url?>/do=order/order_by=header">Заголовок</a>
                     <?php if ($order_by == 'header') {
-                        if ($is_asc) echo '<i class="fa fa-sort-alpha-asc"></i>';
-                        else echo '<i class="fa fa-sort-alpha-desc"></i>';
+                        if ($is_asc) echo '<span class="symbol">&uarr;</span>';
+                        else echo '<span class="symbol">&darr;</span>';
                     } ?>
                 </th>
                 <th>Фото</th>
                 <th>
                     <a href="<?=$base_url?>/do=order/order_by=url">URL</a>
                     <?php if ($order_by == 'url') {
-                        if ($is_asc) echo '<i class="fa fa-sort-alpha-asc"></i>';
-                        else echo '<i class="fa fa-sort-alpha-desc"></i>';
+                        if ($is_asc) echo '<span class="symbol">&uarr;</span>';
+                        else echo '<span class="symbol">&darr;</span>';
                     } ?>
                 </th>
                 <th>
                     <a href="<?=$base_url?>/do=order/order_by=date_create">Создана</a>
                     <?php if ($order_by == 'date_create') {
-                        if ($is_asc) echo '<i class="fa fa-sort-numeric-asc"></i>';
-                        else echo '<i class="fa fa-sort-numeric-desc"></i>';
+                        if ($is_asc) echo '<span class="symbol">&uarr;</span>';
+                        else echo '<span class="symbol">&darr;</span>';
                     } ?>
                 </th>
                 <th>
                     <a href="<?=$base_url?>/do=order/order_by=date_edit">Изменена</a>
                     <?php if ($order_by == 'date_edit') {
-                        if ($is_asc) echo '<i class="fa fa-sort-numeric-asc"></i>';
-                        else echo '<i class="fa fa-sort-numeric-desc"></i>';
+                        if ($is_asc) echo '<span class="symbol">&uarr;</span>';
+                        else echo '<span class="symbol">&darr;</span>';
                     } ?>
                 </th>
                 <th>
                     <a href="<?=$base_url?>/do=order/order_by=date_publish">Опубликована</a>
                     <?php if ($order_by == 'date_publish') {
-                        if ($is_asc) echo '<i class="fa fa-sort-numeric-asc"></i>';
-                        else echo '<i class="fa fa-sort-numeric-desc"></i>';
+                        if ($is_asc) echo '<span class="symbol">&uarr;</span>';
+                        else echo '<span class="symbol">&darr;</span>';
                     } ?>
                 </th>
                 <th></th>
@@ -67,11 +73,11 @@
                     <td><?=$item['id']?></td>
 
                     <?php if ($item['is_category'] == 1) { ?>
-                        <td style="text-align:center;color:#DBBE3B"><i class="fa fa-2x fa-folder-open"></i></td>
+                        <td>Категория</td>
                         <td><b><a href="<?=$base_url?>/<?=$item['url']?>"><?=$item['header']?></a></b></td>
                         <td></td>
                     <?php } else { ?>
-                        <td style="text-align:center;color:#888"><i class="fa fa-2x fa-file-text-o"></i></td>
+                        <td>Статья</td>
                         <td><?=$item['header']?></td>
                         <?php if (!empty($item['photo'])) { ?>
                         <td style="
@@ -95,11 +101,11 @@
                     <td style="text-align:center">
                         <form action="<?=$_SERVER['REQUEST_URI']?>" method="POST">
                             <?php if ($item['is_category'] == 1) { ?>
-                                <button title="Удалить" type="submit" class="link" name="delete_category" value="<?=$item['id']?>" onclick="return confirm('Удалить категорию?')"><i class="fa fa-lg fa-times" style="color:#c00"></i></button>
-                                <a title="Редактировать" href="<?=$base_url?>/<?=$item['url']?>/do=edit"><i class="fa fa-lg fa-pencil-square-o"></i></a>
+                                <button title="Удалить" type="submit" class="link" name="delete_category" value="<?=$item['id']?>" onclick="return confirm('Удалить категорию?')"><span class="symbol" style="color:#c00">&#10008;</span></button>
+                                <a title="Редактировать" href="<?=$base_url?>/<?=$item['url']?>/do=edit"><span class="symbol">&#10000;</span></a>
                             <?php } else { ?>
-                                <button title="Удалить" type="submit" class="link" name="delete_article" value="<?=$item['id']?>" onclick="return confirm('Удалить новость?')"><i class="fa fa-lg fa-times" style="color:#c00"></i></button>
-                                <a title="Редактировать" href="<?=$base_url?>/<?=$item['url']?>"><i class="fa fa-lg fa-pencil-square-o"></i></a>
+                                <button title="Удалить" type="submit" class="link" name="delete_article" value="<?=$item['id']?>" onclick="return confirm('Удалить новость?')"><span class="symbol" style="color:#c00">&#10008;</span></button>
+                                <a title="Редактировать" href="<?=$base_url?>/<?=$item['url']?>"><span class="symbol">&#10000;</span></a>
                             <?php } ?>
                         </form>
                     </td>
