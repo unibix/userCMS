@@ -12,7 +12,7 @@ class controller_block_core_news_announce extends block {
             if ($params['category_id'] != -1) $category = " AND parent_id=".$params['category_id']." ";
             else $category = ""; 
             $today = time();
-            $items = $this->dbh->query("SELECT * FROM news WHERE is_category=0 AND date_publish<$today $category ORDER BY date_publish LIMIT 0,".$params['count_news']);
+            $items = $this->dbh->query("SELECT * FROM news WHERE is_category=0 AND date_publish<$today $category ORDER BY date_publish DESC LIMIT 0,".$params['count_news']);
 
             foreach ($items as $n => $item) $items[$n]['url'] = SITE_URL.'/'.$component_url.$this->get_full_url($item['id']);
 
