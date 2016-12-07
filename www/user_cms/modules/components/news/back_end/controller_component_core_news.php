@@ -170,8 +170,8 @@ class controller_component_core_news extends component
                 if ($new_id == 0) {
                     $errors[] = 'Произошла ошибка при сохранении. Попробуйте еще раз.';
                 } else {
-                    $item['id'] = $new_id;
-                    $new_item_url = $this->model->get_full_url($new_id);
+                    if ($item['id'] == 0) $this->redirect($back_url); //чтобы не остаться на странице добавления (элемент был новый)
+                    else $new_item_url = $this->model->get_full_url($new_id); // получаем урл чтобы просмотреть изменения
                 }
             }
         }
