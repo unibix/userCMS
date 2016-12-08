@@ -121,24 +121,28 @@ class model_component_core_components_manager {
 		
 		foreach ($data as $key => $value) {
 			if (is_array($value)) {
-				$ini_content .= '[' . $key . ']' . "\n";
-				
-				foreach ($value as $key2 => $value2) {
-					$ini_content .= $key2 . "='" . $value2 . "'\n";
-				}
-				
+				$ini_content .= '['.$key.']'."\n";
+				foreach ($value as $key2 => $value2) $ini_content .= $key2.'="'.$value2.'"'."\n";
 			} else {
-				$ini_content .= $key . "='" . $value . "'\n";
+				$ini_content .= $key.'="'.$value.'"'."\n";
 			}
 		}
 		
-		file_put_contents(ROOT_DIR . '/modules/components/' . $component_name . '/back_end/component.ini', $ini_content);
+        $ini_path = 
+            file_exists(ROOT_DIR.'/modules/components/'.$component_name.'/back_end/component.ini')
+            ? ROOT_DIR.'/modules/components/'.$component_name.'/back_end/component.ini'
+            : ROOT_DIR.'/user_cms/modules/components/'.$component_name.'/back_end/component.ini';
+
+		file_put_contents($ini_path, $ini_content);
 	}
 	
 	public function get_component_full_config($component_name) {
-		$ini_path = file_exists(ROOT_DIR . '/modules/components/' . $component_name . '/back_end/component.ini') ? ROOT_DIR . '/modules/components/' . $component_name . '/back_end/component.ini' : ROOT_DIR . '/user_cms/modules/components/' . $component_name . '/back_end/component.ini';
-//echo $ini_path;
-		if (file_exists($ini_path) && is_readable($ini_path)) {
+		$ini_path = 
+            file_exists(ROOT_DIR.'/modules/components/'.$component_name.'/back_end/component.ini')
+            ? ROOT_DIR.'/modules/components/'.$component_name.'/back_end/component.ini'
+            : ROOT_DIR.'/user_cms/modules/components/'.$component_name.'/back_end/component.ini';
+		
+        if (file_exists($ini_path) && is_readable($ini_path)) {
 			return parse_ini_file($ini_path, true);
 		} else {
 			return array();

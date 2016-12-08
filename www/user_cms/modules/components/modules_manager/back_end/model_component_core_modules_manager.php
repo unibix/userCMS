@@ -205,6 +205,8 @@ class model_component_core_modules_manager extends model {
 		if (is_dir($module_dir_core)) {
 			delTree($module_dir_core);
 		}
-		
+
+        $this->dbh->exec("DELETE FROM installed_modules WHERE id = '".(int)$module['id']."'");      
+        $this->dbh->exec("DELETE FROM activated_modules WHERE module_id = '".(int)$module['id']."'");		
 	}
 }

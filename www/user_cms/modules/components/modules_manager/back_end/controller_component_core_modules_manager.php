@@ -68,7 +68,7 @@ class controller_component_core_modules_manager extends component {
 			}
 		*/
 		 		
-			if (strtolower(end(explode('.', $_FILES['file']['name'])))!='zip') {
+			if (strtolower(pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION))!='zip') {
 				$this->data['errors'][] = 'Для установки модуля необходим архив ZIP';
 			} else {
 				$zip = new ZipArchive;
@@ -359,6 +359,7 @@ class controller_component_core_modules_manager extends component {
 			}
 			echo '<pre>'; print_r($module); echo '</pre>';
 			$this->model->delete_module($module);
+            $this->redirect(SITE_URL.'/admin/'.$this->component_name.'/installed');
 		} else {
 			$this->redirect(SITE_URL . '/admin/' . $this->component_name);
 		}

@@ -528,18 +528,11 @@ class user_cms_core {
 	}
 
 	function parse_html_for_plugins() {
-		// исключам парсинг внутри textarea. 	TODO: сделать нормальную регулярку
-		$textarea_start = strpos($this->page['html'],'<textarea');
-		if($textarea_start!==false) {
-			$textarea_end = strpos($this->page['html'], '</textarea>');
-			$component_html = substr($this->page['html'], 0, $textarea_start);
-			$component_html .= substr($this->page['html'], $textarea_end);
-			//echo $component_html;
-			$html = $this->html . $component_html;
+		if(strpos($this->page['html'],'<textarea') !== false) {
+            $html = $this->html.preg_replace('/<textarea(?!<\/textarea>)[\s\S]+?<\/textarea>/', '', $this->page['html']);
 		} else {
 			$html = $this->html . $this->page['html'];
 		}
-
 		preg_match_all("/\{plugin:(.*)\=(.*)\}/U", $html ,  $out); 
 		return $out;
 	}
