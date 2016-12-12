@@ -34,3 +34,7 @@
     display: block;
     clear: both;
 }
+
+#content img {
+    max-width: 100%;
+}

@@ -19,7 +19,7 @@
 	<form method="post" action="" enctype="multipart/form-data" >
 		<label for="image_text">Описание:</label>
 		<input type="text" name="text">
-		<label for="page_name">Выберите файл загрузки или архив ZIP c изображениями внутри (максимальный размер файла: <b><?=$max_file_size?>МБ</b>)</label>
+		<label for="page_name">Выберите файл загрузки</label>
 		<input type="file"  name="image">
 		<input type="checkbox" name="stamp" /><label for="image_stamp">Применить водяной знак</label><br>
 		<input type="submit" name="submit" value="Закачать">

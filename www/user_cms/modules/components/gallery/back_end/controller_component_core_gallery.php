@@ -265,7 +265,6 @@ class controller_component_core_gallery extends component {
 		$category['path'] = SITE_URL . '/uploads/modules/gallery/' . $category['dir'];
 		$upload_dir = ROOT_DIR . '/uploads/modules/gallery/' . $category['dir'];
 		
-
 		if(isset($_POST['submit']) || isset($_POST['submit_exit'])) {
 			$data = array();
 			$data['text'] = $_POST['text'];
@@ -340,7 +339,6 @@ class controller_component_core_gallery extends component {
 		}
 		
 		$this->data['category'] = $category;
-		$this->data['max_file_size'] = $this->detect_max_upload_filesize();
 		$this->data['items'] = $this->model->get_items($category['id']);
 		
 		$this->data['page_name'] = 'Категория "' . $category['name'] . '"';
@@ -370,46 +368,7 @@ class controller_component_core_gallery extends component {
 		
 		$this->redirect(SITE_URL . '/admin/' . $this->component_name);
 	}
-
-
-	/**
-	 * Detects max size of file can be uploaded to server
-	 *
-	 * Based on php.ini parameters "upload_max_filesize", "post_max_size" &
-	 * "memory_limit". Valid for single file upload form. Respects floating point
-	 * values like "1.5G and special values of memory_limit = -1 and
-	 * post_max_size = 0 that treats as unlimited.
-	 *
-	 * @throws Exception
-	 * @return int|float	Max file size in Mbytes
-	 */
-	public function detect_max_upload_filesize(){
-		/**
-		 * Converts shorthands like "2M" or "512K" to bytes
-		 *
-		 * @param int $size
-		 * @return int|float
-		 * @throws Exception
-		 */
-		$normalize = function($size) {
-			if (preg_match('/^(-?[\d\.]+)(|[KMG])$/i', $size, $match)) {
-				$pos = array_search($match[2], array("", "K", "M", "G"));
-				$size = $match[1] * pow(1024, $pos);
-			} else {
-				throw new Exception("Failed to normalize memory size '{$size}' (unknown format)");
-			}
-			return $size;
-		};
-		$limits = array();
-		$limits[] = $normalize(ini_get('upload_max_filesize'));
-		if (($max_post = $normalize(ini_get('post_max_size'))) != 0) {
-			$limits[] = $max_post;
-		}
-		if (($memory_limit = $normalize(ini_get('memory_limit'))) != -1) {
-			$limits[] = $memory_limit;
-		}
-		$maxFileSize = min($limits);
-		$maxFileSize = $maxFileSize  / 1024 / 1024;
-		return round($maxFileSize , 3) ;
-	}
+	
 }
+
+
