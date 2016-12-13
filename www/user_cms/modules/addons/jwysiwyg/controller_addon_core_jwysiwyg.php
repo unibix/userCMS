@@ -1,40 +1,40 @@
-<?php 
+<?php
 class controller_addon_core_jwysiwyg extends addon {
-	public function action_index() {
-		$this->page['head'] = "\t\t<!-- jWysiwyg START -->\n";
-		$this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/jquery.wysiwyg.js');
-		// Дополнительные плагины
-		$this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/plugins/farbtastic/farbtastic.js');
-		$this->page['head'] .= $this->add_css_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/plugins/farbtastic/farbtastic.css');
-		$this->page['head'] .= $this->add_css_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/jquery.wysiwyg.css');
-		$this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/controls/wysiwyg.image.js');
-		$this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/controls/wysiwyg.colorpicker.js');
-		$this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/controls/wysiwyg.table.js');
-		$this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/controls/wysiwyg.cssWrap.js');
-		$this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/controls/wysiwyg.link.js');
-		$this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/controls/wysiwyg.msWordFormatPopup.js');
-		// Файловый менеджер
-		$this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/plugins/wysiwyg.fileManager.js');
-		$this->page['head'] .= $this->add_css_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/plugins/fileManager/wysiwyg.fileManager.css');
-		
-		$this->data['handler_url'] = SITE_URL . '/user_cms/modules/addons/jwysiwyg/source/handlers/file-manager.php';
-		
-		$this->page['head'] .= $this->load_view();
-		
-		$this->page['head'] .= "\t\t<!-- jWysiwyg END -->\n";
+	function action_index() {
+
+
+    $this->page['head']  = '<!-- START jodit editor  -->' . "\n\t";
+    $this->page['head'] .= $this->add_css_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/jodit.min.css'). "\n\t";
+    $this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jwysiwyg/jodit.min.js'). "\n\t";
+    $this->page['head'] .= $this->add_js(
+
+    "$(document).ready(function() { 
+		new Jodit('.wysiwyg', {
+		        uploader: {
+		            url: '" . SITE_URL . "/user_cms/modules/addons/jwysiwyg/connector.php?action=upload'
+		        },
+		        filebrowser: {
+		            ajax: {
+		                url: '" . SITE_URL . "/user_cms/modules/addons/jwysiwyg/connector.php'
+		            },
+		        },
+		        language: 'ru'   ,
+		        minHeight: 350
+		    });
+
+	 });"
+
+    ) 
+
+    . "\n\t";
+    
+
+
+    $this->page['head'] .= '<!-- END jodit editor -->' . "\n\t";
+
+
 		
 		return $this->page;
 	}
-	
-	public function action_activate() {
-		
-	}
-	
-	public function action_deactivate() {
-		
-	}
-	
-	public function action_settings() {
-		
-	}
-}
+
+} 
