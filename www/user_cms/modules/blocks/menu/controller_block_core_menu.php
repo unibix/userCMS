@@ -74,7 +74,7 @@ class controller_block_core_menu extends block {
 				}
 			}
 			if ($this->is_active($item['url'])) {
-				$this->menu .= '<li class="active current"><a href="' . $item['url'] . '">' . $item['name'] . '</a>';
+				$this->menu .= '<li class="current"><a href="' . $item['url'] . '">' . $item['name'] . '</a>';
 			} else {
 				$this->menu .= '<li><a href="' . $item['url'] . '">' . $item['name'] . '</a>';
 			}

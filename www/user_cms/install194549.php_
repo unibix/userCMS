@@ -81,8 +81,11 @@ if(count($errors) == 0) {
         $main_page = $main_page->fetch(PDO::FETCH_ASSOC);
         if ($main_page['title'] == "Главная страница") {
             $dbh->exec("UPDATE main SET title='".$config['site_name']."' WHERE url='/'");
+            //exit($main_page['title']);
+        } else {
+            //exit($main_page['title']);
         }
-        		
+		
 		// Обновляем htaccess
         update_htaccess();
         
