@@ -53,9 +53,19 @@ class user_cms_core {
 		$this -> url = $this -> parse_url();
 
         if ($this->config['maintenance'] == 1) {
-            if (END_NAME == 'front_end' && (!isset($_SESSION['auth']) || $_SESSION['auth'] == 0 || $_SESSION['access'] < 2)) exit(
-                '<div style="margin:20% auto;font-size:200%;padding:30px;max-width:900px;text-align:center;">Внимание! В данный момент сайт обновляется.</div>'
-            );
+            if (END_NAME == 'front_end' && (!isset($_SESSION['auth']) || $_SESSION['auth'] == 0 || $_SESSION['access'] < 2)) {
+               exit(
+                '<div style="margin:20% auto;font-size:200%;padding:30px;max-width:900px;text-align:center;">
+			Внимание! В данный момент сайт обновляется.
+		</div>'
+               );
+            }
+            else {
+            	$this -> page['html_maintanance']   = '
+            	<div style="position:absolute; top:10px;left:10px;background:rgba(234, 100, 100,0.7);padding:20px;border:1px solid red;" id="user_maintenance">
+			Сайт виден только для вас. Не забудьте <a href="'.SITE_URL.'/admin/config" target="_blank">включить</a> его. <a href="javascript:void(0)" onclick="document.getElementById(\'user_maintenance\').style.display=\'none\'">Скрыть это уведомление</a>
+		</div>';
+            }
         }
 
 		// задаем по умолчанию 
@@ -353,6 +363,9 @@ class user_cms_core {
 		$this->html = str_replace('[component]', $this -> page['html'], $this->html);
 		if (strpos($this->theme['file'], 'ajax') !== 0) {
 			$this->html .= "\n<!-- UserCms " . USER_CMS_VERSION . " - " . date('d.m.Y H:i') . " -->";
+		}
+		if (isset($this -> page['html_maintanance']  )) {
+			$this->html .= $this -> page['html_maintanance'] ;
 		}
 
 	}
