@@ -238,11 +238,10 @@ class controller_component_core_components_manager extends component {
 		if (!class_exists($class_name, true)) {
 			$class_name = 'controller_component_core_' . $component_info['component'];			
 		}
-		$obj = new $class_name($this->config, $this->url, array('name' => $component_info['component'], 'view' => $component_info['view']), $this->dbh);
-		
-		if (method_exists($obj,'action_deactivate')) {
-			$obj->action_deactivate();
-		}
+        if (class_exists($class_name) && method_exists($class_name, 'action_deactivate')) {
+    		$obj = new $class_name($this->config, $this->url, array('name' => $component_info['component'], 'view' => $component_info['view']), $this->dbh);
+    		$obj->action_deactivate();
+        }
 		
 		$this->model->deactivate($this->url['actions'][1]);
 		
