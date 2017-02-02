@@ -43,7 +43,7 @@ if (function_exists('apache_get_modules')) {
             } 
         } 
 
-$need_writable_files = array('install.php','.htaccess','db.sqlite','config.ini' );
+$need_writable_files = array('install.php','.htaccess','config.ini');
 foreach ($need_writable_files as $value) {
 	if ( ! is_writable($value)){
         $errors[] = 'Файл ' . $value . ' не доступен для записи';
@@ -62,7 +62,18 @@ if (get_magic_quotes_gpc() || get_magic_quotes_runtime()) {
 	$errors[] = 'Директива magic_quotes должна быть отключена';
 }
 
+if (!file_exists('db.sqlite') && !file_exists('install.sql')) {
+    $errors[] = 'Невозможно создать базу данных. Отсутствует файл install.sql';
+}
+
 if(count($errors) == 0) {
+    if (!file_exists('db.sqlite')) file_put_contents('db.sqlite', '');
+    $dbh = new PDO('sqlite:db.sqlite');
+    if (file_exists('install.sql')) {
+        $dbh->exec(file_get_contents('install.sql'));
+        unlink('install.sql');
+    }
+
     $show_form = TRUE;
 	$config = parse_ini_file('config.ini');
 	
@@ -74,7 +85,6 @@ if(count($errors) == 0) {
         update_config($config);
 
         // Обновляем логин и пароль
-        $dbh = new PDO('sqlite:db.sqlite');
         $dbh->exec("UPDATE users SET login = '" . $_POST['login'] . "', password = '" . md5($_POST['password']) . "' WHERE id = '1' ; ");
 
         $main_page = $dbh->query("SELECT * FROM main WHERE url='/'");
