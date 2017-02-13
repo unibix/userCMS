@@ -71,6 +71,12 @@ php_value post_max_size 10M
 <IfModule mod_rewrite.c>
 RewriteEngine on
 
+
+# Redirect from HTTP to HTTPS
+# RewriteCond %{SERVER_PORT} !^443$
+# RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]
+
+
 # Redirect from OLD domain or aliases
 # RewriteCond %{HTTP_HOST} ^olddomain\.ru$ [NC]
 # RewriteRule ^(.*)$ http://newdomain.com/$1 [R=301,L]
