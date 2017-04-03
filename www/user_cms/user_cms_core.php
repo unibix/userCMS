@@ -1,6 +1,6 @@
 <?php
 
-define('USER_CMS_VERSION', '2.4.0');
+define('USER_CMS_VERSION', '2.4.1');
 
 
 /**
@@ -197,7 +197,8 @@ class user_cms_core {
    	function load_component() {
 		if(END_NAME == 'back_end' && ((!isset($_SESSION['auth']) || $_SESSION['auth']===0) || (isset($_SESSION['access']) && $_SESSION['access'] < 1))){
 			if($this->url['component'] != 'users' ||  ($this->url['component']=='users' && $this->url['actions'][0] != 'login')) {
-				$subject = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+				$protocol = (!isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
+                $subject = $protocol . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 				$_SESSION['backend_route'] = str_replace(SITE_URL, '', $subject); // будет использоваться в компоненте users для редиректа пользователя после авторизации.
 				
 				header('HTTP/1.1 301 Moved Permanently');
