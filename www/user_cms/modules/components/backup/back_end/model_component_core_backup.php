@@ -146,7 +146,7 @@ class model_component_core_backup extends model
             $this->set_process_info($process);
             $zip->close();
 
-            $backup_file = ROOT_DIR.'/temp/backups/'.$_SERVER['HTTP_HOST'].'-'.$process['type'].'-'.date('d-m-Y-H-i-s').'.zip';
+            $backup_file = ROOT_DIR.'/temp/backups/'.$_SERVER['HTTP_HOST'].'-'.date('d-m-Y-H-i-s').'-'.$process['type'].'.zip';
             
             if (!rename($temp_backup, $backup_file)) {
                 $process['status'] = 'terminated';

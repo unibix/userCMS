@@ -15,7 +15,7 @@ class controller_component_core_backup extends component
                 'href_delete'   => SITE_URL.'/admin/backup/delete/del='.$backup,
                 'href_restore'  => SITE_URL.'/admin/backup/restore/res='.$backup,
                 'date'          => date('d.m.Y H:i', filemtime(ROOT_DIR.'/temp/backups/'.$backup)),
-                'size'          => round(filesize(ROOT_DIR.'/temp/backups/'.$backup) / 0x10000, 2)
+                'size'          => round(filesize(ROOT_DIR.'/temp/backups/'.$backup) / 0x100000)
             );
         }
         
