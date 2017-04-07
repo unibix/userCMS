@@ -94,29 +94,19 @@ class controller_component_core_backup extends component
 
     public function action_create_backup()
     {
-        if (isset($_POST['start'])) {
-            $backup_file = ROOT_DIR.'/temp/backups/'.$this->str2url(SITE_NAME);
-            if ($_POST['is_full'] == '1') {
-                $is_full = true;
-                $backup_file .= '-full-';
-            } else {
-                $is_full = false;
-                $backup_file .= '-no-uploads-';
-            }
-            $backup_file .= date('d-m-Y-H-i-s').'.zip';
-
-            if (!$this->model->start_process($backup_file, $is_full)) {
-                $this->data['error'] = 'Не удалось запустить процесс бэкапа.';
-            }
-        }
-
-        $this->data['initial_status'] = $this->model->get_process_status();
-        $this->data['status_url'] = str_replace(ROOT_DIR, SITE_URL, __DIR__.'/console/output.txt');
-        
+        $this->data['get_process_status_url'] = str_replace(ROOT_DIR, SITE_URL, __DIR__.'/process.json');
+        $this->data['do_backup_url'] = SITE_URL.'/admin/backup/ajax_do_backup_process';
         $this->page['title'] = 'Резервное копирование';
         $this->page['keywords'] = 'Резервное копирование';
         $this->page['description'] = 'Резервное копирование';
         $this->page['html'] = $this->load_view('backup_form');
         return $this->page;
+    }
+
+
+
+    public function action_ajax_do_backup_process()
+    {
+        $this->model->do_backup_process();
     }
 }
