@@ -97,7 +97,7 @@ function backupProcess()
     }
 
     var maxExecutionTime = <?=ini_get('max_execution_time')?>,
-        getProcessStatusUrl = '<?=$get_process_status_url?>',
+        getProcessStatusUrl = '<?=str_replace('\\', '/', $get_process_status_url)?>',
         getProcessStatusRecursive = true,
         badJsonCounter = 0
 
@@ -133,7 +133,7 @@ function backupProcess()
         xhr.send()
     }
 
-    var doBackupUrl = '<?=$do_backup_url?>'
+    var doBackupUrl = '<?=str_replace('\\', '/', $do_backup_url)?>'
     function doBackupProcess(getParams)
     {
         getParams = getParams ? '?'+getParams : ''
