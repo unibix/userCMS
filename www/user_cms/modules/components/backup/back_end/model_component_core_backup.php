@@ -6,7 +6,7 @@ class model_component_core_backup extends model
     {
 		if (is_dir(ROOT_DIR.'/temp/backups')) {
 			$backup_dir = scandir(ROOT_DIR.'/temp/backups');
-			return array_values(array_diff($backup_dir, array('.', '..')));			
+			return array_values(array_diff($backup_dir, array('.', '..', '.gitignore')));			
 		}
 		return array();
 	}
