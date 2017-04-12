@@ -1,54 +1,157 @@
+<style>
+    #progress {
+        background-color: #F5F0E7;
+        border: 1px solid #A49980;
+        border-radius: 8px;
+        color: #454545;
+        padding: 10px;
+        width: 400px;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+</style>
+
 <div id="content">
-  <h1 class="page_name">Создание бэкапа</h1>
-  <form method="POST" action="">
-    <label>Выберите тип резервной копии:</label><br>
-    <input checked type="radio" name="type" value="full">полная <br>
-    <input type="radio" name="type" value="no_uploads">без содержимого папки uploads <br>
-    <input type="submit" name="create_backup" value="Создать">
-  </form>
-  
-<?php if (isset($_SESSION['backup_name'])) { ?>  
-  <div style="overflow:hidden; position:relative; width:200px; height:20px; border:1px solid #999999; background:#CCCCCC; border-radius:6px;">
-	<div style="position:relative; text-align:center; z-index:5; margin:0 auto; font-size:14px; color:black;">
-		<span id="innernumber"><?php echo $_SESSION['last_backup_file']; ?></span>/<span id="outernumber"><?php echo $_SESSION['number_backup_files']; ?></span>
-	</div>
-	<div id="greenline" style="position:absolute; z-index:3; top:0px; left:0px; width:0px; height:20px; background:#1A9E1A;"></div>
-  </div>
-  <div style="min-width:200px; height:20px; text-align:left; color:red;">*не закрывайте вкладку в браузере</div>
+    <h1>Создание резервной копии</h1>
+    <div id="error" class="notice error" style="display:none"></div>
+    <div id="success" class="notice success" style="display:none">Бэкап создан! <a href="<?=SITE_URL?>/admin/backup">Список резервных копий</a></div>
 
-<?php } ?>
+    <div id="form"" style="display:none">
+        <input id="isFull" type="radio" name="isFull" value="1" checked> Полный бэкап<br>
+        <input type="radio" name="isFull" value="0"> Без папки uploads <br>
+        <input type="button" onclick="createBackupClick()" value="Создать">
+    </div>
+
+    <div id="progress" style="display:none">0%</div>
+    <p id="action" style="display:none"></p>
 </div>
-<?php if (isset($_SESSION['backup_name'])) { ?>
+
+
 <script>
-function postXmlHttp(url, params){
-	var http = new XMLHttpRequest();
-	http.open("POST", url, true);
 
-	http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	http.setRequestHeader("Content-length", params.length);
-	http.setRequestHeader("Connection", "close");
+var backup = new backupProcess()
 
-	http.onreadystatechange = function() {//Call a function when the state changes.
-		if(http.readyState == 4 && http.status == 200) {
-			console.log(http.responseText);
-			if (http.responseText==1) {
-				document.getElementById("innernumber").innerHTML = parseInt(document.getElementById("innernumber").innerHTML) + 1;
-				document.getElementById("greenline").style.width = (200 * parseInt(document.getElementById("innernumber").innerHTML) / parseInt(document.getElementById("outernumber").innerHTML))  + "px";
-				console.log(parseInt(document.getElementById("innernumber").innerHTML));
-				console.log(http.responseText);
-				postXmlHttp(url, params);
-			} else if (http.responseText==0){
-				window.location = "<?php echo SITE_URL . '/admin/backup'; ?>";
-			} else {
-				//error
-			}
-		}
-	}
-	http.send(params);
+
+function createBackupClick()
+{
+    if (document.getElementById('isFull').checked) backup.start('type=full')
+    else backup.start('type=no-uploads')
+    document.getElementById('error').style.display = 'none'
+    document.getElementById('success').style.display = 'none'
+    document.getElementById('form').style.display = 'none'
+    document.getElementById('progress').style.display = 'block'
 }
 
-$( document ).ready(function() {
-    postXmlHttp("<?php echo SITE_URL . '/admin/backup/ajax_create_backup'; ?>", '');
-});
+
+function backupProcess()
+{
+    var isInit = true,
+        proc = {}
+
+    function displayProcess()
+    {
+        if (proc.status == 'terminated') {
+            if (!isInit) {
+                if ('error' in proc) {
+                    document.getElementById('error').style.display = 'block'
+                    document.getElementById('error').innerHTML = '<p>'+proc.error+'</p>'
+                } else {
+                    document.getElementById('success').style.display = 'block'
+                }
+            } else {
+                document.getElementById('error').style.display = 'none'
+                document.getElementById('success').style.display = 'none'
+            }
+            document.getElementById('form').style.display = 'block'
+            document.getElementById('progress').style.display = 'none'
+        } else {
+            document.getElementById('success').style.display = 'none'
+            document.getElementById('error').style.display = 'none'
+            document.getElementById('form').style.display = 'none'
+            document.getElementById('progress').style.display = 'block'
+            document.getElementById('progress').textContent = proc.progress + '%'
+            if (proc.progress > 50) {
+                document.getElementById('progress').style.color = 'white';
+            } else {
+                document.getElementById('progress').style.color = '';
+            }
+            document.getElementById('progress').style.backgroundImage = 
+            'linear-gradient(to right, #107710 0%, #107710 '+proc.progress+'%, #F5F0E7 '+proc.progress+'%, #F5F0E7 100%)'
+        }
+
+        if (proc.status == 'executing') {
+            document.getElementById('action').textContent = proc.action
+            document.getElementById('action').style.display = 'block'
+        } else {
+            document.getElementById('action').style.display = 'none'
+        }
+        isInit = false
+    }
+
+    function fatalError(error)
+    {
+        document.getElementById('form').style.display = 'block'
+        document.getElementById('error').style.display = 'block'
+        document.getElementById('error').innerHTML = '<p>'+error+'</p>'
+        getProcessStatusRecursive = false
+    }
+
+    var maxExecutionTime = <?=ini_get('max_execution_time')?>,
+        getProcessStatusUrl = '<?=str_replace('\\', '/', $get_process_status_url)?>',
+        getProcessStatusRecursive = true,
+        badJsonCounter = 0
+
+    function getProcessStatus() {
+        var xhr = new XMLHttpRequest
+        xhr.open('GET', getProcessStatusUrl+'?nocache='+Math.random(), true)
+        xhr.onload = function() {
+            console.log(xhr.responseText)
+            if (xhr.responseText != '') {
+                try {
+                    proc = JSON.parse(xhr.responseText)
+                    jsonIsCorrect = true
+                    badJsonCounter = 0
+                } catch(e) {
+                    jsonIsCorrect = false
+                    badJsonCounter++
+                }
+                if (jsonIsCorrect) {
+                    if (proc.status == 'executing' && Date.now()/1000 - proc.timestamp > maxExecutionTime*2) {
+                        fatalError('Похоже, что предыдущий процесс был прерван. Начните заново.')
+                    } else {
+                        displayProcess()
+                    }
+                    if (proc.status == 'terminated') getProcessStatusRecursive = false
+                    if (proc.status == 'paused') doBackupProcess()
+                } else if (badJsonCounter > 10) {
+                    fatalError('Cтатус процесса имеет неверный формат.')
+                }
+            }
+            if (getProcessStatusRecursive) setTimeout(getProcessStatus, 200)
+        }
+        xhr.onerror = fatalError.bind(null, 'Невозможно получить статус процесса.')
+        xhr.send()
+    }
+
+    var doBackupUrl = '<?=str_replace('\\', '/', $do_backup_url)?>'
+    function doBackupProcess(getParams)
+    {
+        getParams = getParams ? '?'+getParams : ''
+        var xhr = new XMLHttpRequest
+        xhr.open('GET', doBackupUrl+getParams, true)
+        xhr.onload = function() {
+            if (xhr.responseText != '') fatalError(xhr.responseText)
+        }
+        xhr.onerror = fatalError.bind(null, 'Невозможно запустить процесс.')
+        xhr.send()
+    }
+
+    this.start = function(getParams) {
+        doBackupProcess(getParams)
+        getProcessStatusRecursive = true
+        setTimeout(getProcessStatus, 200)
+    }
+
+    getProcessStatus()
+}
 </script>
-<?php } ?>
