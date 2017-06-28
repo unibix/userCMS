@@ -14,7 +14,7 @@ class DB extends PDO
            // $this->query("SET NAMES 'cp1251'");
         } 
         catch(PDOException $e) { 
-            echo "Произошла ошибка в работе с базой данных...";
+            echo "UError #1873: Произошла ошибка в работе с базой данных...";
             exit();
         }
     }
