@@ -4,6 +4,9 @@
         text-decoration: none;
     }
 </style>
+<?php
+$base_url_public = str_replace('/admin','',$base_url);
+?>
 <div id="content">    
     <h1><?=$page_header?></h1><br>
     <p class="buttons">
@@ -94,7 +97,7 @@
                         <?php } ?>
                     <?php } ?>
 
-                    <td><?=$item['url']?></td>
+                    <td><a href="<?=$base_url_public?>/<?=$item['url']?>" target="_blank" title="Посмотреть" ><?=$item['url']?></a></td>
                     <td><?=date('d.m.Y H:i', $item['date_create'])?></td>
                     <td><?=date('d.m.Y H:i', $item['date_edit'])?></td>
                     <td><?=date('d.m.Y H:i', $item['date_publish'])?></td>
