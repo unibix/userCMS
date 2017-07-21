@@ -70,7 +70,7 @@
               <?php } ?>
 
               <span>Сообщение об ошибке:</span> 
-              <input type="text" name="fields[<?=$i?>][error_message]" value="">
+              <input type="text" name="fields[<?=$i?>][error_message]" value="<?=$field['error_message']?>">
             </div>
           <?php } ?>
           

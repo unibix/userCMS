@@ -1,5 +1,5 @@
 <div class="feedback" id="plugin-feedback-<?=$plugin_id?>">
-    <form action="#plugin-feedback-<?=$plugin_id?>" method="POST">
+    <form action="#plugin-feedback-<?=$plugin_id?>" method="POST" enctype="multipart/form-data">
 
     <?php if ($success) { ?>
         <div class="alert alert-success"><?=$success?></div>
@@ -11,6 +11,12 @@
                 <label for="<?=$field['name']?>"><?=$field['label']?><?=($field['required']) ? ' *' : ''?></label>
                 <?php if ($field['error']) { ?><span class="text-danger"><?=$field['error']?></span><?php } ?>
                 <input id="<?=$field['name']?>" type="text" class="form-control" name="<?=$field['name']?>" value="<?=$field['value']?>" <?=($field['required']) ? 'required' : ''?>>
+            
+            <?php } elseif ($field['type'] == 'file') { ?>
+
+                <label for="<?=$field['name']?>"><?=$field['label']?><?=($field['required']) ? ' *' : ''?></label>
+                <?php if ($field['error']) { ?><span class="text-danger"><?=$field['error']?></span><?php } ?>
+                <input id="<?=$field['name']?>" type="file" class="form-control" name="<?=$field['name']?>" <?=($field['required']) ? 'required' : ''?>>
             
             <?php } elseif ($field['type'] == 'textarea') { ?>
 
@@ -51,7 +57,7 @@
             <?php } ?>
             </div>
         <?php } ?>
+        * - обязательны для заполнения
     <?php } ?>
-    * - обязательны для заполнения
     </form>
 </div>
