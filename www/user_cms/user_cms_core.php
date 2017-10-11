@@ -1,6 +1,6 @@
 <?php
 
-define('USER_CMS_VERSION', '2.4.2');
+define('USER_CMS_VERSION', '2.4.3');
 
 
 /**
@@ -573,31 +573,28 @@ class user_cms_core {
 			return !in_array($main_id, $sections['values']);
 		}
 	}
-
-	function print_r($var, $var_name = '') {
-		echo '<pre style="outline: 1px dotted grey;padding:5px;">';
-		if( ! empty($var_name)) {
-			echo '<h3>' . $var_name . '</h3>';
-		}
-		if(is_string($var)){
-			$var = htmlspecialchars($var);
-		}
-		print_r($var);
-		echo '</pre>';
-	}
-
-	function var_dump($var, $var_name = '') {
-		echo '<pre style="outline: 1px dotted grey;padding:5px;">';
-		if( ! empty($var_name)) {
-			echo '<h3>' . $var_name . '</h3>';
-		}
-		var_dump($var);
-		echo '</pre>';
-	}
-	
 }
 
+function out($var, $var_name = '') {
+	echo '<pre style="outline: 1px dashed red;padding:5px;margin:10px;color:white;background:black;">';
+	if( ! empty($var_name)) {
+		echo '<h3>' . $var_name . '</h3>';
+	}
+	if(is_string($var)){
+		$var = htmlspecialchars($var);
+	}
+	print_r($var);
+	echo '</pre>';
+}
 
+function out2($var, $var_name = '') {
+	echo '<pre style="outline: 1px dashed red;padding:5px;margin:10px;color:white;background:black;">';
+	if( ! empty($var_name)) {
+		echo '<h3>' . $var_name . '</h3>';
+	}
+	var_dump($var);
+	echo '</pre>';
+}
 
 function __autoload($class_name) {
 	$core_dir        = '/user_cms';
