@@ -9,7 +9,7 @@
 # See: http://php.net/manual/en/timezones.php
 php_value date.timezone "Europe/Kaliningrad"
 
-SetEnv   LC_ALL  nl_NL.UTF-8
+SetEnv LC_ALL ru_RU.utf8
 
 ########################################
 # Set up UTF-8 encoding
