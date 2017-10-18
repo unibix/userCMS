@@ -29,6 +29,8 @@ class helper_mail {
 
         $headers = "Date: ".date("r")."\r\n";
         $headers.= "From: =?UTF-8?B?".base64_encode($this->from_name)."?= <".$this->from_email.">\r\n";
+        $headers.= "Reply-To: <".$this->from_email.">\r\n";
+        $headers.= "Return-Path: <".$this->from_email.">\r\n";
         $headers.= "MIME-Version: 1.0\r\n";
 
         $subject = "=?UTF-8?B?".base64_encode($this->subject)."?=";
