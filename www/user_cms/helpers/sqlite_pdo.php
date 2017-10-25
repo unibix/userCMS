@@ -10,8 +10,7 @@ class DB extends PDO
                 
             $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('DBStatement', array($this)));
-            
-           // $this->query("SET NAMES 'cp1251'");
+            $this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE,PDO::FETCH_ASSOC);
         } 
         catch(PDOException $e) { 
             echo "UError #1873: Произошла ошибка в работе с базой данных...";
