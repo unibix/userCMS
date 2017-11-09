@@ -84,7 +84,7 @@ class controller_component_core_pages extends component {
 			if ($this->view == 'children_menu' or $this->view == 'children_menu_in_bottom') {
 				$this->data['children'] = array();
 				
-				$results = $this->model->get_pages_by_parent_id($page_info[0]);
+				$results = $this->model->get_pages_by_parent_id($page_info['main_id']);
 				
 				foreach ($results as $result) {
 					$this->data['children'][] = array(
