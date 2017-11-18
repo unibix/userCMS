@@ -206,7 +206,10 @@ class controller_plugin_core_feedback extends plugin
         $this->data['validation_methods'] = $this->validation_methods;
         $this->data['fields'] = $params['fields'];
         
-        $this->page['html'] = $this->load_view('settings');
+        if ( ! defined ('IS_FEEDBACK_CSS_FILE'))  {
+		    $this->page['head'] = $this->add_css_file(SITE_URL . '/user_cms/modules/plugins/' . $this->plugin_name . '/views/style.css');
+			define("IS_FEEDBACK_CSS_FILE", 1);
+		}
         
         return $this->page;
     }
