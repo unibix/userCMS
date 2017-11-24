@@ -59,5 +59,7 @@
         <?php } ?>
         * - обязательны для заполнения
     <?php } ?>
+       <input type="hidden" name="phone_label" value="">
+       <input type="email" name="email_label" value="check@gmail.com" style="display: none;">
     </form>
 </div>
