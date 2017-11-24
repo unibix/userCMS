@@ -2,10 +2,7 @@
 
 /**
 *   Feedback 2.0
-*   Если атрибут name не задан через админку, то для большинства элементов формы этот атрибут формируется по шаблону:
-*     name="plugin_[id]_[field_index]", где 
-*       [id] - id активированного плагина,
-*       [field_index] - индекс элемента формы в массиве fields
+*   Все настройки через админку
 */
 class controller_plugin_core_feedback extends plugin
 {   
@@ -28,6 +25,10 @@ class controller_plugin_core_feedback extends plugin
     );
 
     public function action_index($plugin) {
+	if(isset($_POST['feedback_' . $plugin['id'] . '_submit']) AND ($_POST['phone_label'] != '' or $_POST['email_label'] != 'check@gmail.com') ) {
+		// защита от ботов (скрытая капча)
+		die('Error #3092: validating error feedback plugin');
+	}
         if ($plugin['id'] != $this->run_params) {
             return $this->page;
         }
