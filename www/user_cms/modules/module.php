@@ -19,10 +19,10 @@ class module {
 	}
 	
 	public function add_js($html) {
-		return "\t\t<script type=\"text/javascript\">" . $html . "</script>\n";
+		return "\t\t<script>" . $html . "</script>\n";
 	}
 	public function add_js_file($name) {
-		return "\t\t<script type=\"text/javascript\" src=\"" . $name . "\"></script>\n";
+		return "\t\t<script src=\"" . $name . "\"></script>\n";
 	}
 	public function add_css($html) {
 		return "\t\t<style type=\"text/css\">" . $html . "</style>\n";
