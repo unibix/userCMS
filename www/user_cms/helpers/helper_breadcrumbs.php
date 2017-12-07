@@ -1,7 +1,7 @@
 <?php 
 class helper_breadcrumbs {
 	private $data = array();
-	public $separator = '&#8260;';
+	public $separator = '/';
 	
 	public function add($name, $href = '/') {
 		$this->data[] = array(
