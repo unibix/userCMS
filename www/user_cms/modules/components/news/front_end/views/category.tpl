@@ -1,18 +1,17 @@
-<div id="content">
-    <p>
+<div id="content" class="content news">
+    
+        <h1><?=$page_header?></h1>
+        <?php if (isset($category['text'])) { ?>
+        <?=$category['text']?>
+        <?php } ?>
+
+    <p class="breadcrumbs">
         <?php
         $links = array(); 
         foreach ($breadcrumbs['labels'] as $n => $label) $links[] = '<a href="'.$breadcrumbs['hrefs'][$n].'">'.$label.'</a>';
         echo implode(' / ', $links);
         ?>
     </p>
-    <?php if (isset($category)) { ?>
-        <p class="date">Опубликовано: <?=date('d.m.Y H:i', $category['date_publish'])?></p>
-        <h1><?=$page_header?></h1>
-        <?=$category['text']?>
-    <?php } else { ?>
-        <h1><?=$page_header?></h1>
-    <?php } ?>
     <?php if (!empty($items)) { ?>
         <?php foreach ($items as $item) if ($item['is_category'] == 1) { ?>
             <div class="category-preview">
