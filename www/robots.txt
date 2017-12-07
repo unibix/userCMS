@@ -4,4 +4,4 @@ Disallow: /tmp/
 Disallow: /user_cms/
 
 #Host: domain.com
-#Sitemap: /sitemap.xml
+#Sitemap: http://domain.com/sitemap2.xml
