@@ -4,7 +4,9 @@
 	display: block;
 	opacity: 0;
 	transition: opacity 0.7s ease;
-    position: relative;
+    	position: relative;
+	max-width: 1170px;
+    	margin: 0 auto;
 }
 
 .cube-slider > .right-arrow, 
