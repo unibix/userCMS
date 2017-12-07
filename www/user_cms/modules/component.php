@@ -61,8 +61,8 @@ class component extends module {
 		    header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
 		}
 		$this->data['page_name'] = 'Страница не найдена';
-		$this->data['content'] = '<p style="margin: 20px 0;">Ошибка 404 бывает в следующих случаях:	<ol><li>Страницу удалили</li><li>Страницу переместили</li><li>Страница еще не создана</li></ol>Воспользуйтесь меню сайта для поиска нужной информации!</p>';
-		$this->data['bread_crumbs'] = '<a href="' . SITE_URL . '">Главная</a>->Ошибка 404';
+		$this->data['content'] = '<p style="margin: 20px 0;">Ошибка 404 бывает в следующих случаях:	<ol><li>Страницу удалили</li><li>Страницу переместили</li><li>Страница еще не создана</li></ol>Воспользуйтесь меню сайта для поиска нужной информации или перейдите на <a href="' . SITE_URL . '">главную страницу</a>.</p>';
+		$this->data['bread_crumbs'] = '<a href="' . SITE_URL . '">Главная</a> / Ошибка 404';
 		$page['title'] = 'Страница не найдена. Ошибка 404';
 		$page['keywords'] = '';
 		$page['description'] = '';
