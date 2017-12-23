@@ -25,16 +25,16 @@ class controller_plugin_core_feedback extends plugin
     );
 
     public function action_index($plugin) {
-	if(isset($_POST['feedback_' . $plugin['id'] . '_submit']) AND ($_POST['phone_label'] != '' or $_POST['email_label'] != 'check@gmail.com') ) {
-		// защита от ботов (скрытая капча)
-		die('Error #3092: validating error feedback plugin');
-	}
+    	if(isset($_POST['feedback_' . $plugin['id'] . '_submit']) AND ($_POST['phone_label'] != '' or $_POST['email_label'] != 'check@gmail.com') ) {
+    		// защита от ботов (скрытая капча)
+    		die('Error #3092: validating error feedback plugin');
+    	}
         if ($plugin['id'] != $this->run_params) {
             return $this->page;
         }
         
-        $params = unserialize($plugin['params']);
-        //core::print_r($params);
+        $params = unserialize(base64_decode($plugin['params']));
+        //out($params);
         $this->plugin_id = $this->data['plugin_id'] = $plugin['id'];
         
         if (isset($_SESSION['feedback_success_' . $this->plugin_id])) {
@@ -78,6 +78,7 @@ class controller_plugin_core_feedback extends plugin
                 }
                 $message .= 'Форма заполнена на странице: '. SITE_URL  . $this->url['request_uri'] .'<br>';
                 
+
                 $this->load_helper('mail');
                 
                 $this->helper_mail->from_name = $params['mail_text_from'];
@@ -86,7 +87,9 @@ class controller_plugin_core_feedback extends plugin
                 $this->helper_mail->subject = $params['mail_subject'];
                 if (isset($attach)) $this->helper_mail->add_attach($attach);
 
+                $this->before_send();
                 $is_sent = $this->helper_mail->send($message);
+                $this->after_send();
                 if (isset($attach)) unlink($attach);
                 if ($is_sent) {
                     $_SESSION['feedback_success_' . $this->plugin_id] = $params['mail_text_success'];
@@ -140,8 +143,12 @@ class controller_plugin_core_feedback extends plugin
                 );
             }
             
-            
-            $this->page['head'] = $this->add_css_file(SITE_URL . '/user_cms/modules/plugins/' . $this->plugin_name . '/views/style.css');
+            if ( ! defined ('IS_FEEDBACK_CSS_FILE'))  {
+                $this->page['head'] = $this->add_css_file(
+                    SITE_URL . '/user_cms/modules/plugins/' . $this->plugin_name . '/views/style.css');
+                define("IS_FEEDBACK_CSS_FILE", 1);
+            }
+          
             $this->page['html'] = $this->load_view();
         }
         
@@ -150,14 +157,14 @@ class controller_plugin_core_feedback extends plugin
     
     public function action_activate() {
         if (isset($_POST['activate'])) {
-            $this->page['params'] = serialize(array(
+            $this->page['params'] = base64_encode(serialize(array(
                 'fields'            => isset($_POST['fields']) ? $_POST['fields'] : array(),
                 'mail_to'           => $_POST['mail_to'],
                 'mail_subject'      => $_POST['mail_subject'],
                 'mail_from'         => $_POST['mail_from'],
                 'mail_text_from'    => $_POST['mail_text_from'],
                 'mail_text_success' => $_POST['mail_text_success']
-            ));
+            )));
             
             return $this->page;
         }
@@ -181,20 +188,21 @@ class controller_plugin_core_feedback extends plugin
     }
     
     public function action_settings($plugin) {
-        $params = unserialize($plugin['params']);
+        $params = unserialize(base64_decode($plugin['params']));
+        //out($params);
         $this->data['plugin_id'] = $plugin['id'];
         if (isset($_POST['edit_settings'])) {
             $this->page['plugin_id'] = $plugin['id'];
-            $this->page['params'] = serialize(array(
+            $this->page['params'] = base64_encode(serialize(array(
                 'fields'            => isset($_POST['fields']) ? $_POST['fields'] : array(),
                 'mail_to'           => $_POST['mail_to'],
                 'mail_subject'      => $_POST['mail_subject'],
                 'mail_from'         => $_POST['mail_from'],
                 'mail_text_from'    => $_POST['mail_text_from'],
                 'mail_text_success' => $_POST['mail_text_success'],
-            ));
+            )));
             
-            return $this->page;
+           
         }
         
         $this->data['mail_to'] = $params['mail_to'];
@@ -207,10 +215,7 @@ class controller_plugin_core_feedback extends plugin
         $this->data['validation_methods'] = $this->validation_methods;
         $this->data['fields'] = $params['fields'];
         
-        if ( ! defined ('IS_FEEDBACK_CSS_FILE'))  {
-		    $this->page['head'] = $this->add_css_file(SITE_URL . '/user_cms/modules/plugins/' . $this->plugin_name . '/views/style.css');
-			define("IS_FEEDBACK_CSS_FILE", 1);
-		}
+        $this->page['html'] = $this->load_view('settings');
         
         return $this->page;
     }
@@ -258,4 +263,10 @@ class controller_plugin_core_feedback extends plugin
             return true;
         }
     }
+
+    public function before_send() {
+    }
+    public function after_send() {
+    }
+
 }
