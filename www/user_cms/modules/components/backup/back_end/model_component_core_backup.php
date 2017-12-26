@@ -100,7 +100,7 @@ class model_component_core_backup extends model
             for ($i=$process['listPointer']; $i<$process['listSize']; $i++) {
                 
                 $name = $list[$i];
-                $zipName = str_replace(ROOT_DIR, '', $name);
+                $zipName = str_replace(ROOT_DIR . '/', '', $name);
                 if (is_dir($list[$i])) {
                     $is_added = $zip->addEmptyDir($zipName);
                 } elseif (pathinfo($name, PATHINFO_EXTENSION) == 'php_') {
