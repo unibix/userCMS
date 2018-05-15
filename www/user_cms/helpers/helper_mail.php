@@ -44,7 +44,7 @@ class helper_mail {
             $body .= "Content-Type: $msgType; charset=UTF-8\r\n";
             $body .= "Content-Transfer-Encoding: 8bit\r\n";
             $body .= "\r\n";
-            $body .= $message;
+            $body .= '<html>' . $message . '</html>';
 
             foreach ($this->attach as $path) {
                 $filename = mb_substr($path, mb_strrpos($path, '/'));
@@ -62,7 +62,7 @@ class helper_mail {
             $headers .= "Content-Type: $msgType; charset=UTF-8\r\n";
             $headers .= "Content-Transfer-Encoding: 8bit\r\n";
             $headers .= "\r\n";
-            $body = $message;
+            $body .= '<html>' . $message . '</html>';
         }
         mb_internal_encoding($mb_internal_encoding);
         return mail($this->mail_target, $subject, $body, $headers);
