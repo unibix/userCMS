@@ -11,9 +11,9 @@
     </p>
     <p class="image">
     <?php if (!empty($article['photo'])) { ?>
-        <img src="<?=SITE_URL;?>/uploads/modules/<?=$img_folder?>/<?=$article['photo']?>">
+        <img src="<?=SITE_URL;?>/uploads/modules/<?=$img_folder?>/<?=$article['photo']?>" alt="<?=$page_header?>">
     <?php } else { ?>
-        <img src="<?=SITE_URL;?>/user_cms/modules/components/<?=$img_folder?>/no-photo.jpg">
+        <img src="<?=SITE_URL;?>/user_cms/modules/components/<?=$img_folder?>/no-photo.jpg" alt="нет фото">
     <?php } ?>
     </p>
     <div class="article">
