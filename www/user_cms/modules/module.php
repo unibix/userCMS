@@ -25,7 +25,7 @@ class module {
 		return "\t\t<script src=\"" . $name . "\"></script>\n";
 	}
 	public function add_css($html) {
-		return "\t\t<style type=\"text/css\">" . $html . "</style>\n";
+		return "\t\t<style>" . $html . "</style>\n";
 	}
 	public function add_css_file($name) {
 		return "\t\t<link rel=\"stylesheet\" type=\"text/css\" href=\"" . $name . "\">\n";
