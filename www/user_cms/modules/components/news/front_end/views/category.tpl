@@ -26,9 +26,9 @@
                 <h2><?=$item['header']?></h2>
                 <div class="image">
                 <?php if (!empty($item['photo'])) { ?>
-                    <img src="/uploads/modules/<?=$img_folder?>/mini/<?=$item['photo']?>">
+                    <img src="/uploads/modules/<?=$img_folder?>/mini/<?=$item['photo']?>" alt="<?=$item['header']?>">
                 <?php } else { ?>
-                    <img src="/user_cms/modules/components/<?=$img_folder?>/no-photo.jpg">
+                    <img src="/user_cms/modules/components/<?=$img_folder?>/no-photo.jpg" alt="нет фото">
                 <?php } ?>
                 </div>
                 <?=$item['overview']?> <a href="<?=$base_url?>/<?=$item['url']?>">Подробнее</a>
