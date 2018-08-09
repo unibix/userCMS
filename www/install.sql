@@ -80,6 +80,10 @@ INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_a
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (29, 'Страничная навигация', 'plugin',   'pagination',   '1.0',  1480488062, 'Кнопки для страничной навигации');
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (30, 'Анонс новостей',   'block',    'news_announce',    '2.0',  1480488062, 'Анонс новостей');
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (31, 'Слайдер CUBE', 'block',    'cube_slider',  '1.4',  1481290914, 'Слайдер в виде вращающегося куба.');
+INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (32, 'Блок HTML кода',   'plugin',    'custom_html',  '1.0',  1533821211, 'Модуль позволяет добавлять на станицу пользовательский html код');
+INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (33, 'Блок выполняемого кода',   'plugin',    'custom_script',  '1.0',  1533821211, 'Модуль позволяет добавлять на станицу пользовательский выполняемый код');
+INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (34, 'Блок выполняемого кода',   'block',    'custom_script',  '1.0',  1533821211, 'Модуль позволяет добавлять на станицу пользовательский выполняемый код');
+
 
 CREATE TABLE "main" (
   "id" integer NULL PRIMARY KEY AUTOINCREMENT,
