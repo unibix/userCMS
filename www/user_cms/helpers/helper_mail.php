@@ -35,7 +35,9 @@ class helper_mail {
 
         $subject = "=?UTF-8?B?".base64_encode($this->subject)."?=";
         if (strpos($message, '</')) $msgType = "text/html"; else $msgType = "text/plain";
-
+        
+        $body = '';
+        
         if ($this->attach) {
             $boundary = md5(time());
             $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
