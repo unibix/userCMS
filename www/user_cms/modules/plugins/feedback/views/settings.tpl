@@ -1,7 +1,15 @@
 <div id="feedback_settings">
   <div>
-    <label>Направление отправки (можно указать несколько адресов через запятую):</label>
-    <input type="text" name="mail_to" value="<?php echo $mail_to; ?>">
+    <label>Направление отправки (можно указать несколько адресов через запятую):</label><br>
+    <label>
+    <?php if(SITE_EMAIL){?>
+      Site e-mail1<input type="checkbox" id='site-email-1' value="<?=SITE_EMAIL?>" checked class="check-email" onchange="addDefaultEmails()">
+    <?php } ?>
+    <?php if(SITE_EMAIL2){?>
+      Site e-mail2<input type="checkbox" id='site-email-2' value="<?=SITE_EMAIL2;?>" checked class="check-email" onchange="addDefaultEmails()">
+    <?php } ?>
+    </label>
+    <input type="text" name="mail_to" value="<?php echo $mail_to; ?>" id="mail-to"> 
     <label>Тема письма:</label>
     <input type="text" name="mail_subject" value="<?php echo $mail_subject; ?>">
     <label>Email "От кого"</label>
@@ -48,6 +56,21 @@
               <input type="radio" name="fields[<?=$i?>][default_checked]" value="1" <?php if ($field['default_checked'] == 1) { ?>checked<?php } ?>> Выбран
               <input type="radio" name="fields[<?=$i?>][default_checked]" value="0" <?php if ($field['default_checked'] == 0) { ?>checked<?php } ?>> Не выбран <br>
             
+          <?php } elseif($field['type'] == 'recaptcha'){?>
+            <span>Ключ</span>
+            <input type="text" name="fields[<?=$i?>][key]" value="<?=$field['key']?>">
+            <span>Секретный ключ</span>
+            <input type="text" name="fields[<?=$i?>][secret_key]" value="<?=$field['secret_key']?>">
+            <input type="hidden" name="fields[<?=$i?>][validation]" value="recaptcha">
+
+
+          <?php } elseif($field['type'] == 'captcha'){?>
+            <span>Ширина картинки (px)</span>
+            <input type="text" name="fields[<?=$i?>][captcha_width]" value="<?=isset($field['captcha_width'])?$field['captcha_width']:'';?>">
+            <span>Высота картинки (px)</span>
+            <input type="text" name="fields[<?=$i?>][captcha_height]" value="<?=isset($field['captcha_height'])?$field['captcha_height']:'';?>">
+            <input type="hidden" name="fields[<?=$i?>][validation]" value="captcha">
+
           <?php } ?>
           
           <?php if ($field['type'] != 'submit' && $field['type'] != 'select') { ?>
@@ -120,6 +143,15 @@
             field += '<input type="radio" name="fields[' + field_num + '][default_checked]" checked value="1"> Выбран';
             field += '<input type="radio" name="fields[' + field_num + '][default_checked]" value="0"> Не выбран <br>';
           break;
+          case 'recaptcha':
+          field += '<span>Ключ:</span> <input type="text" name="fields[' + field_num + '][key]" value="" required>';
+          field += '<span>Секретный ключ:</span> <input type="text" name="fields[' + field_num + '][secret_key]" value="" required>';
+          field += '<input type="hidden" name="fields[' + field_num + '][validation]" value="recaptcha">';
+          break;
+          case 'captcha':
+          field += '<span>Ширина картинки (px)</span> <input type="text" name="fields[' + field_num + '][captcha_width]" value="" >';
+          field += '<span>Высота картинки (px)</span> <input type="text" name="fields[' + field_num + '][captcha_height]" value="">';
+          field += '<input type="hidden" name="fields[' + field_num + '][validation]" value="captcha">';
       }
       
       if (this.value != 'submit' && this.value != 'select') {
@@ -135,7 +167,6 @@
             <?php } ?>
             field +=  '</select>';
           }
-
           field +=  '<span>Сообщение об ошибке:</span> <input type="text" name="fields[' + field_num + '][error_message]" value="">';
         field +=  '</div>';
       }
@@ -194,3 +225,24 @@
   #form_selected_fields .remove {float: right;}
   #form_selected_fields .arrows {color: #107710; cursor: pointer;}
 </style>
+<script>
+  //добавление site-email и site-email2 по чекбоксам
+   function addDefaultEmails(){
+     var emails = [];//тут будут адреса сайта по умолчанию(помеченые галочкой)
+     var insertedEmails = typeof $('#mail-to').val() != 'undefined'?$('#mail-to').val().split(','):false;//адреса которые добавлены в поле вручную
+     insertedEmails.splice(insertedEmails.indexOf(' '), 1);//удаляем пустой
+     $('.check-email').each(function(){
+        if($(this).is(':checked')){
+          if(emails.indexOf($(this).val()) == -1)emails.push($(this).val());//если выбран и нет в списке добавляем
+          if(insertedEmails.indexOf($(this).val()) != -1)insertedEmails.splice(insertedEmails.indexOf($(this).val()), 1);//если уже введен удаляем
+        }else{
+          //удаляем при снятии галочки
+          if(emails.indexOf($(this).val()) != -1)emails.splice(emails.indexOf($(this).val()), 1);
+          if(insertedEmails.indexOf($(this).val()) != -1)insertedEmails.splice(insertedEmails.indexOf($(this).val()), 1);
+        }
+     });
+     emailsResult = emails.concat(insertedEmails);//получаем то что было введено вручную и то что отмечено галочкой
+     $('#mail-to').val((emailsResult.length>1?emailsResult.join(','):(emailsResult.length==1?emailsResult[0]:'')));
+   }
+   addDefaultEmails();
+</script>
