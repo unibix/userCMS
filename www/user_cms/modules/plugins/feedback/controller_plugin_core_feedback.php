@@ -1,21 +1,25 @@
 <?php
 
 /**
-*   Feedback 2.0
+*   Feedback 2.2
 *   Все настройки через админку
+*   Добавлены: Google reCAPTCHA, графическая капча движка UserCMS, автоматическое добавление e-mail адресов сайта в поле направление
 */
 class controller_plugin_core_feedback extends plugin
 {   
     private $errors = array();
+    public $test = 'sasasasasa';
     
     private $field_types = array(
-        'text'     => 'Текстовое поле (input[type="text"])',
-        'textarea' => 'Текстовое поле (textarea)',
-        'select'   => 'Список',
-        'file'     => 'Файл',
-        'checkbox' => 'Флажок',
+        'text'     	=> 'Текстовое поле (input[type="text"])',
+        'textarea' 	=> 'Текстовое поле (textarea)',
+        'select'   	=> 'Список',
+        'file'     	=> 'Файл',
+        'checkbox' 	=> 'Флажок',
         //'radio'    => 'Переключатель',
-        'submit'   => 'Кнопка отправки формы'
+        'submit'    => 'Кнопка отправки формы',
+        'captcha'   => 'Графическая капча',
+        'recaptcha' => 'Google reCAPTCHA',
     );
     
     private $validation_methods = array(
@@ -34,7 +38,6 @@ class controller_plugin_core_feedback extends plugin
         }
         
         $params = unserialize(base64_decode($plugin['params']));
-        //out($params);
         $this->plugin_id = $this->data['plugin_id'] = $plugin['id'];
         
         if (isset($_SESSION['feedback_success_' . $this->plugin_id])) {
@@ -43,7 +46,7 @@ class controller_plugin_core_feedback extends plugin
         } else {
             $this->data['success'] = false;
         }
-        
+ // out($params);       
         if ($params['fields']) {
             if (isset($_POST['feedback_' . $plugin['id'] . '_submit']) && $this->validate($params['fields'])) {
                 $message = '';
@@ -71,7 +74,7 @@ class controller_plugin_core_feedback extends plugin
                         }
                     } elseif (isset($_POST[$key])) {
                         $message .= $this->helper_validate->safestr($_POST[$key], true);
-                    }
+                    } 
                 
                     $message .= '<br>';
                     
@@ -131,6 +134,16 @@ class controller_plugin_core_feedback extends plugin
                 } else {
                     $required = false;
                 }
+                if ($field['type'] == 'recaptcha'){
+                    $option_list = array('key'=> $field['key']);	
+                }
+                if ($field['type'] == 'captcha'){
+                    $option_list = array(
+                        'captcha_width'     => $field['captcha_width'],
+                        'captcha_height'    => $field['captcha_height']
+
+                    );    
+                }
                 
                 $this->data['fields'][$i] = array(
                     'type'        => $field['type'],
@@ -147,8 +160,7 @@ class controller_plugin_core_feedback extends plugin
                 $this->page['head'] = $this->add_css_file(
                     SITE_URL . '/user_cms/modules/plugins/' . $this->plugin_name . '/views/style.css');
                 define("IS_FEEDBACK_CSS_FILE", 1);
-            }
-          
+            }       
             $this->page['html'] = $this->load_view();
         }
         
@@ -222,7 +234,6 @@ class controller_plugin_core_feedback extends plugin
     
     private function validate($fields) {
         $this->load_helper('validate');
-
         foreach ($fields as $i => $field) {
             if (isset($field['required']) && $field['required']) {
                 $error = false;
@@ -237,34 +248,52 @@ class controller_plugin_core_feedback extends plugin
                     $field['error_message'] = 'Не заполнено поле "' . $field['label'] . '"';
                 }
             
-                if ($field['type'] != 'file' && !isset($_POST[$key])) {
+                if ($field['type'] != 'file' && !isset($_POST[$key]) && $field['type'] != 'recaptcha' && $field['type'] != 'captcha') {
                     $this->errors[$i] = $field['error_message'];
                     continue;
                 }
 
                 if (!isset($field['validation']) || $field['validation'] == 'not_empty') {
-                    if ($field['type'] == 'file') $error = empty($_FILES[$key]['tmp_name']);
-                    else $error = empty($_POST[$key]);
+                    if ($field['type'] == 'file'){
+                    	$error = empty($_FILES[$key]['tmp_name']);
+                    }else{
+                    	$error = empty($_POST[$key]);
+  					}
+
+                    
                 } elseif ($field['validation'] == 'email') {
                     $error = !$this->helper_validate->email($_POST[$key]);
                 } elseif ($field['validation'] == 'phone') {
                     $error = !$this->helper_validate->phone($_POST[$key]);
                 }
-                
+
+                if($field['type'] == 'recaptcha'){
+                	$cpatcha 	= $_POST['g-recaptcha-response'];
+                	$secret_key = $field['secret_key'];
+                	$response = file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret=' . $secret_key . '&response=' . $cpatcha . '&remoteip=' . $_SERVER['REMOTE_ADDR']);
+                	$response = json_decode($response, true);
+                	if(empty($response['success']))$error = $field['error_message'];
+            	}
+                if($field['type'] == 'captcha'){
+                    $captcha_result = isset($_SESSION['captcha' . $this->data['plugin_id']])?$_SESSION['captcha' . $this->data['plugin_id']]:false;
+                    if(!$captcha_result || $captcha_result != $_POST['captcha'])$error = $field['error_message'];
+                }
+
                 if ($error) {
                     $this->errors[$i] = $field['error_message'];
                 }
             }
-        }
-        
+        }   
         if ($this->errors) {
             return false;
         } else {
             return true;
         }
+
     }
 
     public function before_send() {
+
     }
     public function after_send() {
     }
