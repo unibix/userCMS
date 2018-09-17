@@ -50,6 +50,9 @@ class controller_component_core_theme_manager extends component
 		$this->data['theme_content'] = file_get_contents($path);
 		
 		$this->data['page_name'] = 'Редактирование файла ' . $this->url['params']['file'] . '. Тема ' . $theme['name'];
+
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
+
 		$page['title'] = 'Менеджер тем';
 		$page['keywords'] = 'Менеджер тем';
 		$page['description'] = 'Менеджер тем';
@@ -97,6 +100,8 @@ class controller_component_core_theme_manager extends component
 				$this->data['errors'][] = '';
 			}
 		}
+		$this->data['page_name'] = 'Установка темы';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$page['title'] = 'Менеджер тем';
 		$page['keywords'] = 'Менеджер тем';
 		$page['description'] = 'Менеджер тем';
@@ -108,5 +113,6 @@ class controller_component_core_theme_manager extends component
 	public function action_edit() {
 		$this->redirect(SITE_URL . '/admin/theme_manager/theme/' . $this->config['site_theme'] . '/file=index.tpl');
 	}
+
 	
 }

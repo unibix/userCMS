@@ -1,4 +1,5 @@
 <h1 id="page_name">Обновление User CMS</h1>
+<?=$breadcrumbs;?>
 <?php if(isset($message)) { ?> <div class="success"><?php echo $message; ?></div><?php } ?>
 <?php if(isset($error)) { ?> <div class="error"><?php echo $error; ?></div><?php } ?>
 

@@ -4,7 +4,6 @@
 * класс пользователей
 */
 class controller_component_core_users extends component {
-	
 	public function action_index() {
 	
 		if(isset($this->url['params']['success']) && $this->url['params']['success'] == 'add' && isset($this->url['params']['added'])) {
@@ -23,6 +22,7 @@ class controller_component_core_users extends component {
 	
 		$this->data['bread_crumbs'] = 'Вы на главной странице.';
 		$this->data['page_name'] = 'Пользователи';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->render();
 
 		$page['title'] = 'Пользователи';
 		$page['keywords'] = 'друиге ключи';
@@ -145,6 +145,7 @@ class controller_component_core_users extends component {
 		$this->data['page_name']    = 'Редактирование пользователя';
 		$this->data['text_submit']  = 'Сохранить изменения';
 		$this->data['name_submit']  = 'edit_user';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 
 		$page['title'] = 'Редактирование пользователя';
 		$page['keywords'] = 'друиге ключи';
@@ -213,6 +214,7 @@ class controller_component_core_users extends component {
 		$this->data['page_name']    = 'Добавление нового пользователя';
 		$this->data['text_submit']  = 'Добавить пользователя';
 		$this->data['name_submit']  = 'add_user';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 
 		$page['title'] = 'Добавление нового пользователя';
 		$page['keywords'] = 'друиге ключи';

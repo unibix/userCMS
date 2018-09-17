@@ -2,7 +2,6 @@
 
 class controller_component_core_backup extends component
 {
-    
     public function action_index()
     {
         $this->data['backups'] = array();
@@ -21,6 +20,7 @@ class controller_component_core_backup extends component
         
         $this->data['restore_backup'] = SITE_URL.'/admin/backup/restore';
         $this->data['create_backup'] = SITE_URL.'/admin/backup/create_backup';
+        $this->data['breadcrumbs'] = $this->helper_breadcrumbs->render();
         
         $this->page['title'] = 'Резервное копирование';
         $this->page['keywords'] = 'Резервное копирование';
@@ -71,6 +71,7 @@ class controller_component_core_backup extends component
         } elseif (isset($this->url['params']['res'])) {
             $file = ROOT_DIR.'/temp/backups/'.$this->url['params']['res'];
         } else {
+            $this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs('Восстановление', '');
             $this->page['html'] = $this->load_view('restore_form');
             return $this->page;
         }
@@ -96,7 +97,8 @@ class controller_component_core_backup extends component
     {
         $this->data['get_process_status_url'] = str_replace(ROOT_DIR, SITE_URL, __DIR__.'/process.json');
         $this->data['do_backup_url'] = SITE_URL.'/admin/backup/ajax_do_backup_process';
-        $this->page['title'] = 'Резервное копирование';
+        $this->page['title'] = $this->data['page_name'] = 'Резервное копирование';
+        $this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs('Создание резервной копии', '');
         $this->page['keywords'] = 'Резервное копирование';
         $this->page['description'] = 'Резервное копирование';
         $this->page['html'] = $this->load_view('backup_form');

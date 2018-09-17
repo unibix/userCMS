@@ -168,9 +168,12 @@ class controller_component_core_pages extends component {
 		
 		$this->data['page_name'] = 'Редактирование страницы';
 		
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['name'], '');
+
 		$this->page['title'] = 'Редактирование страницы';
 		$this->page['keywords'] = 'Редактирование страницы';
 		$this->page['description'] = 'Редактирование страницы';
+
 		$this->page['html'] = $this->load_view('edit');
 
 		return $this->page;
@@ -299,6 +302,8 @@ class controller_component_core_pages extends component {
 		$this->data['categories_options'] = $this->build_categories_options($categories, array(1));
 
 		$this->data['page_name'] = 'Добавление новой страницы';
+
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		
 		$this->page['title'] = 'Добавление страницы';
 		$this->page['keywords'] = 'Добавление страницы';
@@ -358,4 +363,5 @@ class controller_component_core_pages extends component {
 		
 		return $html;
 	}
+
 }

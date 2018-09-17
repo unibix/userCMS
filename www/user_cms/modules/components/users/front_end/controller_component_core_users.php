@@ -248,4 +248,5 @@ class controller_component_core_users extends component {
 		if (isset($_COOKIE['users_try'])) setcookie('users_try', 1, time()-1);
 		if (isset($_SESSION['users_try'])) unset($_SESSION['users_try']);
 	}
+
 }

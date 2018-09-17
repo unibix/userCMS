@@ -15,7 +15,6 @@ class controller_component_core_pages extends component {
 		$this->page['title'] = $page_info['title'];
 		$this->page['keywords'] = $page_info['keywords'];
 		$this->page['description'] = $page_info['description'];
-		$this->data['bread_crumbs'] = 'Вы на главной странице.';
 		
 		$view = !empty($page_info['view']) ? $page_info['view'] : $this->view;
 		if (!empty($page_info['theme_view'])) {
@@ -66,7 +65,7 @@ class controller_component_core_pages extends component {
 		}
 		
 		if($not_found) {
-			$this->page = $this->action_404();
+			$this->page = $this->action_404('404_not_found');
 			return $this->page;
 		} else {
 			$this->set_global_data('page_id', $page_info['id']);
@@ -95,7 +94,7 @@ class controller_component_core_pages extends component {
 			}
 		}
 		
-		$this->data['bread_crumbs'] = $this->helper_breadcrumbs->render();
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->render();
 
 		$this->page['html'] = $this->load_view($view);
 

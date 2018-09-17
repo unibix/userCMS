@@ -1,5 +1,6 @@
 <div id="content">
     <h1 class="page_name">Резервное копирование</h1>
+    <?=$breadcrumbs;?>
     <?php if (isset($errors) && !empty($errors)) { ?>
     <div class="notice error">
         <?php foreach ($errors as $error) { ?>

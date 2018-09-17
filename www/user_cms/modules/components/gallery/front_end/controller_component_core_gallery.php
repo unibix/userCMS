@@ -1,7 +1,6 @@
 <?php 
 
 class controller_component_core_gallery extends component {
-	
 	public function action_index() {
 		if (file_exists($this->view_dir . '/gallery.css')) {
 			$css = SITE_URL . '/modules/components/' . $this->component_name . '/front_end/views/gallery.css';
@@ -35,7 +34,6 @@ class controller_component_core_gallery extends component {
 			$this->page['keywords'] = $gallery_info['keywords'];
 			$this->page['description'] = $gallery_info['description'];
 			$this->data['page_name'] = $gallery_info['name'];
-			$this->data['bread_crumbs'] = '';
 		}
 		
 		$this->data['category_thumb_width'] = $this->component_config['category_thumb_width'];
@@ -88,11 +86,7 @@ class controller_component_core_gallery extends component {
 		}
 
 		if($not_found) {
-			$this->page['title'] = '404!!1';
-			$this->page['keywords'] = 'Страница не найдена';
-			$this->page['description'] = 'Страница не найдена';
-			$this->action_404();
-			$view = 'index';
+			return $this->action_404();
 		} else {			
 			$this->page['title'] = $category['title'];
 			$this->page['keywords'] = $category['keywords'];
@@ -105,6 +99,7 @@ class controller_component_core_gallery extends component {
 		$this->data['item_thumb_height'] = $this->component_config['item_thumb_height'];
 		$this->data['category_thumb_width'] = $this->component_config['category_thumb_width'];
 		$this->data['category_thumb_height'] = $this->component_config['category_thumb_height'];
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 
 		$this->page['html'] = $this->load_view($view);
 		return $this->page;

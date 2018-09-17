@@ -1,6 +1,5 @@
 <?php
 class controller_component_core_update extends component {
-	
 	function action_index() {
 		$archive_types = array(
 			'application/force-download',
@@ -103,11 +102,10 @@ class controller_component_core_update extends component {
 
 		}
 		
-
-
 		// выводим форму для загрузки обновления
 		$this->page['html'] = $this->load_view();
 		$this->page['title'] = 'Обновление ядра';
+
 		return $this->page;
 
 	}

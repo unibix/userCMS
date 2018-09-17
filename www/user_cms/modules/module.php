@@ -104,6 +104,8 @@ class module {
 			foreach ($results as $key => $result) {
 				if (is_array($result) && isset($result['value'])) {
 					$config[$key] = $result['value'];
+				}else{
+					$config[$key] = $result;
 				}
 			}
 		}

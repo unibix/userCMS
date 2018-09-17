@@ -6,19 +6,13 @@ class controller_component_core_news extends component
         parent::__construct($config, $url, $component, $dbh);
         
         $this->data['img_folder'] = 'news';
-        
-        $this->data['breadcrumbs'] = array(
-            'labels' => array('Главная', 'Новости'),
-            'hrefs' => array(SITE_URL, SITE_URL.'/'.$this->url['component'])
-        );
+
+        $this->data['breadcrumbs'] = $this->helper_breadcrumbs->render();
 
         if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {;
             $this->data['base_url'] = SITE_URL.'/'.$this->url['component'];
         } else {
             $this->data['base_url'] = SITE_URL.'/'.$this->url['component'].'/'.implode('/', $this->url['actions']);
-            foreach ($this->url['actions'] as $n => $url) {
-                $this->data['breadcrumbs']['hrefs'][$n+2] = $this->data['breadcrumbs']['hrefs'][$n+1].'/'.$url;
-            }
         }
 
         $this->page['head'] = $this->add_css_file('/user_cms/modules/components/'.$this->data['img_folder'].'/front_end/views/style.css');
@@ -34,10 +28,10 @@ class controller_component_core_news extends component
     */
     protected function show_category($parent_id)
     {
-        $items_count = $this->model->count_childrens($parent_id);
-        $items_per_page = $this->component_config['index_page_count'];
+        $items_count = $this->helper_pagination->total = $this->model->count_childrens($parent_id);
+        $items_per_page =  $this->helper_pagination->limit = $this->component_config['index_page_count'];
         $pages_count = ceil($items_count/$items_per_page);
-        $current_page = isset($this->url['params']['page']) ? intval($this->url['params']['page']) : 0;
+        $current_page = $this->helper_pagination->page = isset($this->url['params']['page']) ? intval($this->url['params']['page']) : 0;
         if ($current_page > $pages_count) $current_page = $pages_count;
         elseif ($current_page < 1) $current_page = 1;
 
@@ -49,6 +43,7 @@ class controller_component_core_news extends component
         $this->page['title'] = $this->data['page_header'] = isset($category) ? $category['header'] : 'Все новости';
         $this->page['keywords'] = isset($category) ? $category['keywords'] : 'новости, новости сайта '.SITE_NAME;
         $this->page['description'] = isset($category) ? $category['description'] : 'Новости сайта '.SITE_NAME;
+        $this->data['pagination'] = $this->helper_pagination->render();
         $this->page['html'] = $this->load_view('category');
         return $this->page;
     }
@@ -69,19 +64,6 @@ class controller_component_core_news extends component
         return $this->page;
     }
 
-
-    /**
-    * Отображает страницу ошибки 404
-    * @return array готовую страницу $this->page
-    */
-    protected function show_404()
-    {
-        $this->page['title'] = 'Элемент не найден';
-        $this->page['html'] = $this->load_view('404_not_found');
-        return $this->page;
-    }
-
-
     public function action_index()
     {
         return $this->action_else();
@@ -98,9 +80,13 @@ class controller_component_core_news extends component
             return $this->show_category(0); // корневая категория
         } else {
             $result = $this->model->find_by_actions($this->url['actions']);
-            foreach($result['labels'] as $label) $this->data['breadcrumbs']['labels'][] = $label;
+            $breadcrumbs_url = SITE_URL . '/' . $this->url['component'];
+            foreach($result['labels'] as $key_lb => $label){
+                $breadcrumbs_url .= '/' . $this->url['actions'][$key_lb];
+                $this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($label, $breadcrumbs_url);
+            }
             $item = $result['item'];
-            if ($item === false) return $this->show_404(); // элемент не найден
+            if ($item === false) return $this->action_404(); // элемент не найден
             elseif ($item['is_category'] == 0) return $this->show_article($item); // статья
             else return $this->show_category($item['id']); // категория
         }

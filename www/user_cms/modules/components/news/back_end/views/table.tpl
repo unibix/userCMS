@@ -9,6 +9,7 @@ $base_url_public = str_replace('/admin','',$base_url);
 ?>
 <div id="content">    
     <h1><?=$page_header?></h1><br>
+    <?=$breadcrumbs;?>
     <p class="buttons">
         <?php if ($upper_url != '') { ?>
             <a class="button" href="<?=$upper_url?>" title="Перейти в родительскую категорию"><span class="symbol">&larr;</span></a>
@@ -115,7 +116,8 @@ $base_url_public = str_replace('/admin','',$base_url);
                 </tr>
             <?php } ?>
         </table>
-        <?php if ($pages_count > 1) echo '{plugin:pagination='.$current_page.','.$pages_count.','.$base_url.'/page=%u}'?>
+        <?php //if ($pages_count > 1) echo '{plugin:pagination='.$current_page.','.$pages_count.','.$base_url.'/page=%u}'?>
+        <?=$pagination;?>
     <?php } else { ?>
         <p>Категория пуста</p>
     <?php } ?>

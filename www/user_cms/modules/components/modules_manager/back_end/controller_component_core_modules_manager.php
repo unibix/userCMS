@@ -4,7 +4,6 @@
 * класс менеджера модулей
 */
 class controller_component_core_modules_manager extends component {
-	
 	// вывод  активированных модулей
 	public function action_index() {
 		$this->data['success'] = '';
@@ -42,6 +41,7 @@ class controller_component_core_modules_manager extends component {
 		$this->data['modules_list'] = $this->model->get_installed_modules();
 		
 		$this->data['page_name'] = 'Установленные Модули';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['title'] = 'Установленные Модули';
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('installed');
@@ -92,6 +92,7 @@ class controller_component_core_modules_manager extends component {
 		}
 
 		$this->data['page_name'] = 'Установка модулей';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['title'] = 'Установка модулей';
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('install');
@@ -112,7 +113,8 @@ class controller_component_core_modules_manager extends component {
 			$this->redirect(SITE_URL . '/admin/modules_manager/installed');
 		}
 		
-		$this->page['title'] = 'Ручная установка модуля';
+		$this->page['title'] = $this->data['page_name'] = 'Ручная установка модуля';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('manual_install');
 		return $this->page;
@@ -156,6 +158,7 @@ class controller_component_core_modules_manager extends component {
 
 		$this->data['page_name'] = 'Обновление модуля';
 		$this->page['title'] = 'Обновление модуля';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('update');
 
@@ -338,6 +341,8 @@ class controller_component_core_modules_manager extends component {
 		
 		$this->data['page_name'] = 'Редактирование модуля';
 		$this->page['title'] = 'Редактирование модуля';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'] . ' «' . $module_info['name'] . '»', '');
+
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('settings');
 

@@ -10,11 +10,11 @@ class model_component_core_pages extends model {
 	}
 	
 	/*
-	* âîçâğàùàåò äî÷åğíèå ñòğàíèöû 1ãî óğîâíÿ âëîæåííîñòè
+	* Ã¢Ã®Ã§Ã¢Ã°Ã Ã¹Ã Ã¥Ã² Ã¤Ã®Ã·Ã¥Ã°Ã­Ã¨Ã¥ Ã±Ã²Ã°Ã Ã­Ã¨Ã¶Ã» 1Ã£Ã® Ã³Ã°Ã®Ã¢Ã­Ã¿ Ã¢Ã«Ã®Ã¦Ã¥Ã­Ã­Ã®Ã±Ã²Ã¨
 	* params:
-	*   children_count - join column with count of children / äîáàâëÿåò ê âûáîğêå ñòîëáåö ñ êîëè÷åñòâîì äî÷åğíèõ ñòğàíèö
-	*   content - join `pages` table with page content / äîáàâëÿåò ê âûáîğêå òàáëèöó `pages` ñ êîíòåíòîì
-	*   sort - set 'sort by' value / óêàçûâàåò ïîğÿäîê ñîğòèğîâêè
+	*   children_count - join column with count of children / Ã¤Ã®Ã¡Ã Ã¢Ã«Ã¿Ã¥Ã² Ãª Ã¢Ã»Ã¡Ã®Ã°ÃªÃ¥ Ã±Ã²Ã®Ã«Ã¡Ã¥Ã¶ Ã± ÃªÃ®Ã«Ã¨Ã·Ã¥Ã±Ã²Ã¢Ã®Ã¬ Ã¤Ã®Ã·Ã¥Ã°Ã­Ã¨Ãµ Ã±Ã²Ã°Ã Ã­Ã¨Ã¶
+	*   content - join `pages` table with page content / Ã¤Ã®Ã¡Ã Ã¢Ã«Ã¿Ã¥Ã² Ãª Ã¢Ã»Ã¡Ã®Ã°ÃªÃ¥ Ã²Ã Ã¡Ã«Ã¨Ã¶Ã³ `pages` Ã± ÃªÃ®Ã­Ã²Ã¥Ã­Ã²Ã®Ã¬
+	*   sort - set 'sort by' value / Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¥Ã² Ã¯Ã®Ã°Ã¿Ã¤Ã®Ãª Ã±Ã®Ã°Ã²Ã¨Ã°Ã®Ã¢ÃªÃ¨
 	*
 	*/
 	public function get_pages_by_parent_id($parent_id = 0, $params = array()){
@@ -42,7 +42,7 @@ class model_component_core_pages extends model {
 	}
 	
 	/*
-	* âîçâğàùàåò äåğåâî\ñïèñîê âñåõ äî÷åğíèõ ñòğàíèö ëşáîãî óğîâíÿ âëîæåííîñòè
+	* Ã¢Ã®Ã§Ã¢Ã°Ã Ã¹Ã Ã¥Ã² Ã¤Ã¥Ã°Ã¥Ã¢Ã®\Ã±Ã¯Ã¨Ã±Ã®Ãª Ã¢Ã±Ã¥Ãµ Ã¤Ã®Ã·Ã¥Ã°Ã­Ã¨Ãµ Ã±Ã²Ã°Ã Ã­Ã¨Ã¶ Ã«Ã¾Ã¡Ã®Ã£Ã® Ã³Ã°Ã®Ã¢Ã­Ã¿ Ã¢Ã«Ã®Ã¦Ã¥Ã­Ã­Ã®Ã±Ã²Ã¨
 	*	
 	*
 	*/
@@ -73,8 +73,8 @@ class model_component_core_pages extends model {
 		return $retval;
 	}
 	/*
-		óäàëåíèå ñòğàíèöû.
-		(bool) recursive - óäàëåíèå äî÷åğíèõ ñòğàíèö
+		Ã³Ã¤Ã Ã«Ã¥Ã­Ã¨Ã¥ Ã±Ã²Ã°Ã Ã­Ã¨Ã¶Ã».
+		(bool) recursive - Ã³Ã¤Ã Ã«Ã¥Ã­Ã¨Ã¥ Ã¤Ã®Ã·Ã¥Ã°Ã­Ã¨Ãµ Ã±Ã²Ã°Ã Ã­Ã¨Ã¶
 	*/
 	public function delete_page($page_id = 0, $recursive = false){
 		//$page = $this->dbh->row("SELECT * FROM pages WHERE main_id = '" . (int)$page_id . "'");
@@ -140,7 +140,7 @@ class model_component_core_pages extends model {
 		$this->dbh->query($sql);
 	}
 	/*
-		âîçâğàùàåò ñòğîêó ñ óğëîì ñòğàíèöû
+		Ã¢Ã®Ã§Ã¢Ã°Ã Ã¹Ã Ã¥Ã² Ã±Ã²Ã°Ã®ÃªÃ³ Ã± Ã³Ã°Ã«Ã®Ã¬ Ã±Ã²Ã°Ã Ã­Ã¨Ã¶Ã»
 	*/
 	public function get_page_url($page_id, $url = '') {
 		$sql = "SELECT parent_id, url FROM main WHERE id = '" . (int)$page_id . "'";
@@ -157,8 +157,8 @@ class model_component_core_pages extends model {
 	}
 	
 	/*
-		ìåòîä äëÿ ïğîâåğêè ñóùåñòâîâàíèÿ óğëà.
-		id - èäåíòèôèêàòîğ ñòğàíèöû, êîòîğàÿ èñêëş÷àåòñÿ èõ ïğîâåğêè
+		Ã¬Ã¥Ã²Ã®Ã¤ Ã¤Ã«Ã¿ Ã¯Ã°Ã®Ã¢Ã¥Ã°ÃªÃ¨ Ã±Ã³Ã¹Ã¥Ã±Ã²Ã¢Ã®Ã¢Ã Ã­Ã¨Ã¿ Ã³Ã°Ã«Ã .
+		id - Ã¨Ã¤Ã¥Ã­Ã²Ã¨Ã´Ã¨ÃªÃ Ã²Ã®Ã° Ã±Ã²Ã°Ã Ã­Ã¨Ã¶Ã», ÃªÃ®Ã²Ã®Ã°Ã Ã¿ Ã¨Ã±ÃªÃ«Ã¾Ã·Ã Ã¥Ã²Ã±Ã¿ Ã¨Ãµ Ã¯Ã°Ã®Ã¢Ã¥Ã°ÃªÃ¨
 	*/
 	public function url_exists($url, $id = null) {
 		$sql = "SELECT * FROM main WHERE url = '" . $this->dbh->escape($url) . "'";
@@ -172,7 +172,7 @@ class model_component_core_pages extends model {
 	}
 	
 	/*
-		ìåòîä äëÿ ïğåîáğàçîâàíèÿ óğëà
+		Ã¬Ã¥Ã²Ã®Ã¤ Ã¤Ã«Ã¿ Ã¯Ã°Ã¥Ã®Ã¡Ã°Ã Ã§Ã®Ã¢Ã Ã­Ã¨Ã¿ Ã³Ã°Ã«Ã 
 	*/
 	public function url_modify($url, $id = null, $i = 2) {
 		if($this->url_exists(rtrim($url, "0..9") . $i, $id)) {
