@@ -1,6 +1,6 @@
 <div id="content">
     <h1 id="page_name"><?=$page_name;?></h1>
-    <p class="bread_crumbs"><?=$bread_crumbs?></p>
+    <?=$breadcrumbs?>
     <div id="gallery-box">
         <?php if ($categories) foreach ($categories as $category) {?>
         <div class="item-box">

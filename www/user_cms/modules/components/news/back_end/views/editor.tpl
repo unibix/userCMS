@@ -13,6 +13,7 @@
 
 <div id="content">
     <h1><?=$page_header?></h1><br>
+    <?=$breadcrumbs;?>
     <p class="buttons"><a class="button" href="<?=$back_url?>">Назад</a></p>
     <?php
     if (isset($new_item_url)) {

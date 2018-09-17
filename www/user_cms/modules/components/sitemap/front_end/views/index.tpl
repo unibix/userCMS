@@ -1,5 +1,6 @@
 <div id="content">
 	<h1><?php echo $page_name ; ?></h1>
+	<?=$breadcrumbs;?>
 	<ul class="sitemap">
 		<?php
 			foreach ($pages as $value) {

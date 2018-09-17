@@ -7,6 +7,7 @@
 </style>
 <div id="content">
 	<h1><?php echo $page_name ; ?></h1>
+	<?=$breadcrumbs;?>
 <form method="post" action="">
   <textarea class="code-editor" id="code_editor" style="min-heigth: 900px;" rows="50" name="theme_content"><?php echo $theme_content; ?></textarea>
   <input type="submit" name="submit_theme" value="Сохранить изменения">

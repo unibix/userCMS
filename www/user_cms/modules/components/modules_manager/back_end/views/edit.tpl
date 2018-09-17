@@ -7,6 +7,7 @@
 	</script>
 <div id="content">
 	<h1 id="page_name">Добавление новой страницы</h1>
+	<?=$breadcrumbs;?>
 	<p class="buttons"><a href="<?php echo SITE_URL;?>/pages/add_component">Активировать компонент</a></p>
 	<?php if($errors) { ?>
 	<div class="notice error">

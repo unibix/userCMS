@@ -145,6 +145,7 @@ class controller_component_core_components_manager extends component {
 		$this->data['text_submit'] = 'Активировать';
 		$this->data['page_name'] = 'Активация компонента';
 		$this->page['title'] = 'Активация компонента';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('form');
 		
@@ -158,6 +159,7 @@ class controller_component_core_components_manager extends component {
 		
 		$this->data['page_name'] = 'Активированные компоненты';
 		$this->page['title'] = 'Активированные компоненты';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('activated');
 		return $this->page;
@@ -217,6 +219,7 @@ class controller_component_core_components_manager extends component {
 		$this->data['text_submit'] = 'Сохранить изменения';
 		$this->data['page_name'] = 'Редактирование компонента ' . $component_info['name'];
 		$this->page['title'] = 'Редактирование компонента';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('form');
 		
@@ -302,6 +305,7 @@ class controller_component_core_components_manager extends component {
 		
 		$this->data['page_name'] = 'Настройки компонента &laquo;<a href="' . SITE_URL . '/admin/' . $component_name . '">' . $this->data['component_name'] . '</a>&raquo;';
 		$this->page['title'] = 'Настройки компонента ' . $this->data['component_name'];
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->page['title'], '');
 		$this->page['keywords'] = 'Настройки компонента ' . $this->data['component_name'];
 		$this->page['description'] = 'Настройки компонента ' . $this->data['component_name'];
 		$this->page['html'] = $this->load_view('settings');

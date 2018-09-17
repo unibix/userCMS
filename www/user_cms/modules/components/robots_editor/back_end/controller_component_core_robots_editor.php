@@ -35,4 +35,5 @@ class controller_component_core_robots_editor extends component {
 		$this->page['html'] = $this->load_view();
 		return $this->page;
 	}
+
 }

@@ -3,7 +3,6 @@
 class controller_component_core_sitemap extends component {
 	public function action_index() {
 		$this->data['page_name'] = 'Карта сайта';
-		
 		$this->data['pages'] = $this->model->get_pages();
 
 		$this->page['title'] = 'Карта сайта ' . SITE_NAME;
@@ -13,4 +12,5 @@ class controller_component_core_sitemap extends component {
 
 		return $this->page;
 	}
+
 }

@@ -1,5 +1,6 @@
 <div id="content">
 	<h1 id="page_name"><?php echo $page_name ; ?></h1>
+	<?=$breadcrumbs;?>
 	<?php if($user) { ?>
 	<?php if($errors) { ?>
 	<div class="notice error">

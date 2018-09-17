@@ -1,5 +1,6 @@
 <div id="content" class="settings">
   <h1 id="page_name"><?php echo $page_name; ?></h1>
+  <?=$breadcrumbs;?>
   <?php if ($success) { ?>
   <div class="success"><?php echo $success; ?></div>
   <?php } ?>

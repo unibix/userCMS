@@ -13,6 +13,7 @@
 
 <div id="content">
     <h1>Создание резервной копии</h1>
+    <?=$breadcrumbs;?>
     <div id="error" class="notice error" style="display:none"></div>
     <div id="success" class="notice success" style="display:none">Бэкап создан! <a href="<?=SITE_URL?>/admin/backup">Список резервных копий</a></div>
 
