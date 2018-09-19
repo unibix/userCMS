@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+   	<link href="<?=THEME_URL;?>_admin/bootstrap/bootstrap.min.css" rel="stylesheet"  type="text/css" >
+    <link href="<?=THEME_URL;?>_admin/bootstrap/ie10-viewport-bug-workaround.css" rel="stylesheet"  type="text/css" >
 	[head]
 </head>
 <body>
@@ -27,14 +29,10 @@
   [position=left_menu]
 	<!-- end #header -->
 	<div id="middle">
-
-
-
-
 	[component]
 
 				
-				<div class="clear">&nbsp;</div>
+		<div class="clear">&nbsp;</div>
 		
 	</div>
 	<!-- end #page --> 
@@ -58,10 +56,11 @@ function confirmDelete() {
 			return false;
 		}
 }
-
 $(".confirmButton").click(function(){
 	return confirmDelete();
 });
 </script>
+<script src="<?=THEME_URL?>_admin/bootstrap/bootstrap.min.js"></script>
+<script src="<?=THEME_URL?>_admin/bootstrap/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>

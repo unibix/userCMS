@@ -1,5 +1,4 @@
 <?php
-
 class controller_component_core_gallery extends component {
 	
 	public function action_index() {
@@ -54,7 +53,6 @@ class controller_component_core_gallery extends component {
 		} else {
 			$this->data['text'] = '';
 		}
-
 		if(isset($_POST['parent'])){
 			$this->data['parent'] = $_POST['parent'];
 		} else {
@@ -136,7 +134,6 @@ class controller_component_core_gallery extends component {
 			}
 			
 			$cat_id = $this->model->add_category($this->data);
-
 			$redirect = SITE_URL . '/admin/gallery/success=added/cat_id=' . $cat_id;
 			$this->redirect($redirect);
 		}
@@ -146,6 +143,7 @@ class controller_component_core_gallery extends component {
 		
 		$this->data['page_name'] = 'Добавить категорию';
 		$this->data['text_submit'] = 'Добавить категорию';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['title'] = 'Добавить категорию';
 		$this->page['keywords'] = 'Добавить категорию';
 		$this->page['description'] = 'Добавить категорию';
@@ -190,7 +188,6 @@ class controller_component_core_gallery extends component {
 				$this->data['preview'] = substr(strip_tags($_POST['text']), 0, 300);
 			}
 		}
-
 		if(isset($_POST['parent'])){
 			$this->data['parent'] = $_POST['parent'];
 		} else {
@@ -218,7 +215,6 @@ class controller_component_core_gallery extends component {
 		//$this->data['dir'] = false;
 		
 		if(isset($_POST['submit_gallery']) && !$this->data['errors']){
-
 			$upload_dir = ROOT_DIR . '/uploads/modules/gallery/' . $this->data['dir'];
 			
 			if (isset($_POST['image'])) {
@@ -241,7 +237,6 @@ class controller_component_core_gallery extends component {
 			}
 			
 			$this->model->edit_category($this->data);
-
 			$redirect = SITE_URL . '/admin/gallery/success=edited/cat_id=' . $this->data['id'];
 			$this->redirect($redirect);
 		}
@@ -250,6 +245,7 @@ class controller_component_core_gallery extends component {
 		
 		$this->data['page_name'] = 'Редактирование категории';
 		$this->data['text_submit'] = 'Сохранить изменения';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'] . ' «' . $this->data['name'] . '»', '');
 		$this->page['title'] = 'Редактирование категории';
 		$this->page['keywords'] = 'Редактирование категории';
 		$this->page['description'] = 'Редактирование категории';
@@ -342,6 +338,7 @@ class controller_component_core_gallery extends component {
 		$this->data['items'] = $this->model->get_items($category['id']);
 		$this->data['max_file_size'] = $this->detect_max_upload_filesize();
 		$this->data['page_name'] = 'Категория "' . $category['name'] . '"';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->data['text_submit'] = 'Добавить фото';
 		$this->page['title'] = 'Категория "' . $category['name'] . '"';
 		$this->page['keywords'] = 'Категория "' . $category['name'] . '"';
@@ -368,7 +365,6 @@ class controller_component_core_gallery extends component {
 		
 		$this->redirect(SITE_URL . '/admin/' . $this->component_name);
 	}
-
     /**
      * Detects max size of file can be uploaded to server
      *
@@ -410,5 +406,3 @@ class controller_component_core_gallery extends component {
         return round($maxFileSize , 3) ;
     }	
 }
-
-

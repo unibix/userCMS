@@ -178,29 +178,21 @@ class controller_component_core_news extends component
 
         $available_parents = $this->model->get_available_parents($item);
         $available_parents[] = array('id' => 0, 'header' => 'Корневая категория');
-
         $this->data = array_merge($this->data, compact('errors', 'back_url', 'item', 'upload_dir', 'new_item_url', 'available_parents'));
         $this->data['page_header'] = $item['is_category'] == 1 ? 'Редактирование категории' : 'Редактирование новости';
+        if(count($this->data['available_parents']) > 1){
+            $breadcrumb_url = SITE_URL . '/admin/' . $this->url['component'];
+            foreach ($this->data['available_parents'] as $key => $parent) {
+                $breadcrumb_url .= isset($parent['url'])?'/' . $parent['url']:'';
+                if(isset($parent['url']))$this->helper_breadcrumbs->add($parent['header'], $breadcrumb_url);    
+            }
+        }else{
+            $this->helper_breadcrumbs->add($this->data['available_parents'][0]['header'], SITE_URL . '/admin/' . $this->url['component']);
+        }
         $this->page['title'] = 'Редактор новостей и категорий';
         $this->page['html'] = $this->load_view('editor');
         return $this->page;
     }
-
-
-
-
-    /**
-    * Отображает страницу ошибки 404
-    * @return array готовую страницу $this->page
-    */
-    protected function show_404()
-    {
-        $this->page['title'] = 'Элемент не найден';
-        $this->page['html'] = $this->load_view('404_not_found');
-        return $this->page;
-    }
-
-
 
     public function action_index()
     {
@@ -215,36 +207,40 @@ class controller_component_core_news extends component
     public function action_else()
     {
         if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {
-            $parent_id = 0; // пока не ясно что показывать, но родительская категория уже определена
+            $this->data['breadcrumbs'] = $this->helper_breadcrumbs->render();
+            $parent_id = 0;// корневая категория
         } else {
             $item = $this->model->find_by_actions($this->url['actions']);
-            if ($item === false) return $this->show_404(); // элемент не найден
-            elseif ($item['is_category'] == 0) return $this->show_editor($item); // запрошена статья - открываем сразу в режиме редактирования
+            $breadcrumb_url = SITE_URL . '/admin/' . $this->url['component']; 
+            foreach($item['labels'] as $key_lb => $label){
+                $breadcrumb_url .= '/' . $this->url['actions'][$key_lb];
+                $this->helper_breadcrumbs->add($label,  $breadcrumb_url);
+            }
+            $this->data['breadcrumbs'] = $this->helper_breadcrumbs->render();
+            $item = $item['item'];
+            if ($item === false) return $this->action_404(); // элемент не найден
+            elseif ($item['is_category'] == 0) return $this->show_editor($item); // статья
             else $parent_id = $item['id']; // пока не ясно что показывать, но родительская категория уже определена
         }
-
         // категория может отображаться по-разному в зависимости от указанных в URL параметров
         // do - команда что делать (по умолчанию просто показать вложенные эл-ты)
         if (isset($this->url['params']['do'])) switch ($this->url['params']['do']) {
             case 'edit':
             if ($parent_id != 0) return $this->show_editor($item); // редактирование категории
-            else return $this->show_404(); // редактирование корневой категории запрещено (её по сути не существует, она только подразумевается)
-
+            else return $this->action_404(); // редактирование корневой категории запрещено (её по сути не существует, она только подразумевается)
             case 'add_category':
             $new_category = $this->model->new_category();
             $new_category['parent_id'] = $parent_id;
             if ($parent_id != 0 && $item['date_publish'] > time()) $new_category['date_publish'] = $item['date_publish'];
             return $this->show_editor($new_category);
-
             case 'add_article':
             $new_article = $this->model->new_article();
             $new_article['parent_id'] = $parent_id;
             if ($parent_id != 0 && $item['date_publish'] > time()) $new_article['date_publish'] = $item['date_publish'];
             return $this->show_editor($new_article);
-
             case 'order': // переключение сортировки в таблице
             if (!isset($this->url['params']['order_by'])) {
-                return $this->show_404(); //не хватет параметра order_by
+                return $this->$this->action_404(); //не хватет параметра order_by
             } elseif ($this->url['params']['order_by'] == $_SESSION['news_backend_order_by']) {
                 $this->is_asc = $_SESSION['news_backend_is_asc'] = !$_SESSION['news_backend_is_asc'];
             } else {
@@ -252,7 +248,6 @@ class controller_component_core_news extends component
                 $this->order_by = $_SESSION['news_backend_order_by'] = $this->url['params']['order_by'];
             }
             $this->redirect($this->data['base_url']);
-
             default:
             return $this->show_childrens($parent_id);
         } else {

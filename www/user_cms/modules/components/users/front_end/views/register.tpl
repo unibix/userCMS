@@ -1,6 +1,6 @@
 <div id="content" class="users register">
   <h1><?php echo $page_name; ?></h1>
-  <p class="bread_crumbs"><?php echo $breadcrumbs; ?></p>
+  <?php echo $breadcrumbs;?>
   <div id="register_form">
     <?php if ($errors) { ?>
     <div class="notice errors">

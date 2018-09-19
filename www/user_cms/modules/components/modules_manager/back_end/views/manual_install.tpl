@@ -1,5 +1,6 @@
 <div id="content">
   <h1>Ручная установка</h1>
+  <?=$breadcrumbs;?>
   <form action="" method="POST">
   <label>Название</label>
   <input type="text" name="name" value="">

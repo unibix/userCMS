@@ -6,21 +6,11 @@ class controller_component_core_news extends component
         parent::__construct($config, $url, $component, $dbh);
         
         $this->data['img_folder'] = 'news';
-        
-        $this->data['breadcrumbs'] = array(
-            'labels' => array('Главная', 'Новости'),
-            'hrefs' => array(SITE_URL, SITE_URL.'/'.$this->url['component'])
-        );
-
         if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {;
             $this->data['base_url'] = SITE_URL.'/'.$this->url['component'];
         } else {
             $this->data['base_url'] = SITE_URL.'/'.$this->url['component'].'/'.implode('/', $this->url['actions']);
-            foreach ($this->url['actions'] as $n => $url) {
-                $this->data['breadcrumbs']['hrefs'][$n+2] = $this->data['breadcrumbs']['hrefs'][$n+1].'/'.$url;
-            }
         }
-
         $this->page['head'] = $this->add_css_file('/user_cms/modules/components/'.$this->data['img_folder'].'/front_end/views/style.css');
         $this->page['head'] .= $this->add_css('#content .article-preview img {max-width:'.$this->component_config['image_thumb_width'].'px}');
     }
@@ -69,19 +59,6 @@ class controller_component_core_news extends component
         return $this->page;
     }
 
-
-    /**
-    * Отображает страницу ошибки 404
-    * @return array готовую страницу $this->page
-    */
-    protected function show_404()
-    {
-        $this->page['title'] = 'Элемент не найден';
-        $this->page['html'] = $this->load_view('404_not_found');
-        return $this->page;
-    }
-
-
     public function action_index()
     {
         return $this->action_else();
@@ -98,11 +75,17 @@ class controller_component_core_news extends component
             return $this->show_category(0); // корневая категория
         } else {
             $result = $this->model->find_by_actions($this->url['actions']);
-            foreach($result['labels'] as $label) $this->data['breadcrumbs']['labels'][] = $label;
+            $breadcrumbs_url = SITE_URL . '/' . $this->url['component'];
+            foreach($result['labels'] as $key_lb => $label){
+                $breadcrumbs_url .= '/' . $this->url['actions'][$key_lb];
+                $this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($label, $breadcrumbs_url);
+            }
             $item = $result['item'];
-            if ($item === false) return $this->show_404(); // элемент не найден
+            if ($item === false) return $this->action_404(); // элемент не найден
             elseif ($item['is_category'] == 0) return $this->show_article($item); // статья
             else return $this->show_category($item['id']); // категория
         }
     }
+
+
 }
