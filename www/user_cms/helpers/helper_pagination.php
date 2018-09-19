@@ -8,8 +8,8 @@ class helper_pagination {
 	public $text = 'Показано с {start} по {end} из {total} (всего {pages} страниц)';
 	public $text_first = '&laquo;';
 	public $text_last = '&raquo;';
-	public $text_next = '&rsaquo;';
-	public $text_prev = '&lsaquo;';
+	public $text_next = 'Cледующая';
+	public $text_prev = 'Предыдущая';
 	public $style_links = 'links';
 	public $style_results = 'results';
 	 
@@ -33,10 +33,14 @@ class helper_pagination {
 		
 		$output = '';
 		
-		if ($page > 1) {
-			$output .= ' <a href="' . str_replace('{page}', 1, $this->url) . '">' . $this->text_first . '</a> <a href="' . str_replace('{page}', $page - 1, $this->url) . '">' . $this->text_prev . '</a> ';
-    	}
-
+		if($num_pages > $this->num_links){//ссылки предыдущая и следующая показываем если страниц больше чем отображается (параметр $num_links)
+			if ($page > 1) {
+				$output .= '<li class="page-item"><a class="page-link" href="' . str_replace('{page}', 'page='.($page - 1), $this->url) . '">' . $this->text_prev . '</a></li>';
+	    	}else{
+	    		$output = '<li class="page-item disabled"><span class="page-link">'.$this->text_prev.'</span></li>';
+	    	}
+		}
+		
 		if ($num_pages > 1) {
 			if ($num_pages <= $num_links) {
 				$start = 1;
@@ -55,26 +59,28 @@ class helper_pagination {
 					$end = $num_pages;
 				}
 			}
-
 			if ($start > 1) {
-				$output .= ' .... ';
+				$output .= ' <li class="page-item disabled"><span class="page-link"> .... </span></li>';
 			}
-
 			for ($i = $start; $i <= $end; $i++) {
 				if ($page == $i) {
-					$output .= ' <b>' . $i . '</b> ';
+					$output .='<li class="page-item active"><a class="page-link">'.$i.'</a></li>';
 				} else {
-					$output .= ' <a href="' . str_replace('{page}', $i, $this->url) . '">' . $i . '</a> ';
+					$output .= ' <li class="page-item"><a class="page-link" href="' . str_replace('{page}', 'page='.$i, $this->url) . '">' . $i . '</a></li> ';
 				}	
 			}
 							
 			if ($end < $num_pages) {
-				$output .= ' .... ';
+				$output .= ' <li class="page-item disabled"><span class="page-link"> .... </span></li>';
 			}
 		}
 		
-   		if ($page < $num_pages) {
-			$output .= ' <a href="' . str_replace('{page}', $page + 1, $this->url) . '">' . $this->text_next . '</a> <a href="' . str_replace('{page}', $num_pages, $this->url) . '">' . $this->text_last . '</a> ';
+		if($num_pages > $this->num_links){
+	   		if ($page < $num_pages) {
+				$output .= '<li class="page-item"><a class="page-link" href="' . str_replace('{page}', 'page='.($page + 1), $this->url) . '">' . $this->text_next . '</a></li>';
+			}else{
+				$output .= '<li class="page-item disabled"><span class="page-link">'.$this->text_next.'</span></li>';
+			}
 		}
 		
 		$find = array(
@@ -89,9 +95,8 @@ class helper_pagination {
 			((($page - 1) * $limit) > ($total - $limit)) ? $total : ((($page - 1) * $limit) + $limit),
 			$total, 
 			$num_pages
-		);
-		
-		return ($output ? '<div class="' . $this->style_links . '">' . $output . '</div>' : '') . '<div class="' . $this->style_results . '">' . str_replace($find, $replace, $this->text) . '</div>';
+		);	
+		return ($output && $num_pages > 1? '<nav><ul class="pagination">' . $output . '</ul></nav>' : '');
 	}
 }
 ?>

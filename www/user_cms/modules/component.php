@@ -42,6 +42,13 @@ class component extends module {
 			array(SITE_URL . (END_NAME == 'back_end'?'/admin':''), SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['component']) 
 			
 		);
+		//ссылки для постраничной навигации (pagination)
+		$this->load_helper('pagination');
+		if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {;
+            $this->helper_pagination->url = SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['component'] . '/{page}' . (!empty($_SERVER['QUERY_STRING'])?'?'.$_SERVER['QUERY_STRING']:'');
+        } else {
+            $this->helper_pagination->url = SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['component'] . '/' . implode('/', $this->url['actions']) . '/{page}' . (!empty($_SERVER['QUERY_STRING'])?'?' . $_SERVER['QUERY_STRING']:'');
+        }
 	}
 
 	public function action_index() {

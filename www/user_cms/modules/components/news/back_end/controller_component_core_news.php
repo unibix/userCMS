@@ -3,7 +3,6 @@ class controller_component_core_news extends component
 {
     protected $order_by;
     protected $is_asc;
-
     function __construct($config, $url, $component, $dbh)
     {
         parent::__construct($config, $url, $component, $dbh);
@@ -14,11 +13,9 @@ class controller_component_core_news extends component
         
         $r = $this->dbh->row("SELECT url FROM main WHERE component='".$this->url['component']."'");
         $this->data['front_end_component_url'] = $r['url'];
-
         $this->data['component'] = $this->url['component'];
         $this->data['order_by'] = $this->order_by;
         $this->data['is_asc'] = $this->is_asc;
-
         if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {;
             $this->data['base_url'] = SITE_URL.'/admin/'.$this->url['component'];
             $this->data['upper_url'] = '';
@@ -29,9 +26,6 @@ class controller_component_core_news extends component
             $this->data['upper_url'] = SITE_URL.'/admin/'.$this->url['component'].'/'.implode('/', $actions);
         }
     }
-
-
-
     /**
     * Отображает таблицу статей и категорий, вложенных в категорию с $parent_id
     * Если указан $parent_id = 0, то выводятся элементы, вложенные в корневую категорию
@@ -42,27 +36,25 @@ class controller_component_core_news extends component
     {
         if (isset($_POST['delete_article'])) $this->model->delete_article($_POST['delete_article']);
         if (isset($_POST['delete_category'])) $this->model->delete_category($_POST['delete_category']);
-
-        $items_count = $this->model->count_childrens($parent_id);
-        $items_per_page = 25;
+        $items_count = $this->helper_pagination->total = $this->model->count_childrens($parent_id);
+        $this->helper_pagination->limit = $items_per_page = 20;
         $pages_count = ceil($items_count/$items_per_page);
         $current_page = isset($this->url['params']['page']) ? intval($this->url['params']['page']) : 0;
         if ($current_page > $pages_count) $current_page = $pages_count;
         elseif ($current_page < 1) $current_page = 1;
-
+        $this->helper_pagination->page = $current_page;
         $items = $this->model->fetch_childrens($parent_id, ($current_page-1)*$items_per_page, $items_per_page, $this->order_by, $this->is_asc);
-        if ($parent_id != 0) $category = $this->model->get($parent_id);
-
+        if ($parent_id != 0) {
+            $category = $this->model->get($parent_id);
+        }
         $this->data = array_merge($this->data, compact('items_count', 'pages_count', 'current_page', 'items'));
         
         $this->data['page_header'] = isset($category) ? $category['header'] : 'Все новости (корневая категория)';
         $this->page['title'] = 'Таблица новостей';
+        $this->data['pagination'] = $this->helper_pagination->render();
         $this->page['html'] = $this->load_view('table');
         return $this->page;
     }
-
-
-
     /**
     * Отображает статью или категорию в режиме редактирования
     * @param array $item массив с данными из записи в БД или пустой если создаем новую сущность
@@ -73,11 +65,8 @@ class controller_component_core_news extends component
         $errors = array();
         $back_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/'.$this->url['component'];
         if (isset($_POST['back_url'])) $back_url = $_POST['back_url'];
-
-
         if (isset($_POST['save'])) {
             $item = array_merge($item, $_POST['item']);
-
             if ($item['header'] != '') {
                 if ($item['url'] == '') $item['url'] = $this->str2url($item['header']);
                 if ($item['title'] == '') $item['title'] = $item['header'];
@@ -87,16 +76,13 @@ class controller_component_core_news extends component
             }
             $conflict_id = $this->model->find_conflict_id($item['url'], $item['parent_id']);
             if ($conflict_id != 0 && $conflict_id != $item['id']) $errors[] = 'URL конфликтует с уже имеющимися в этой категории, поменяйте его на вкладке SEO.';
-
             if ($item['is_category'] == 0) {
                 if ($item['text'] == '') $errors[] = 'Статья новости пустая, напишите что-нибудь';
                 if ($item['overview'] == '' && $item['text'] != '') $item['overview'] = mb_substr(strip_tags($item['text']), 0, 250).'...';
             }
             if (mb_strlen($item['overview']) > 250) $item['overview'] = mb_substr($item['overview'], 0, 247).'...';
             if ($item['description'] == '') $item['description'] = $item['overview'];
-
             $item['date_edit'] = time();
-
             if ($item['date_publish'] == '') {
                 $item['date_publish'] = time();
             } else {
@@ -115,14 +101,12 @@ class controller_component_core_news extends component
                     );
                 }
             }
-
             if ($item['parent_id'] != 0) {
                 $parent = $this->model->get($item['parent_id']);
                 if ($parent['date_publish'] > $item['date_publish']) {
                     $errors[] = 'Дата публикации раньше, чем у родительской категории ('.date('d.m.Y H:i', $parent['date_publish']).')';
                 }
             }
-
             if ($item['id'] != 0 && $item['is_category'] == 1) $this->model->adjust_childs_date_publish($item);
             
             if (empty($errors) && $item['is_category'] == 0) {
@@ -134,7 +118,6 @@ class controller_component_core_news extends component
                     if (file_exists($upload_dir.'/mini/'.$item['photo'])) unlink($upload_dir.'/mini/'.$item['photo']);
                     $item['photo'] = '';
                 }
-
                 if (!empty($_FILES['photo']['name'])) {
                     if (in_array(strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION)), array('jpeg', 'jpg', 'png', 'gif'))) {
                     
@@ -164,7 +147,6 @@ class controller_component_core_news extends component
                     }
                 }
             }
-
             if (empty($errors)) {
                 $new_id = $this->model->save($item);
                 if ($new_id == 0) {
@@ -175,7 +157,6 @@ class controller_component_core_news extends component
                 }
             }
         }
-
         $available_parents = $this->model->get_available_parents($item);
         $available_parents[] = array('id' => 0, 'header' => 'Корневая категория');
         $this->data = array_merge($this->data, compact('errors', 'back_url', 'item', 'upload_dir', 'new_item_url', 'available_parents'));
@@ -193,13 +174,10 @@ class controller_component_core_news extends component
         $this->page['html'] = $this->load_view('editor');
         return $this->page;
     }
-
     public function action_index()
     {
         return $this->action_else();
     }
-
-
     /**
     * Маршрутизация
     * @return array готовую страницу $this->page
@@ -254,8 +232,6 @@ class controller_component_core_news extends component
             return $this->show_childrens($parent_id); //по умолчанию показываем таблицу вложенных элементов
         }
     }
-
-
     public function action_add() {
         $this->redirect('/admin/'.$this->url['component'].'/do=add_article');
     }
