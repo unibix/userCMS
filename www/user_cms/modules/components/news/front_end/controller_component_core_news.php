@@ -24,21 +24,20 @@ class controller_component_core_news extends component
     */
     protected function show_category($parent_id)
     {
-        $items_count = $this->model->count_childrens($parent_id);
-        $items_per_page = $this->component_config['index_page_count'];
+        $items_count = $this->helper_pagination->total = $this->model->count_childrens($parent_id);
+        $items_per_page =  $this->helper_pagination->limit = $this->component_config['index_page_count'];
         $pages_count = ceil($items_count/$items_per_page);
-        $current_page = isset($this->url['params']['page']) ? intval($this->url['params']['page']) : 0;
+        $current_page = $this->helper_pagination->page = isset($this->url['params']['page']) ? intval($this->url['params']['page']) : 0;
         if ($current_page > $pages_count) $current_page = $pages_count;
         elseif ($current_page < 1) $current_page = 1;
-
         $items = $this->model->fetch_childrens($parent_id, ($current_page-1)*$items_per_page, $items_per_page);
         if ($parent_id != 0) $category = $this->model->get($parent_id);
-
         $this->data = array_merge($this->data, compact('items_count', 'pages_count', 'current_page', 'items', 'category'));
         
         $this->page['title'] = $this->data['page_header'] = isset($category) ? $category['header'] : 'Все новости';
         $this->page['keywords'] = isset($category) ? $category['keywords'] : 'новости, новости сайта '.SITE_NAME;
         $this->page['description'] = isset($category) ? $category['description'] : 'Новости сайта '.SITE_NAME;
+        $this->data['pagination'] = $this->helper_pagination->render();
         $this->page['html'] = $this->load_view('category');
         return $this->page;
     }

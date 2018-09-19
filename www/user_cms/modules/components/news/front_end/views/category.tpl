@@ -26,7 +26,7 @@
                 <?=$item['overview']?> <a href="<?=$base_url?>/<?=$item['url']?>">Подробнее</a>
             </div>
         <?php } ?>
-        <?php if ($pages_count > 1) echo '{plugin:pagination='.$current_page.','.$pages_count.','.$base_url.'/page=%u}'?>
+        <?=$pagination;?>
     <?php } else { ?>
         <p>Здесь пока нет новостей.</p>
     <?php } ?>
