@@ -1,10 +1,8 @@
 <?php 
-
 /**
 * класс менеджера модулей
 */
 class controller_component_core_modules_manager extends component {
-	
 	// вывод  активированных модулей
 	public function action_index() {
 		$this->data['success'] = '';
@@ -21,12 +19,10 @@ class controller_component_core_modules_manager extends component {
 		
 		$this->data['back_end_modules_list'] = $this->model->get_activated_modules(array('back_end'=>1));
 		$this->data['front_end_modules_list'] = $this->model->get_activated_modules(array('back_end'=>0));
-
 		$this->data['page_name'] = 'Активированные модули';
 		$this->page['title'] = 'Активированные модули';
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view();
-
 		return $this->page;
 	}
 	
@@ -42,10 +38,10 @@ class controller_component_core_modules_manager extends component {
 		$this->data['modules_list'] = $this->model->get_installed_modules();
 		
 		$this->data['page_name'] = 'Установленные Модули';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['title'] = 'Установленные Модули';
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('installed');
-
 		return $this->page;
 	}
 	// установка модулей
@@ -90,12 +86,11 @@ class controller_component_core_modules_manager extends component {
 				$this->data['message'] = 'Сообщение об успешности установки не задано';
 			}
 		}
-
 		$this->data['page_name'] = 'Установка модулей';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['title'] = 'Установка модулей';
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('install');
-
 		return $this->page;
 	}
 	
@@ -112,7 +107,8 @@ class controller_component_core_modules_manager extends component {
 			$this->redirect(SITE_URL . '/admin/modules_manager/installed');
 		}
 		
-		$this->page['title'] = 'Ручная установка модуля';
+		$this->page['title'] = $this->data['page_name'] = 'Ручная установка модуля';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('manual_install');
 		return $this->page;
@@ -139,7 +135,6 @@ class controller_component_core_modules_manager extends component {
 				if($zip->getFromName('update.php') === false) {
 					$this->data['errors'][] = 'Файла update.php нет в архиве';
 				}
-
 				$zip->extractTo(ROOT_DIR . '/modules/');
 				$zip->close();
 				if(count($this->data['errors']) == 0) {
@@ -153,12 +148,11 @@ class controller_component_core_modules_manager extends component {
 				$this->data['message'] = 'Сообщение об успешности обновления не задано';
 			} 
 		}
-
 		$this->data['page_name'] = 'Обновление модуля';
 		$this->page['title'] = 'Обновление модуля';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('update');
-
 		return $this->page;
 	}
 	
@@ -217,7 +211,6 @@ class controller_component_core_modules_manager extends component {
 			
 			$this->model->count_activated_modules_sort(0);
 			$this->model->count_activated_modules_sort(1);
-
 			$this->data['message'] = 'Модуль активирован </br> <a href="' . SITE_URL . '/admin/' . $this->component_name . '">К списку активированных модулей</a> | <a href="' . SITE_URL . '/admin/' . $this->component_name . '/installed">Активировать другой модуль</a>';
 		}
 		
@@ -230,7 +223,6 @@ class controller_component_core_modules_manager extends component {
 		$this->page['title'] = 'Активация модуля &laquo;' . $module_info['name'] . '&raquo;';
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('activate');
-
 		return $this->page;
 	}
 	
@@ -338,9 +330,9 @@ class controller_component_core_modules_manager extends component {
 		
 		$this->data['page_name'] = 'Редактирование модуля';
 		$this->page['title'] = 'Редактирование модуля';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'] . ' «' . $module_info['name'] . '»', '');
 		$this->page['html'] = $this->load_view('left_menu');
 		$this->page['html'] .= $this->load_view('settings');
-
 		return $this->page;
 	}
 	

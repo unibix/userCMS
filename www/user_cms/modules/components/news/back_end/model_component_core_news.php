@@ -126,20 +126,36 @@ class model_component_core_news extends model
     public function find_by_actions($url_actions)
     {
         $c = count($url_actions);
-        if ($c == 0) return false;
         $parent_id = 0;
-        foreach ($url_actions as $n => $url) {
+        $result = array(
+            'item' => false,
+            'labels' => array(), // заголовки родительских категорий (нужны для breadcrumbs)
+        );
+         if ($c == 0) return $result;
+         foreach ($url_actions as $n => $url) {
             $category = $this->dbh->row("SELECT * FROM news WHERE parent_id=$parent_id AND url='$url' AND is_category=1 LIMIT 1");
             if ($n == $c-1) {
                 $article = $this->dbh->row("SELECT * FROM news WHERE parent_id=$parent_id AND url='$url' AND is_category=0 LIMIT 1");
-                if ($article) return $article;
-                elseif ($category) return $category;
-                else return false;
+                if ($article) {
+                    $result['item'] = $article;
+                    $result['labels'][] = $article['header'];
+                } elseif ($category) {
+                    $result['item'] = $category;
+                    $result['labels'][] = $category['header'];
+                } else {
+                    $result['item'] = false;
+                }
             } else {
-                if ($category) $parent_id = $category['id'];
-                else return false;
+                if ($category) {
+                    $parent_id = $category['id'];
+                    $result['labels'][] = $category['header'];
+                } else {
+                    $result['item'] = false;
+                    break;
+                }
             }
         }
+        return $result;
     }
 
     // получить полный URL элемента по его id

@@ -1,17 +1,9 @@
-<div id="content" class="content news">
-    
-        <h1><?=$page_header?></h1>
-        <?php if (isset($category['text'])) { ?>
-        <?=$category['text']?>
-        <?php } ?>
-
-    <p class="breadcrumbs">
-        <?php
-        $links = array(); 
-        foreach ($breadcrumbs['labels'] as $n => $label) $links[] = '<a href="'.$breadcrumbs['hrefs'][$n].'">'.$label.'</a>';
-        echo implode(' / ', $links);
-        ?>
-    </p>
+<div id="content" class="content news">   
+    <h1><?=$page_header?></h1>
+    <?=$breadcrumbs?>
+    <?php if (isset($category['text'])) { ?>
+    <?=$category['text']?>
+    <?php } ?>
     <?php if (!empty($items)) { ?>
         <?php foreach ($items as $item) if ($item['is_category'] == 1) { ?>
             <div class="category-preview">

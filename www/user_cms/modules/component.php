@@ -35,6 +35,13 @@ class component extends module {
 		$this->model                    = $this->load_model();
 		$this->component_config         = $this->get_component_config($component['name']);
 		$this->component_info           = isset($component['info']) ? $component['info'] : $this->get_component_info($component['name']);
+		//первые две ссылки хлебных крошек
+		$this->load_helper('breadcrumbs');
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs(
+			array('Главная', (isset($this->component_config['name'])?$this->component_config['name']:(isset($this->component_info['name'])?$this->component_info['name']:'')) ),
+			array(SITE_URL . (END_NAME == 'back_end'?'/admin':''), SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['component']) 
+			
+		);
 	}
 
 	public function action_index() {
@@ -53,7 +60,7 @@ class component extends module {
 		return $this->action_404();
 	}
 
-	public function action_404($view_name = 'index') {
+	public function action_404($view_name = '404_not_found') {
 		$sapi_name = php_sapi_name();
 		if ($sapi_name == 'cgi' || $sapi_name == 'cgi-fcgi') {
 		    header('Status: 404 Not Found');
@@ -61,12 +68,22 @@ class component extends module {
 		    header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
 		}
 		$this->data['page_name'] = 'Страница не найдена';
-		$this->data['content'] = '<p style="margin: 20px 0;">Ошибка 404 бывает в следующих случаях:	<ol><li>Страницу удалили</li><li>Страницу переместили</li><li>Страница еще не создана</li></ol>Воспользуйтесь меню сайта для поиска нужной информации или перейдите на <a href="' . SITE_URL . '">главную страницу</a>.</p>';
-		$this->data['bread_crumbs'] = '<a href="' . SITE_URL . '">Главная</a> / Ошибка 404';
+		$this->data['content'] = '<p style="margin: 20px 0;">Ошибка 404 бывает в следующих случаях:	<ol><li>Страницу удалили</li><li>Страницу переместили</li><li>Страница еще не создана</li></ol>Воспользуйтесь меню сайта для поиска нужной информации или перейдите на <a href="' . SITE_URL . (END_NAME == 'back_end'?'/admin/':'') . '">главную страницу</a>.</p>';
+		$this->data['breadcrumbs'] = 
+		'<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="' . SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '">Главная</a></li>
+				<li class="breadcrumb-item active" aria-current="page">Ошибка 404</li>
+			</ol>
+		</nav>';
 		$page['title'] = 'Страница не найдена. Ошибка 404';
 		$page['keywords'] = '';
 		$page['description'] = '';
-		$page['html'] = $this->load_view($view_name);
+		if(is_file($this->view_dir . '/' . $view_name . '.tpl') || is_file($this->view_dir_core . '/' . $view_name . '.tpl')){
+			$page['html'] = $this->load_view($view_name);
+		}else{
+			$page['html'] = '<div id="content">' . "\r\n" . '<h1>' . $this->data['page_name'] . '</h1>' . "\r\n" . $this->data['breadcrumbs'] . "\r\n" . $this->data['content'] . "\r\n</div>";
+		}
 		return $page;
 	}
 	

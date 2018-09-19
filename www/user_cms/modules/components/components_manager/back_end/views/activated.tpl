@@ -1,5 +1,6 @@
 <div id="content">
   <h1><?php echo $page_name; ?></h1>
+  <?=$breadcrumbs;?>
   <p class="buttons">
     <a class="button" href="<?php echo SITE_URL . '/admin/components_manager/activate'; ?>">Активировать</a>
     <a class="button" href="<?php echo SITE_URL . '/admin/components_manager'; ?>">К списку всех компонентов</a>

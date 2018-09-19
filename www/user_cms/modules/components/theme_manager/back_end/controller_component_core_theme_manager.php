@@ -1,5 +1,4 @@
 <?php
-
 class controller_component_core_theme_manager extends component
 {
 	public function action_index() {
@@ -50,6 +49,7 @@ class controller_component_core_theme_manager extends component
 		$this->data['theme_content'] = file_get_contents($path);
 		
 		$this->data['page_name'] = 'Редактирование файла ' . $this->url['params']['file'] . '. Тема ' . $theme['name'];
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$page['title'] = 'Менеджер тем';
 		$page['keywords'] = 'Менеджер тем';
 		$page['description'] = 'Менеджер тем';
@@ -67,7 +67,6 @@ class controller_component_core_theme_manager extends component
 		if(isset($this->url['params']['success']) && $this->url['params']['success']=='installed') {
 			$this->data['success'][] = 'Тема установлена.';
 		}
-
 		if(isset($_POST['upload_theme'])) {
 			$archive_types = array(
 				'application/force-download',
@@ -97,6 +96,8 @@ class controller_component_core_theme_manager extends component
 				$this->data['errors'][] = '';
 			}
 		}
+		$this->data['page_name'] = 'Установка темы';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$page['title'] = 'Менеджер тем';
 		$page['keywords'] = 'Менеджер тем';
 		$page['description'] = 'Менеджер тем';

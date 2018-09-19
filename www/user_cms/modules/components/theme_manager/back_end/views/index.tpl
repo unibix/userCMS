@@ -7,6 +7,7 @@
 </style>
 <div id="content">
 	<h1><?php echo $page_name ; ?></h1>
+  <?=$breadcrumbs;?>
   <p class="buttons">
     <a class="button" href="<?php echo $button_install; ?>">Установить тему</a>
     <a class="button" href="<?php echo $button_change_theme; ?>">Сменить тему</a>

@@ -1,7 +1,5 @@
 <?php 
-
 class controller_component_core_menus_manager extends component {
-	
 	public function action_index() {
 		$this->data['errors'] = array();
 		$this->data['success'] = array();
@@ -25,7 +23,6 @@ class controller_component_core_menus_manager extends component {
 		$this->data['menus'] = $this->model->get_menus_list();
 		
 		$this->data['page_name'] = 'Менеджер меню';
-
 		$page['title'] = 'Меню сайта';
 		$page['keywords'] = 'Меню сайта';
 		$page['description'] = 'Меню сайта';
@@ -109,6 +106,7 @@ class controller_component_core_menus_manager extends component {
 		$this->data['menu'] = $menu;
 		
 		$this->data['page_name'] = 'Добавление нового меню';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		$this->data['text_submit'] = 'Добавить';
 		$page['title'] = 'Добавление нового меню';
 		$page['keywords'] = 'Добавление нового меню';
@@ -168,6 +166,7 @@ class controller_component_core_menus_manager extends component {
 		$this->data['menu'] = $menu;
 		
 		$this->data['page_name'] = 'Редактирования меню "' . $menu['name'] . '"';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($menu['name'], '');
 		$this->data['text_submit'] = 'Сохранить изменения';
 		$page['title'] = 'Добавление нового меню';
 		$page['keywords'] = 'Добавление нового меню';
@@ -200,7 +199,6 @@ class controller_component_core_menus_manager extends component {
 		$this->data['errors'] = array();
 		$this->data['success'] = array();
 		$this->data['notices'] = array();
-
 		if(isset($this->url['params']['success'])) {
 			if($this->url['params']['success']=='del') {
 				$this->data['success'][] = 'Элемент меню удален';
@@ -220,10 +218,10 @@ class controller_component_core_menus_manager extends component {
 		$this->data['page_name'] = 'Элементы меню "' . $this->data['menu']['name'] . '"';
 		//$this->data['text_submit'] = 'Сохранить изменения';
 		$page['title'] = 'Элементы меню "' . $this->data['menu']['name'] . '"';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs( $this->data['menu']['name'], '');
 		$page['keywords'] = 'Элементы меню "' . $this->data['menu']['name'] . '"';
 		$page['description'] = 'Элементы меню "' . $this->data['menu']['name'] . '"';
 		$page['html'] = $this->load_view('items');
-
 		return $page;
 	}
 	
@@ -240,7 +238,6 @@ class controller_component_core_menus_manager extends component {
 		} else {
 			$this->redirect(SITE_URL . '/admin/menus_manager');
 		}
-
 		$this->data['errors'] = array();
 		$this->data['success'] = array();
 		$this->data['notices'] = array();
@@ -310,7 +307,6 @@ class controller_component_core_menus_manager extends component {
 			$this->redirect(SITE_URL . '/admin/menus_manager');
 		}
 		
-
 		$this->data['errors'] = array();
 		$this->data['success'] = array();
 		$this->data['notices'] = array();
@@ -353,9 +349,13 @@ class controller_component_core_menus_manager extends component {
 		
 		$this->data['items'] = $this->model->get_items_list($item['menu_id'], 0, true, array(), $item['id']); // исключаем из списка выводимый элемент и его дочерние элементы
 		$this->data['item'] = $item;
-		
+	
 		$this->data['menu'] = $this->model->get_menu($item['menu_id']);
 		$this->data['page_name'] = 'Изменение элемента меню "' . $this->data['menu']['name'] . '"';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs(
+			array($this->data['menu']['name'], $item['name']),
+			array(SITE_URL . '/admin/' . $this->url['component'] . '/edit/' . $item['menu_id'], '')
+		);
 		$this->data['text_submit'] = 'Сохранить изменения';
 		$page['title'] = 'Изменение элемента меню "' . $this->data['menu']['name'] . '"';
 		$page['keywords'] = 'Изменение элемента меню "' . $this->data['menu']['name'] . '"';

@@ -1,5 +1,4 @@
 <?php 
-
 /**
 * класс текстовых страниц
 */
@@ -35,16 +34,13 @@ class controller_component_core_pages extends component {
 		$this->data['components'] = $this->model_component_components_manager->get_activated_components();
 		
 		$this->data['page_name'] = 'Страницы сайта';
-
 		$this->page['title'] = 'Страницы сайта';
 		$this->page['keywords'] = 'Страницы сайта';
 		$this->page['description'] = 'Страницы сайта';
 		$this->page['html'] = $this->load_view();
-
 		return $this->page;
 	}
 	
-
 	public function action_edit() {
 		$this->data['errors'] = array();
 		$this->data['success'] = array();
@@ -68,7 +64,6 @@ class controller_component_core_pages extends component {
 		}
 		
 		$result = $this->model->get_page($this->data['id']);
-
 		if (isset($_POST['page_name'])) {
 			$this->data['name'] = $_POST['page_name'];
 			if (empty($this->data['name'])) {
@@ -117,7 +112,6 @@ class controller_component_core_pages extends component {
 					$this->data['notices']['changed_url'] = 'Такой адрес страницы уже есть, URL был изменен: ' . $this->data['url'];
 				}
 			}
-
 		} else {
 			$this->data['url'] = $result['url'];
 		}
@@ -168,14 +162,13 @@ class controller_component_core_pages extends component {
 		
 		$this->data['page_name'] = 'Редактирование страницы';
 		
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['name'], '');
 		$this->page['title'] = 'Редактирование страницы';
 		$this->page['keywords'] = 'Редактирование страницы';
 		$this->page['description'] = 'Редактирование страницы';
 		$this->page['html'] = $this->load_view('edit');
-
 		return $this->page;
 	}
-
 	// добавление страницы или активация компонента
 	public function action_add() {
 		$this->data['errors'] = array();
@@ -275,9 +268,7 @@ class controller_component_core_pages extends component {
 		}
 		
 		if (isset($_POST['add']) && !$this->data['errors']) {
-
 			$page_id = $this->model->add_page($this->data);
-
 			$redirect = SITE_URL . '/admin/pages/add/success=added/page=' . $page_id;
 			if (isset($this->data['notices']['changed_url'])) {
 				$redirect .= '/changed_url=' . $this->data['url'];
@@ -297,14 +288,13 @@ class controller_component_core_pages extends component {
 		
 		$categories = $this->model->get_pages(0, array( 'type' => 'tree', 'sort' => 'm.name ASC' ));
 		$this->data['categories_options'] = $this->build_categories_options($categories, array(1));
-
 		$this->data['page_name'] = 'Добавление новой страницы';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
 		
 		$this->page['title'] = 'Добавление страницы';
 		$this->page['keywords'] = 'Добавление страницы';
 		$this->page['description'] = 'Добавление страницы';
 		$this->page['html'] = $this->load_view('add');
-
 		return $this->page;
 	}
 	

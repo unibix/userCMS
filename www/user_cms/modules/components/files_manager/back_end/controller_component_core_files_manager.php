@@ -10,9 +10,9 @@
 	function __construct($config, $url, $component, $dbh){
 		parent::__construct($config, $url, $component, $dbh);
 		define('SELF_SCRIPT', $_SERVER['SCRIPT_NAME']);//сам файл скрипта менеджера
-		 $this->is_windows = stripos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows')?true:false;
-		 $this->errors = isset($_GET['errors'])&&!empty($_GET['errors'])?unserialize($_GET['errors']):array();
-		 $this->get_query = !empty($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:false;
+		$this->is_windows = stripos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows')?true:false;
+		$this->errors = isset($_GET['errors'])&&!empty($_GET['errors'])?unserialize($_GET['errors']):array();
+		$this->get_query = !empty($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:false;
 
 	}
 
@@ -169,10 +169,4 @@
 		return $this->page;
 	}
 
-					
-
-
-
-
-
-} 
+}

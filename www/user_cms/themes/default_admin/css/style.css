@@ -54,9 +54,9 @@ a:hover{text-decoration:none;}
 #logo a{border:none;background:none;text-decoration:none;color:#323030;}
 #h_right {float:right;text-align: right;   width: 600px;margin: 0;}
 #h_right a {
-	margin: 0 3px;
-	padding:5px;
-	background-color: #363636;
+    margin: 0 3px;
+    padding:5px;
+    background-color: #363636;
     background-image: -moz-linear-gradient(180deg, #444444, #aaaaaa);
     background-image: -webkit-linear-gradient(180deg, #444444, #aaaaaa);
     background-image: linear-gradient(180deg, #444444, #aaaaaa);
@@ -64,13 +64,13 @@ a:hover{text-decoration:none;}
     color:white;
     border-radius: 3px;
     border:1px solid grey;
-	text-decoration: none;}
+    text-decoration: none;}
 #h_right a:hover {border: 1px solid #EDE8E8;box-shadow:0 0 5px grey;}
 
 #menu-wrapper{clear:both;overflow:hidden;height:56px;background:#565656;border-top:1px solid #3D2729;
-	background-image:-moz-linear-gradient(180deg , #2F592B, #41B237);
-	background-image:-webkit-linear-gradient(90deg , #2F592B, #41B237);
-	background-image:linear-gradient(180deg , #2F592B, #41B237);}
+    background-image:-moz-linear-gradient(180deg , #2F592B, #41B237);
+    background-image:-webkit-linear-gradient(90deg , #2F592B, #41B237);
+    background-image:linear-gradient(180deg , #2F592B, #41B237);}
 #menu{width:980px;height:55px;margin:0 auto;padding:0;}
 #menu ul{list-style:none;line-height:normal;margin:0;padding:10px 0 0;}
 #menu li{float:left;}
@@ -132,7 +132,7 @@ a:hover{text-decoration:none;}
 
 /*-- tabs --*/
 #tabs_content > div {display: none;}
-#content .tabs {overflow: visible; padding: 5px 5px 0; border-bottom: 1px solid #CCCCCC; height: 28px; margin-bottom: 20px;}
+#content .tabs {overflow: visible; /* padding: 5px 5px 0; */ border-bottom: 1px solid #CCCCCC; height: 30px; margin-bottom: 20px;}
 #content .tabs ul li {display: block; float: left; margin: 0 3px 0 0; box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.25); border-radius: 3px 3px 0 0; }
 #content .tabs ul li a{ display: block; padding: 5px 10px; border: 1px solid #CCC; border-bottom: none; text-decoration: none; border-radius: 3px 3px 0 0;}
 #content .tabs ul li a.active {margin-bottom: -1px; background: #FFF;}
@@ -155,14 +155,14 @@ a:hover{text-decoration:none;}
 .components-menu.fixed.bottom {bottom: 0; top: auto;}
 .button-menu {
     background: #666666;
-	box-shadow: 1px 0 2px #777777, 4px 0 3px #555555 inset;
+    box-shadow: 1px 0 2px #777777, 4px 0 3px #555555 inset;
     height: 40px;
     position: absolute;
     right: -10px;
     top: 150px;
     width: 10px;
-	border-radius: 0 3px 3px 0;
-	cursor: pointer;
+    border-radius: 0 3px 3px 0;
+    cursor: pointer;
 }
 .components-menu.fixed {position: fixed;}
 .components-menu.fixed.bottom {position: fixed;}
@@ -170,18 +170,18 @@ a:hover{text-decoration:none;}
     min-height: 185px;
     position: relative;
     width: 100%;
-	background: #EDFF68;
-	box-shadow: 1px 1px 2px 0px #777;
-	color: #666B45;
-	padding: 10px;
-	border-radius: 0 3px 3px 0;
+    background: #EDFF68;
+    box-shadow: 1px 1px 2px 0px #777;
+    color: #666B45;
+    padding: 10px;
+    border-radius: 0 3px 3px 0;
 }
 .components-menu.hidden > div {
-	box-shadow: none;
+    box-shadow: none;
 }
 .components-menu a {
-	text-shadow: 1px 1px #F6FFB4;
-	color: #666B45;
+    text-shadow: 1px 1px #F6FFB4;
+    color: #666B45;
 }
 .components-menu.hidden {
     left: -185px;
@@ -208,19 +208,19 @@ table.main .sort span {
     padding: 0 5px 3px;
 }
 table.main .sort span:hover {
-	box-shadow: 0 0 1px #ccc;
+    box-shadow: 0 0 1px #ccc;
 }
 table.main .sort span:active {
-	box-shadow: inset 1px 1px 1px #bbb;
+    box-shadow: inset 1px 1px 1px #bbb;
 }
 table.main tr:first-child td.sort .before {
-	display: none;
+    display: none;
 }
 table.main tr:last-child td.sort .after {
-	display: none;
+    display: none;
 }
 table.main tr.parent-row:nth-last-child(2) td.sort .after { /* последняя строка, у которой есть дети - не может быть сдвинута ниже */
-	display: none;
+    display: none;
 }
 table.main .actions ul {
     border-left: 5px solid #E6E6E6;
@@ -240,11 +240,11 @@ table.main .actions ul {
     max-height: 400px;
     overflow-y: scroll;
     padding: 5px 15px 10px;
-	border-radius: 3px;
+    border-radius: 3px;
 }
 fieldset{
-	border: 1px solid #dedede;
-	border-radius: 2px;
+    border: 1px solid #dedede;
+    border-radius: 2px;
 }
 #left_side + #content {
     margin-left: 210px;
@@ -262,11 +262,11 @@ fieldset{
 #left_side ul {
     list-style: none outside none;
     padding: 0;
-	margin: 0;
+    margin: 0;
 }
 #left_side > ul li:first-child a {
-	border: 0;
-	box-shadow: none;
+    border: 0;
+    box-shadow: none;
 }
 #left_side > ul li {
     display: block;
@@ -276,17 +276,17 @@ fieldset{
     color: #666666;
     font-size: 15px;
     text-decoration: none;
-	display: block;
-	padding: 3px 5px 4px;
+    display: block;
+    padding: 3px 5px 4px;
     border-top: 1px solid #FFFFFF;
-	box-shadow: 0 -1px #DDDDDD;
+    box-shadow: 0 -1px #DDDDDD;
 }
 #left_side > ul li:hover {
-	background: #BCCBCB;
-	color: #FFFFFF;
+    background: #BCCBCB;
+    color: #FFFFFF;
 }
 #left_side > ul > li:hover a {
-	color: #555;
+    color: #555;
 }
 #left_side > ul > li:first-child:hover {border-radius: 2px 2px 0 0;}
 #left_side > ul > li:last-child:hover {border-radius: 0 0 2px 2px;}
@@ -311,27 +311,13 @@ fieldset{
 #field_types_block select {border-radius: 3px; background: #FFFFFF; width: 99%; height: 130px;}
 #field_types_block label {margin-bottom: 10px;}
 
-ul.pagination {
-    list-style: none;
-    padding: 0;
+ ul.pagination {
     margin-top: 30px;
-    text-align: center;
 }
-ul.pagination > li {
-    display: inline-block;
-    border: 1px solid #bcbcbc;
-    border-right: none;
-}
-ul.pagination > li:last-of-type {border-right: 1px solid #bcbcbc;}
-ul.pagination > li.current, ul.pagination > li > a:hover {background-color: #e0e0e0;}
-ul.pagination > li > a, 
-ul.pagination > li > span {
-    display: block;
-    width: 30px;
-    height: 30px;
-    line-height: 30px;
-    text-decoration: none;
-}
+
+.page-link{color:#107710;}
+
+.page-item.active .page-link{background: #107710;border-color: #107710;}
 
 #content .link {
     display: inline;
@@ -342,3 +328,4 @@ ul.pagination > li > span {
     text-decoration: underline;
 }
 #content .link:hover{text-decoration:none;}
+ol.breadcrumb{background: #f8f8f8;}

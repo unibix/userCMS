@@ -1,4 +1,6 @@
 <div id="content">
+  <h1><?=$page_name;?></h1>
+  <?=$breadcrumbs;?>
   <?php if($success) { ?>
   <div class="notice success">
     <?php foreach($success as $msg) { ?>
