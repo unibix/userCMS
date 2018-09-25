@@ -7,8 +7,8 @@ class controller_addon_core_codemirror extends addon  {
 
 		$this->page['head']  = "\t\t<!-- START codemirror -->\n";
 		
-		$this->page['head'] .= $this->add_css_file(SITE_URL . '/user_cms/modules/addons/codemirror/source/codemirror.css?v=3.11') ;
-		$this->page['head'] .= $this->add_js_file (SITE_URL . '/user_cms/modules/addons/codemirror/source/codemirror-compressed.js?v=3.11') ;
+		$this->page['head'] .= $this->add_css_file(SITE_URL . '/user_cms/modules/addons/codemirror/source/codemirror.css?v=5.40.2') ;
+		$this->page['head'] .= $this->add_js_file (SITE_URL . '/user_cms/modules/addons/codemirror/source/codemirror.js?v=5.40.2') ;
 
 		$this->page['head'] .= $this->add_js('
 
