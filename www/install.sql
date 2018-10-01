@@ -76,7 +76,6 @@ INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_a
 /catalog|/katalog
 /contacts.html|/kontakty.html');
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (28, 'Текстовый редактор jodit',  'addon',    'jodit', '3.1.95',  1537785328, '');
-INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (29, 'Страничная навигация', 'plugin',   'pagination',   '1.0',  1480488062, 'Кнопки для страничной навигации');
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (30, 'Анонс новостей',   'block',    'news_announce',    '2.0',  1480488062, 'Анонс новостей');
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (31, 'Слайдер CUBE', 'block',    'cube_slider',  '1.4',  1481290914, 'Слайдер в виде вращающегося куба.');
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (32, 'Блок HTML кода',   'plugin',    'custom_html',  '1.0',  1533821211, 'Модуль позволяет добавлять на станицу пользовательский html код');
