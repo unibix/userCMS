@@ -112,6 +112,7 @@ INSERT INTO "main" ("id", "parent_id", "name", "title", "keywords", "description
 INSERT INTO "main" ("id", "parent_id", "name", "title", "keywords", "description", "component", "url", "view", "theme_view", "date_add", "date_edit") VALUES (64,   '0',    'Написать директору',   'Написать директору',   'Написать директору',   'Написать директору',   'pages',    'dir',  'index',    'index',    1481554693, 1481555091);
 INSERT INTO "main" ("id", "parent_id", "name", "title", "keywords", "description", "component", "url", "view", "theme_view", "date_add", "date_edit") VALUES (65,   63, 'Бухгалтер',    'Бухгалтер',    'Бухгалтер',    'Бухгалтер',    'pages',    'buhgalter',    'index',    'index',    1481555152, NULL);
 INSERT INTO "main" ("id", "parent_id", "name", "title", "keywords", "description", "component", "url", "view", "theme_view", "date_add", "date_edit") VALUES (66,   63, 'Маркетолог',   'Маркетолог',   'Маркетолог',   'Маркетолог',   'pages',    'marketolog',   'index',    'index',    1481555169, NULL);
+INSERT INTO "main" ("id", "parent_id", "name", "title", "keywords", "description", "component", "url", "view", "theme_view", "date_add", "date_edit") VALUES (67,   '0',    'Пользователи',  'Пользователи',  'Пользователи',  'Пользователи',  'users', 'users', NULL,   NULL,   1480488322, 1480488322);
 
 CREATE TABLE "menus" (
   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
