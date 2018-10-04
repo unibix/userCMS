@@ -28,5 +28,9 @@
         <input type="submit" name="users_login" value="Войти">
       </div>
     </form>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <a href="<?=SITE_URL?>/users/register">Регистрация</a> | <a href="<?=SITE_URL?>/users/password_recovery_request">Восстановление пароля</a>
+    </div>
   </div>
 </div>

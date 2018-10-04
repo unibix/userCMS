@@ -24,7 +24,7 @@ class model_component_core_users extends model {
 	}	
 	
 	public function get_user_by_id($id) {
-		return $this->get_user($id, 'by_id'); // ��� ������������� � ����������� ��������
+		return $this->get_user($id, 'by_id'); // äëÿ ñîâìåñòèìîñòè ñ ïðåäûäóùèìè âåðñèÿìè
 	}
 	
 	public function get_users($data = array()) {
@@ -78,4 +78,46 @@ class model_component_core_users extends model {
 		
 		return $this->dbh->lastInsertId();
 	}
+
+	public function send_email($addr, $subject, $text)
+    {
+        require_once(ROOT_DIR.'/user_cms/helpers/helper_mail.php');
+        $this->helper_mail = new helper_mail;
+        $this->helper_mail->from_name = 'Робот ' . SITE_NAME;
+        $this->helper_mail->from_email = 'robot@'.$_SERVER['HTTP_HOST'];
+        $this->helper_mail->mail_target = $addr;
+        $this->helper_mail->subject = $subject;
+        return $this->helper_mail->send($text);
+    }
+
+	public function password_recovery_request($email){
+        $email = $this->dbh->escape($email);
+        $user = $this->dbh->row("SELECT * FROM users WHERE email='$email' LIMIT 1");
+        if(!$user)return false;
+        $link = SITE_URL . '/users/password_recovery?p=' . urlencode(base64_encode($email));
+        $subject = 'Запрос на изменение пароля!';
+        $message = '<p>Мы получили запрос на сброс Вашего пароля.<br>Перейдите по ссылке ' . $link . ' для ввода нового пароля</p><p>Если вы не запрашивали сброс пароля, немедленно войдите в аккаунт и поменяйте и логин, и пароль. Никому не передавайте свой логин и пароль!</p>';
+        return $this->send_email($user['email'], $subject, $message);
+    }
+
+    public function reset_password($email, $new_password)
+    {
+        $email = $this->dbh->escape(base64_decode(urldecode($email)));
+        $user = $this->dbh->row("SELECT * FROM users WHERE email='$email' AND access_level=0 LIMIT 1");
+        if (!$user) {
+            return false;
+        }
+        if ($user['email'] == $email) {
+            $hash = md5($new_password);
+            $this->dbh->exec("UPDATE users SET password='$hash' WHERE id=$user[id]");
+            $subject = 'Ваш пароль изменен!';
+            $message = '<p>' . SITE_URL . '<p>Ваш пароль успешно изменен.<br>Новый пароль: '.$new_password.'</p><p>Если вы не меняли свой пароль, немедленно войдите в аккаунт и поменяйте и логин, и пароль или свяжитесь с администратором сайта по адресу ' . SITE_EMAIL . '. Никому не передавайте свой логин и пароль!</p>';
+        } else {
+            $_SESSION['deny_reset_password'] = true;
+            $subject = 'Ваш аккаунт пытались взломать!';
+            $message = '<p>Мы выявили и успешно блокировали попытку взлома вашего аккаунта! Ни в коем случае не передавайте ваши данные посторонним!</p>';
+        }
+        return $this->send_email($user['email'], $subject, $message);
+    }
+
 }

@@ -3,6 +3,13 @@ class controller_component_core_users extends component {
 	protected $errors = array();
 	protected $captcha_suffix = '_profile';
 	protected $first_try = null;
+	private $user = array();
+
+	public function __construct($config, $url, $component, $dbh){
+		parent::__construct($config, $url, $component, $dbh);
+		$this->user = $this->get_global_data('user');
+
+	}
 	
 	public function action_index() {
 		$user = $this->get_global_data('user');
@@ -15,6 +22,14 @@ class controller_component_core_users extends component {
 	}
 	
 	protected function index_logged() {
+		$user = $this->user;
+		if(!$user)return $this->index_not_logged();
+		$this->page['title'] = $this->data['page_name'] = 'Профиль пользователя';
+		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
+		$this->data['user'] = $user;
+		$this->page['html'] = $this->load_view('index_logged');
+		return $this->page;
+
 		
 	}
 	
@@ -23,12 +38,6 @@ class controller_component_core_users extends component {
 		$this->data['href_login'] = SITE_URL . '/' . $this->url['component'] . '/login';
 		
 		$this->data['page_name'] = $this->component_info['name'];
-		
-		$this->load_helper('breadcrumbs');
-		$this->helper_breadcrumbs->add('Главная', SITE_URL);
-		$this->helper_breadcrumbs->add($this->component_info['name'], SITE_URL . '/' . $this->url['component']);
-		
-		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->render();
 	
 		$this->page['html'] = $this->load_view('index_not_logged');
 		return $this->page;
@@ -38,7 +47,6 @@ class controller_component_core_users extends component {
 		if ($this->get_global_data('user')) { // юзер залогинен
 			$this->redirect(SITE_URL . '/' . $this->url['component']);
 		}
-	
 		if (isset($_POST['users_register'])) {
 			if ($this->validate_register()) {
 				$user_data = array(
@@ -152,11 +160,8 @@ class controller_component_core_users extends component {
 		
 		$this->data['page_name'] = 'Авторизация';
 		
-		$this->load_helper('breadcrumbs');
-		$this->helper_breadcrumbs->add('Главная', SITE_URL);
-		$this->helper_breadcrumbs->add($this->component_info['name'], SITE_URL . '/' . $this->url['component']);
-		$this->helper_breadcrumbs->add('Авторизация', SITE_URL . '/' . $this->url['component'] . '/login');
-		
+
+		$this->helper_breadcrumbs->add('Логин', '');
 		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->render();
 		
 		$this->data['errors'] = $this->errors;
@@ -165,6 +170,65 @@ class controller_component_core_users extends component {
 		$this->page['title'] = 'Авторизация';
 		$this->page['html'] = $this->load_view('login');
 		return $this->page;
+	}
+
+	public function action_logout() {
+		if(isset($_SESSION['auth'])) {
+			unset($_SESSION['auth']);
+			unset($_SESSION['access']);
+			unset($_SESSION['login']);
+		}
+		$this->redirect(SITE_URL . '/users/login');
+		exit();
+	}
+
+	public function action_password_recovery_request(){
+        $errors = array();
+        if (isset($_POST['email'])) {
+            if($this->model->password_recovery_request($_POST['email'])){
+                $_SESSION['success_pass_request'] = true;
+                $this->redirect(SITE_URL . '/' . $this->url['component'] . '/' . $this->url['actions'][0]);
+            }else{
+                $errors[] = 'Неправильный адрес электронной почты или пользователь с таким адресом не существует на сайте';
+            }
+        }
+		$success = isset($_SESSION['success_pass_request'])?$_SESSION['success_pass_request']:false;
+        unset($_SESSION['success_pass_request']);
+        $this->page['title'] = $this->data['page_name'] = 'Восстановление пароля';
+        $this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($this->data['page_name'], '');
+        $this->data['success'] = $success;
+        $this->data['errors'] = $errors;
+        $this->page['title'] = 'Восстановление пароля';
+        $this->page['html'] = $this->load_view('reset_password_request');
+        return $this->page;
+
+	}
+
+	public function action_password_recovery(){
+		$errors = array();
+		if(!isset($_GET['p']) && !isset($_SESSION['success_password_change'])) return $this->action_404();
+        $success = isset($_SESSION['success_password_change'])?$_SESSION['success_password_change']:false;
+        if (isset($_POST['password']) && isset($_POST['password2'])) {
+        	if($_POST['password'] !== $_POST['password2'])$errors[] = 'Пароли не совпадают';
+        	if(mb_strlen(trim($_POST['password'])) < 6 )$errors[] = 'Длина пароля не может быть короче 6 символов';
+
+        	if(count($errors) == 0){
+        		$new_password = trim(htmlspecialchars(strip_tags($_POST['password'])));
+	            if($this->model->reset_password($_GET['p'], $new_password)){
+	            	$_SESSION['success_password_change'] = 1;
+	            	$this->redirect(SITE_URL . '/' . $this->url['component'] . '/' . $this->url['actions'][0] . '/?p=');
+	            }else{
+	            	$errors[] = 'Ошибка при изменении пароля. Обратитесь к администратору';
+	            }
+	        }
+	           
+        }
+        unset($_SESSION['success_password_change']);
+        $this->data['success'] = $success;
+        $this->data['errors'] = $errors;
+        $this->page['title'] = 'Сброс пароля';
+        $this->page['html'] = $this->load_view('reset_password');
+        return $this->page;
 	}
 	
 	protected function validate_register() {
@@ -248,4 +312,6 @@ class controller_component_core_users extends component {
 		if (isset($_COOKIE['users_try'])) setcookie('users_try', 1, time()-1);
 		if (isset($_SESSION['users_try'])) unset($_SESSION['users_try']);
 	}
+
+
 }
