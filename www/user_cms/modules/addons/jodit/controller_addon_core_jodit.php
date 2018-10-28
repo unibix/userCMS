@@ -1,8 +1,6 @@
 <?php
 class controller_addon_core_jodit extends addon {
 	function action_index() {
-
-
     $this->page['head']  = '<!-- START jodit editor  -->' . "\n\t";
     $this->page['head'] .= $this->add_css_file(SITE_URL . '/user_cms/modules/addons/jodit/jodit.min.css'). "\n\t";
     $this->page['head'] .= $this->add_js_file(SITE_URL . '/user_cms/modules/addons/jodit/jodit.min.js'). "\n\t";
@@ -11,14 +9,13 @@ class controller_addon_core_jodit extends addon {
     "$(document).ready(function() { 
 		new Jodit('.wysiwyg', {
 		        uploader: {
-		            url: '" . SITE_URL . "/user_cms/modules/addons/jodit/connector.php?action=upload'
+		            url: '" . SITE_URL . "/user_cms/modules/addons/jodit/connector/index.php?action=fileUpload'
 		        },
 		        filebrowser: {
 		            ajax: {
-		                url: '" . SITE_URL . "/user_cms/modules/addons/jodit/connector.php'
-		            },
+		                url: '" . SITE_URL . "/user_cms/modules/addons/jodit/connector/index.php',
+		            }
 		        },
-		        language: 'ru'   ,
 		        minHeight: 350
 		    });
 
