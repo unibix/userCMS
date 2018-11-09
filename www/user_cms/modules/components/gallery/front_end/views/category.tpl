@@ -5,7 +5,7 @@
         <div class="category-info"><?=$category['text']?></div>
         <?php if ($items) foreach ($items as $item) {?>
         <div class="item-box">
-            <a class="fancybox" rel="gallery" href="<?=$item['full']?>" title="<?=$item['text']?>">
+            <a class="fancybox" data-fancybox="gallery" href="<?=$item['full']?>" title="<?=$item['text']?>">
                 <img width="<?=$item_thumb_width?>" height="<?=$item_thumb_height?>" src="<?=$item['image']?>">
             </a>
         </div>
