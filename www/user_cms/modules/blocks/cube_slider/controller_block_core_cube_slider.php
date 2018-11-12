@@ -29,6 +29,7 @@ class controller_block_core_cube_slider extends block {
 			if ($settings['frequency'] <= $settings['speed']) $errors[] = 'Период смены слайдов должен быть больше длительности анимации';
 
 			$max_key = 0;
+			if(!is_dir(ROOT_DIR . '/uploads/modules/cube_slider'))mkdir(ROOT_DIR . '/uploads/modules/cube_slider', 0777, true);
 			foreach ($_POST['images'] as $key => $image) {
 				if (is_uploaded_file($_FILES['files']['tmp_name'][$key])) {
 					$new_image = '/uploads/modules/cube_slider/'.time().'-'.rand().'.'.pathinfo($_FILES['files']['name'][$key], PATHINFO_EXTENSION);

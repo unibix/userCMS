@@ -123,8 +123,8 @@ class controller_component_core_news extends component
                     
                         $this->load_helper('image');
                         
-                        if (!is_dir($upload_dir)) mkdir($upload_dir);
-                        if (!is_dir($upload_dir.'/mini')) mkdir($upload_dir.'/mini');
+                        if (!is_dir($upload_dir)) mkdir($upload_dir, 0777, true);
+                        if (!is_dir($upload_dir.'/mini')) mkdir($upload_dir.'/mini', 0777, true);
                         
                         if (is_uploaded_file($_FILES['photo']['tmp_name'])) {
                             $image = $this->helper_image->img_upload(

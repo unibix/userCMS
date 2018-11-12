@@ -118,7 +118,7 @@
     var fields_list = $('#form_selected_fields');
     
     $('#feedback_settings select[name="field_types"] option').on('click', function() {
-      field_length = $(fields_list).children().size() + 1;
+      field_length = $(fields_list).children().length + 1;
       
       field = '<h3><span title="Поднять выше" class="arrows" onclick="moveUp(this.parentNode.parentNode)">&uarr;</span> <span title="Опустить ниже" class="arrows" onclick="moveDown(this.parentNode.parentNode)">&darr;</span><span class="remove" title="Удалить">x</span><span class="text">Поле №' + field_length + '</span> - ' + $(this).text() + '</h3>';
       field += '<div class="field-content">';
