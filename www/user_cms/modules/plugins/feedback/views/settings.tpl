@@ -144,7 +144,7 @@
             field += '<input type="radio" name="fields[' + field_num + '][default_checked]" value="0"> Не выбран <br>';
           break;
           case 'recaptcha':
-          field += '<span>Ключ:</span> <input type="text" name="fields[' + field_num + '][key]" value="" required>';
+          field += '<br><span>Ключ:</span> <input type="text" name="fields[' + field_num + '][key]" value="" required>';
           field += '<span>Секретный ключ:</span> <input type="text" name="fields[' + field_num + '][secret_key]" value="" required>';
           field += '<input type="hidden" name="fields[' + field_num + '][validation]" value="recaptcha">';
           break;
