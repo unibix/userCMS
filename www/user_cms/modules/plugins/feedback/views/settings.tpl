@@ -57,7 +57,7 @@
               <input type="radio" name="fields[<?=$i?>][default_checked]" value="0" <?php if ($field['default_checked'] == 0) { ?>checked<?php } ?>> Не выбран <br>
             
           <?php } elseif($field['type'] == 'recaptcha'){?>
-            <span>Ключ</span>
+            <br><span>Ключ</span><br>
             <input type="text" name="fields[<?=$i?>][key]" value="<?=$field['key']?>">
             <span>Секретный ключ</span>
             <input type="text" name="fields[<?=$i?>][secret_key]" value="<?=$field['secret_key']?>">
