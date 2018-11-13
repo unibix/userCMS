@@ -294,7 +294,7 @@ fieldset{
 #tab_seo label span {float: right; color: #929292;}
 #content .warning-text {color: #FF0000;}
 #pages_list {margin-bottom: 25px;}
-#content .remove {display: block; width: 24px; height: 24px; background: url(../img/icon_remove.png); text-align: center; color: #CC0000; float: left; cursor: pointer;}
+#content .remove {display: block; width: 24px; height: 24px;/*  background: url(../img/icon_remove.png); */ text-align: center; color: #CC0000; float: left; cursor: pointer;}
 #form_selected_fields input[type="text"], #form_selected_fields textarea, #form_selected_fields select {background: #FFFFFF; padding: 5px; width: 95%; border-radius: 3px;}
 #form_selected_fields > div {
     background: none repeat scroll 0 0 #C9D5E2;

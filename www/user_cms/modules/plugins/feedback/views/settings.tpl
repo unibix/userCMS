@@ -57,7 +57,7 @@
               <input type="radio" name="fields[<?=$i?>][default_checked]" value="0" <?php if ($field['default_checked'] == 0) { ?>checked<?php } ?>> Не выбран <br>
             
           <?php } elseif($field['type'] == 'recaptcha'){?>
-            <span>Ключ</span>
+            <br><span>Ключ</span><br>
             <input type="text" name="fields[<?=$i?>][key]" value="<?=$field['key']?>">
             <span>Секретный ключ</span>
             <input type="text" name="fields[<?=$i?>][secret_key]" value="<?=$field['secret_key']?>">
@@ -118,7 +118,7 @@
     var fields_list = $('#form_selected_fields');
     
     $('#feedback_settings select[name="field_types"] option').on('click', function() {
-      field_length = $(fields_list).children().size() + 1;
+      field_length = $(fields_list).children().length + 1;
       
       field = '<h3><span title="Поднять выше" class="arrows" onclick="moveUp(this.parentNode.parentNode)">&uarr;</span> <span title="Опустить ниже" class="arrows" onclick="moveDown(this.parentNode.parentNode)">&darr;</span><span class="remove" title="Удалить">x</span><span class="text">Поле №' + field_length + '</span> - ' + $(this).text() + '</h3>';
       field += '<div class="field-content">';
@@ -144,7 +144,7 @@
             field += '<input type="radio" name="fields[' + field_num + '][default_checked]" value="0"> Не выбран <br>';
           break;
           case 'recaptcha':
-          field += '<span>Ключ:</span> <input type="text" name="fields[' + field_num + '][key]" value="" required>';
+          field += '<br><span>Ключ:</span> <input type="text" name="fields[' + field_num + '][key]" value="" required>';
           field += '<span>Секретный ключ:</span> <input type="text" name="fields[' + field_num + '][secret_key]" value="" required>';
           field += '<input type="hidden" name="fields[' + field_num + '][validation]" value="recaptcha">';
           break;

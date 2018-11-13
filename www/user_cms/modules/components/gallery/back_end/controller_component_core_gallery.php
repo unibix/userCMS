@@ -116,8 +116,8 @@ class controller_component_core_gallery extends component {
 		
 			$upload_dir = ROOT_DIR . '/uploads/modules/gallery/' . $this->data['dir'];
 			
-			mkdir($upload_dir);
-			mkdir($upload_dir . '/mini');
+			if(!is_dir($upload_dir))mkdir($upload_dir, 0777, true);
+			if(!is_dir($upload_dir . '/mini'))mkdir($upload_dir . '/mini', 0777, true);
 			
 			if(is_uploaded_file($_FILES['image']['tmp_name'])) {
 				if ($this->component_config['category_thumb_width'] > $this->component_config['category_image_width']) {
