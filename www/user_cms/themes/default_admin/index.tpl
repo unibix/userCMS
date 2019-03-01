@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-   	<link href="<?=THEME_URL;?>_admin/bootstrap/bootstrap.min.css" rel="stylesheet"  type="text/css" >
-    <link href="<?=THEME_URL;?>_admin/bootstrap/ie10-viewport-bug-workaround.css" rel="stylesheet"  type="text/css" >
+   	<link href="<?=SITE_URL;?>/user_cms/themes/default_admin/bootstrap/bootstrap.min.css" rel="stylesheet"  type="text/css" >
+    <link href="<?=SITE_URL;?>/user_cms/themes/default_admin/bootstrap/ie10-viewport-bug-workaround.css" rel="stylesheet"  type="text/css" >
 	[head]
 </head>
 <body>
@@ -60,7 +60,7 @@ $(".confirmButton").click(function(){
 	return confirmDelete();
 });
 </script>
-<script src="<?=THEME_URL?>_admin/bootstrap/bootstrap.min.js"></script>
-<script src="<?=THEME_URL?>_admin/bootstrap/ie10-viewport-bug-workaround.js"></script>
+<script src="<?=SITE_URL;?>/user_cms/themes/default_admin/bootstrap/bootstrap.min.js"></script>
+<script src="<?=SITE_URL;?>/user_cms/themes/default_admin/bootstrap/ie10-viewport-bug-workaround.js"></script>
 </body>
 </html>
