@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-   	<link href="<?=SITE_URL;?>/user_cms/themes/default_admin/bootstrap/bootstrap.min.css" rel="stylesheet"  type="text/css" >
-    <link href="<?=SITE_URL;?>/user_cms/themes/default_admin/bootstrap/ie10-viewport-bug-workaround.css" rel="stylesheet"  type="text/css" >
-	[head]
+
+   [head]
+   
 </head>
 <body>
 <div id="header-wrapper">
@@ -13,9 +13,9 @@
 			<p><?php echo $this->config['site_name']; ?></p>
 		</div>
     <div id="h_right">
-      <a href="<?php echo SITE_URL ; ?>/admin/users" >Добро пожаловать, <?php echo $_SESSION['login']; ?></a>
-      <a href="<?php echo SITE_URL ; ?>/admin/users/logout" >Выйти</a>
-      <a href="<?php echo SITE_URL ; ?>" target="_blank">Перейти на сайт</a>
+      <a href="<?=SITE_URL?>/admin/users" >Добро пожаловать, <?php echo $_SESSION['login']; ?></a>
+      <a href="<?=SITE_URL?>/admin/users/logout" >Выйти</a>
+      <a href="<?=SITE_URL?>" target="_blank">Перейти на сайт</a>
     </div>
 </div>
 </div>
