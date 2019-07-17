@@ -73,14 +73,18 @@ class controller_block_core_menu extends block {
 					$item['url'] = SITE_URL;
 				}
 			}
-			if ($this->is_active($item['url'])) {
-				$this->menu .= '<li class="current"><a href="' . $item['url'] . '">' . $item['name'] . '</a>';
-			} else {
-				$this->menu .= '<li><a href="' . $item['url'] . '">' . $item['name'] . '</a>';
-			}
+			// добавляем класс если текущая страница (точнее два класса active и current)
+			$active = ($this->is_active($item['url'])) ? ' active current ' : '';
+			// добавляем класс если есть дочерние элементы 
+			$li_children = ($item['children']) ? 'nav-item dropdown' : 'nav-item'; // классы для LI
+			$a_children = ($item['children']) ? 'nav-link dropdown-toggle' : 'nav-link';
+			$a_attrs = ($item['children']) ? ' role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ' : '';
 			
+
+			$this->menu .= '<li class="'.$active.$li_children.'"><a href="' . $item['url'] . '" '.$a_attrs.' class="'.$a_children.'">' . $item['name'] . '</a>';
+
 			if ($item['children']) {
-				$this->generate_menu($item['children']);
+				$this->generate_menu($item['children'],'dropdown-menu');
 			}
 			
 			$this->menu .= '</li>';
