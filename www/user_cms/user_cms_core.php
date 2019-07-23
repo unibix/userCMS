@@ -20,37 +20,37 @@ class user_cms_core {
 	
 	function __construct() {
        	
-		session_start();
-		date_default_timezone_set('Europe/Kaliningrad');
+	session_start();
+	date_default_timezone_set('Europe/Kaliningrad');
 
        	$this -> html = '';
-		$this -> config = parse_ini_file(ROOT_DIR . '/config.ini');
-		if (!isset($this->config['site_url'])) {
-			$this->config['site_url'] = 'http://' . $_SERVER['HTTP_HOST'];
-		}
+	$this -> config = parse_ini_file(ROOT_DIR . '/config.ini');
+	if (!isset($this->config['site_url'])) {
+		$this->config['site_url'] = 'http://' . $_SERVER['HTTP_HOST'];
+	}
 
-		define('SITE_URL', $this->config['site_url']);
-		define('SITE_NAME', $this->config['site_name']);
+	define('SITE_URL', $this->config['site_url']);
+	define('SITE_NAME', $this->config['site_name']);
         define('SITE_SLOGAN', $this->config['site_slogan']);
         define('SITE_EMAIL', $this->config['site_email']);
         define('SITE_EMAIL2', $this->config['site_email2']);
         define('SITE_PHONE', $this->config['site_phone']);
         define('SITE_PHONE_F', $this->config['site_phone_f']);
 
-		if (is_dir(ROOT_DIR . '/user_cms/themes/' . $this->config['site_theme'])) {
-			define('THEME_URL', SITE_URL . '/user_cms/themes/' . $this->config['site_theme']);
+	if (is_dir(ROOT_DIR . '/user_cms/themes/' . $this->config['site_theme'])) {
+		define('THEME_URL', SITE_URL . '/user_cms/themes/' . $this->config['site_theme']);
             $logo = '/user_cms/themes/'.$this->config['site_theme'].'/images/logo.png';
-		} else {
+	} else {
 			define('THEME_URL', SITE_URL . '/themes/' . $this->config['site_theme']);
             $logo = '/themes/'.$this->config['site_theme'].'/images/logo.png';
-		}
+	}
 
         if (file_exists(ROOT_DIR.$logo)) define('SITE_LOGO', '<img src="'.$logo.'" alt="Логотип '.SITE_NAME.'">');
         else define('SITE_LOGO', SITE_NAME);
 
 
-		$this -> set_error_reporting();
-		$this -> url = $this -> parse_url();
+	$this -> set_error_reporting();
+	$this -> url = $this -> parse_url();
 
         if ($this->config['maintenance'] == 1) {
             if (END_NAME == 'front_end' && (!isset($_SESSION['auth']) || $_SESSION['auth'] == 0 || $_SESSION['access'] < 2)) {
@@ -252,13 +252,16 @@ class user_cms_core {
 
 		if (file_exists($theme['full_name'])) {
 			ob_start();
-	        include $theme['full_name'];
-	        $this->html = ob_get_clean();
+	        	include $theme['full_name'];
+	        	$this->html = ob_get_clean();
 
-		} else {
+		} elseif (file_exists($theme['full_name_core'])) {
 			ob_start();
-	        include $theme['full_name_core'];
-	        $this->html = ob_get_clean();
+	        	include $theme['full_name_core'];
+	        	$this->html = ob_get_clean();
+		}
+		else {
+			exit('Error 32942: нет файла темы ' . $theme['full_name']);
 		}
 		// загружаем css и js файлы из конфига темы
 		
