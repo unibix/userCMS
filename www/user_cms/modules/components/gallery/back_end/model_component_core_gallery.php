@@ -1,6 +1,5 @@
 <?php 
 
-//$mycs = array(1=>0);
 
 class model_component_core_gallery extends model {
 
@@ -64,7 +63,7 @@ class model_component_core_gallery extends model {
 		if($category_id) {
 			$sql .=" WHERE category_id = '" . (int)$category_id . "'";
 		}
-		$sql .= " ORDER BY date_add DESC";
+		$sql .= " ORDER BY sort, date_add DESC";
 		return $this->dbh->query($sql);
 	}
 	
@@ -171,6 +170,25 @@ class model_component_core_gallery extends model {
 		}
 		@rmdir(ROOT_DIR . '/uploads/modules/gallery/' . $category_info['dir']);
 		return $this->dbh->query("DELETE FROM gallery_categories WHERE id = '" . (int)$id . "'");
+	}
+	public function save_order(){
+		
+		foreach ($_POST as $key => $value) {
+			if (mb_strpos($key, 'order_') !== false) {
+				$id = str_replace('order_', '', $key);
+				$r =$this->dbh->exec("UPDATE gallery_items SET sort = '".$value."' WHERE id = '".$id ."';");
+				if(!$r[0]) {return 'Ошибки при сохранении';}
+			}
+
+		}
+		if ($r[0]) {
+			return 'Сортировка сохранена';
+		}
+		else {
+			return 'Ошибки при сохранении';
+		}
+
+
 	}
 	
 	
