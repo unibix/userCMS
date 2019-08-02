@@ -34,7 +34,7 @@ class model_component_core_gallery extends model {
 		if($category_id) {
 			$sql .=" WHERE category_id = '" . (int)$category_id . "'";
 		}
-		$sql .= " ORDER BY date_add DESC";
+		$sql .= " ORDER BY sort, date_add DESC";
 		return $this->dbh->query($sql);
 	}
 	
