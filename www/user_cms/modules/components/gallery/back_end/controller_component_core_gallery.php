@@ -333,6 +333,10 @@ class controller_component_core_gallery extends component {
 				exit;
 			}
 		}
+
+		if (isset($_POST['save_order'])) {
+			$this->data['message'] = $this->model->save_order();
+		}
 		
 		$this->data['category'] = $category;
 		$this->data['items'] = $this->model->get_items($category['id']);
