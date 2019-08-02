@@ -49,6 +49,7 @@ CREATE TABLE "gallery_items" (
   "category_id" integer NOT NULL,
   "image" text NOT NULL,
   "text" text NOT NULL,
+  "sort" integer NULL DEFAULT '1',
   "date_add" integer NOT NULL,
   FOREIGN KEY ("category_id") REFERENCES "gallery_categories" ("id") ON DELETE CASCADE ON UPDATE NO ACTION
 );
