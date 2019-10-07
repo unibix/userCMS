@@ -349,9 +349,9 @@ class controller_component_core_modules_manager extends component {
 			if(method_exists($module_controller,'action_delete')) {
 				$module_controller->action_delete();
 			}
-			echo '<pre>'; print_r($module); echo '</pre>';
+			
 			$this->model->delete_module($module);
-            $this->redirect(SITE_URL.'/admin/'.$this->component_name.'/installed');
+            		$this->redirect(SITE_URL.'/admin/'.$this->component_name.'/installed');
 		} else {
 			$this->redirect(SITE_URL . '/admin/' . $this->component_name);
 		}
