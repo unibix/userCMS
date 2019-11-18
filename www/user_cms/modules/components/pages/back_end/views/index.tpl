@@ -37,7 +37,7 @@
         <?php echo $page['name']; ?>
 			</td>
 			<td><a href="<?php echo SITE_URL . $page['full_url']; ?>" target="_blank">/<?php echo $page['url']; ?></a></td>
-			<td class="td_140"><?php echo date('d.m.Y H:i', $page['date_add']); ?></td>
+			<td class="td_140"><?php echo date('d.m.Y H:i', $page['date_edit']); ?></td>
 			<td class="td_190 actions">
 				<a href="<?php echo SITE_URL;?>/admin/pages/edit/<?php echo $page['id'] ?>" >Изменить</a>
 				<a class="confirmButton" href="<?php echo SITE_URL;?>/admin/pages/delete/<?php echo $page['id'] ?>" >Удалить</a>
