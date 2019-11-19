@@ -80,7 +80,7 @@ if(count($errors) == 0) {
     if(isset($_POST['site_name'])) {
         $config['site_name'] = $_POST['site_name'];
         $config['site_url'] = 'http://' . rtrim($_POST['site_url'], '/')  ;;
-        
+        $config['site_address'] = $config['site_url'];
         // Обновляем config.ini
         update_config($config);
 
