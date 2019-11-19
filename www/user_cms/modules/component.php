@@ -7,6 +7,7 @@ class component extends module {
 
 	public $view;
 	public $view_dir;
+	public $view_dir_theme;
 	public $component_dir;
 	public $component_dir_core;
 	public $page;
@@ -22,6 +23,7 @@ class component extends module {
 		$this->view   = $component['view'];
   		$this->view_dir_core    = ROOT_DIR . '/user_cms/modules/components/'.$component['name'].'/'.END_NAME.'/views';
   		$this->view_dir         = ROOT_DIR .          '/modules/components/'.$component['name'].'/'.END_NAME.'/views';
+  		$this->view_dir_theme 	= ROOT_DIR . '/themes/'.$this->config['site_theme'].'/pages';
 		//$this->view_dir = is_dir($this->view_dir) ? $this->view_dir : $this->view_dir_core;
   		$this->page['title']            = '';
   		$this->page['keywords']         = '';
@@ -97,11 +99,18 @@ class component extends module {
 	public function load_view($name = 'index') {
 		$full_name = $this->view_dir . '/' . $name . '.tpl';
 		$full_name_core = $this->view_dir_core . '/' . $name . '.tpl';
-		
+
+		if(file_exists($this->view_dir_theme)) {
+			$full_name_theme = $this->view_dir_theme . '/' . $name . '.tpl';
+		}
+
+
 		if (file_exists($full_name)) {
 	        $view = $full_name;
 	    } elseif (file_exists($full_name_core)) {
 	        $view = $full_name_core;
+	    } elseif(file_exists($full_name_theme)) {
+			$view = $full_name_theme;
 	    } elseif (file_exists($this->view_dir . '/' . $this->view . '.tpl')) {
 	        $view = $this->view_dir . '/' . $this->view . '.tpl';
 	    } elseif (file_exists($this->view_dir_core . '/' . $this->view . '.tpl')) {
