@@ -319,11 +319,12 @@ class helper_image {
 			imagecolortransparent($im, $background);
 		}
 		  
-		  
-		  if (($exif_result==1)and(end(explode('.',$file))!='gif')) $file.='.gif';
-		  else if (($exif_result==2)and(end(explode('.',$file))!='jpeg')) $file.='.jpeg';
-		  else if (($exif_result==3)and(end(explode('.',$file))!='png')) {
-			$file=substr($file,0,strLen($file)-1-strLen(end(explode('.',$file))));
+		  $temp = explode('.',$file);
+		  $temp_file = end($temp);
+		  if (($exif_result==1) and $temp_file !='gif') $file.='.gif';
+		  else if (($exif_result==2) and $temp_file !='jpeg') $file.='.jpeg';
+		  else if (($exif_result==3) and $temp_file !='png') {
+			$file=substr($file,0,strLen($file)-1-strLen($temp_file));
 			$file.='.png';
 		  }
 		  
