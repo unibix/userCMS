@@ -30,7 +30,10 @@
         <input id="s_phone" type="text" name="site_phone" value="<?php echo $config['site_phone']; ?>">
         
         <label for="s_url">Адрес сайта:</label><br>
-        <input id="s_url" type="text" name="site_url" value="<?php echo $config['site_url']; ?>" >  
+        <input id="s_url" type="text" name="site_url" value="<?php echo $config['site_url']; ?>" >
+
+        <label for="s_p_address">Почтовый адрес:</label><br>
+        <input id="s_p_address" type="text" name="site_address" value="<?php echo $config['site_address']; ?>" >  
         
         <label for="s_theme">Тема сайта:</label><br>
         <select id="s_theme" name="site_theme">
