@@ -36,6 +36,7 @@ class user_cms_core {
         define('SITE_EMAIL2', $this->config['site_email2']);
         define('SITE_PHONE', $this->config['site_phone']);
         define('SITE_PHONE_F', $this->config['site_phone_f']);
+        define('SITE_ADDRESS', $this->config['site_address']);
 
 	if (is_dir(ROOT_DIR . '/user_cms/themes/' . $this->config['site_theme'])) {
 		define('THEME_URL', SITE_URL . '/user_cms/themes/' . $this->config['site_theme']);

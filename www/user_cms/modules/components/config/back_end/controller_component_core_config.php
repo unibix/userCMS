@@ -35,6 +35,12 @@ class controller_component_core_config extends component {
                 $data['site_slogan'] = '';
             }
 
+            if(isset($_POST['site_address']) && !empty($_POST['site_address'])) {
+                $data['site_address'] = $_POST['site_address'];
+            } else {
+                $data['site_address'] = '';
+            }
+
             if(isset($_POST['site_email']) && !empty($_POST['site_email'])) {
                 $data['site_email'] = $_POST['site_email'];
             }
@@ -88,7 +94,7 @@ class controller_component_core_config extends component {
         $this->data['page_name'] = 'Настройки';
 
         $page['title'] = 'Настройки';
-        $page['keywords'] = 'друиге ключи';
+        $page['keywords'] = 'другие ключи';
         $page['description'] = 'другое описание';
         $page['html'] = $this->load_view();
 
