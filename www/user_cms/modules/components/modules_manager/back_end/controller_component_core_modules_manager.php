@@ -244,10 +244,10 @@ class controller_component_core_modules_manager extends component {
 			$this->model->count_activated_modules_sort(0);
 			$this->model->count_activated_modules_sort(1);
 			
-			$this->redirect(SITE_URL . '/admin/' . $this->url['component'] . '/success=deact');
+			$this->redirect(SITE_URL . '/admin/' . $this->url['our_component_name'] . '/success=deact');
 			
 		} else {
-			$this->redirect(SITE_URL . '/admin/' . $this->url['component'] . '');
+			$this->redirect(SITE_URL . '/admin/' . $this->url['our_component_name'] . '');
 		}
 	}
 	
@@ -300,7 +300,7 @@ class controller_component_core_modules_manager extends component {
 				
 				$_SESSION['success'] = 'Настройки модуля "' . $data['name'] . '" обновлены';
 				
-				$this->redirect(SITE_URL . '/admin/' . $this->url['component'] . '/settings/' . $data['id']);
+				$this->redirect(SITE_URL . '/admin/' . $this->url['our_component_name'] . '/settings/' . $data['id']);
 				
 			} else {
 				$this->data['errors'] = $page['errors'];

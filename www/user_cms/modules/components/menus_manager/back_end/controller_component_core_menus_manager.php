@@ -372,7 +372,7 @@ class controller_component_core_menus_manager extends component {
 		$this->data['page_name'] = 'Изменение элемента меню "' . $this->data['menu']['name'] . '"';
 		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs(
 			array($this->data['menu']['name'], $item['name']),
-			array(SITE_URL . '/admin/' . $this->url['component'] . '/edit/' . $item['menu_id'], '')
+			array(SITE_URL . '/admin/' . $this->url['our_component_name'] . '/edit/' . $item['menu_id'], '')
 		);
 		$this->data['text_submit'] = 'Сохранить изменения';
 		$page['title'] = 'Изменение элемента меню "' . $this->data['menu']['name'] . '"';

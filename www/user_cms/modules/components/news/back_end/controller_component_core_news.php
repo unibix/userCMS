@@ -11,19 +11,19 @@ class controller_component_core_news extends component
         $this->order_by = $_SESSION['news_backend_order_by'];
         $this->is_asc = $_SESSION['news_backend_is_asc'];
         
-        $r = $this->dbh->row("SELECT url FROM main WHERE component='".$this->url['component']."'");
+        $r = $this->dbh->row("SELECT url FROM main WHERE component='".$this->url['our_component_name']."'");
         $this->data['front_end_component_url'] = $r['url'];
-        $this->data['component'] = $this->url['component'];
+        $this->data['component'] = $this->url['our_component_name'];
         $this->data['order_by'] = $this->order_by;
         $this->data['is_asc'] = $this->is_asc;
         if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {;
-            $this->data['base_url'] = SITE_URL.'/admin/'.$this->url['component'];
+            $this->data['base_url'] = SITE_URL.'/admin/'.$this->url['our_component_name'];
             $this->data['upper_url'] = '';
         } else {
-            $this->data['base_url'] = SITE_URL.'/admin/'.$this->url['component'].'/'.implode('/', $this->url['actions']);
+            $this->data['base_url'] = SITE_URL.'/admin/'.$this->url['our_component_name'].'/'.implode('/', $this->url['actions']);
             $actions = $this->url['actions'];
             array_pop($actions);
-            $this->data['upper_url'] = SITE_URL.'/admin/'.$this->url['component'].'/'.implode('/', $actions);
+            $this->data['upper_url'] = SITE_URL.'/admin/'.$this->url['our_component_name'].'/'.implode('/', $actions);
         }
     }
     /**
@@ -63,7 +63,7 @@ class controller_component_core_news extends component
     protected function show_editor($item)
     {
         $errors = array();
-        $back_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/'.$this->url['component'];
+        $back_url = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '/admin/'.$this->url['our_component_name'];
         if (isset($_POST['back_url'])) $back_url = $_POST['back_url'];
         if (isset($_POST['save'])) {
             $item = array_merge($item, $_POST['item']);
@@ -110,7 +110,7 @@ class controller_component_core_news extends component
             if ($item['id'] != 0 && $item['is_category'] == 1) $this->model->adjust_childs_date_publish($item);
             
             if (empty($errors) && $item['is_category'] == 0) {
-                $upload_dir = ROOT_DIR.'/uploads/modules/'.$this->url['component'].'/';
+                $upload_dir = ROOT_DIR.'/uploads/modules/'.$this->url['our_component_name'].'/';
                 
                 if (isset($_POST['remove_photo'])) {
                     $item = array_merge($item, $_POST['item']);
@@ -162,13 +162,13 @@ class controller_component_core_news extends component
         $this->data = array_merge($this->data, compact('errors', 'back_url', 'item', 'upload_dir', 'new_item_url', 'available_parents'));
         $this->data['page_header'] = $item['is_category'] == 1 ? 'Редактирование категории' : 'Редактирование новости';
         if(count($this->data['available_parents']) > 1){
-            $breadcrumb_url = SITE_URL . '/admin/' . $this->url['component'];
+            $breadcrumb_url = SITE_URL . '/admin/' . $this->url['our_component_name'];
             foreach ($this->data['available_parents'] as $key => $parent) {
                 $breadcrumb_url .= isset($parent['url'])?'/' . $parent['url']:'';
                 if(isset($parent['url']))$this->helper_breadcrumbs->add($parent['header'], $breadcrumb_url);    
             }
         }else{
-            $this->helper_breadcrumbs->add($this->data['available_parents'][0]['header'], SITE_URL . '/admin/' . $this->url['component']);
+            $this->helper_breadcrumbs->add($this->data['available_parents'][0]['header'], SITE_URL . '/admin/' . $this->url['our_component_name']);
         }
         $this->page['title'] = 'Редактор новостей и категорий';
         $this->page['html'] = $this->load_view('editor');
@@ -189,7 +189,7 @@ class controller_component_core_news extends component
             $parent_id = 0;// корневая категория
         } else {
             $item = $this->model->find_by_actions($this->url['actions']);
-            $breadcrumb_url = SITE_URL . '/admin/' . $this->url['component']; 
+            $breadcrumb_url = SITE_URL . '/admin/' . $this->url['our_component_name']; 
             foreach($item['labels'] as $key_lb => $label){
                 $breadcrumb_url .= '/' . $this->url['actions'][$key_lb];
                 $this->helper_breadcrumbs->add($label,  $breadcrumb_url);
@@ -233,6 +233,6 @@ class controller_component_core_news extends component
         }
     }
     public function action_add() {
-        $this->redirect('/admin/'.$this->url['component'].'/do=add_article');
+        $this->redirect('/admin/'.$this->url['our_component_name'].'/do=add_article');
     }
 }

@@ -110,7 +110,7 @@
 </table>
 <?php if(isset($_GET['for_arch'])){ ?>
 <div class="archiving-buttons">
-	<button class="archivate"><a href="<?=SITE_URL  . '/admin/' . $this->url['component'] . '?cancel_arch=1';?>">Отмена</a></button>
+	<button class="archivate"><a href="<?=SITE_URL  . '/admin/' . $this->url['our_component_name'] . '?cancel_arch=1';?>">Отмена</a></button>
 	<input class="archivate" type="submit" value="Создать архив" name="archivate" >
 </div>
 <?php } ?>

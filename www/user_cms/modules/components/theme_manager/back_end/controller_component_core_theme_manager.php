@@ -6,7 +6,7 @@ class controller_component_core_theme_manager extends component
 		
 		$this->data['page_name'] = 'Редактирование тем';
 		
-		$this->data['button_install'] = SITE_URL . '/admin/' . $this->url['component'] . '/install';
+		$this->data['button_install'] = SITE_URL . '/admin/' . $this->url['our_component_name'] . '/install';
 		$this->data['button_change_theme'] = SITE_URL . '/admin/config';
 		
 		$page = array();
@@ -41,7 +41,7 @@ class controller_component_core_theme_manager extends component
 			unlink($path);
 			$handle = fopen($path, 'w');
 			if(fwrite($handle, $_POST['theme_content']) !== false) {
-				$this->redirect(SITE_URL . '/admin/' . $this->url['component'] . '/success=edited/theme=' . $this->url['actions'][1] . '/file=' . $this->url['params']['file']);
+				$this->redirect(SITE_URL . '/admin/' . $this->url['our_component_name'] . '/success=edited/theme=' . $this->url['actions'][1] . '/file=' . $this->url['params']['file']);
 			}
 			
 		}
@@ -85,7 +85,7 @@ class controller_component_core_theme_manager extends component
 						
 						unlink(ROOT_DIR . '/temp/' . $_FILES['theme']['name']);
 						
-						$this->redirect(SITE_URL . '/admin/' . $this->url['component'] . '/install/success=installed');
+						$this->redirect(SITE_URL . '/admin/' . $this->url['our_component_name'] . '/install/success=installed');
 					} else {
 						$this->data['errors'][] = 'Не удалось открыть архив';
 					}

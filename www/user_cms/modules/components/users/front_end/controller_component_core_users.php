@@ -34,8 +34,8 @@ class controller_component_core_users extends component {
 	}
 	
 	protected function index_not_logged() {
-		$this->data['href_register'] = SITE_URL . '/' . $this->url['component'] . '/register';
-		$this->data['href_login'] = SITE_URL . '/' . $this->url['component'] . '/login';
+		$this->data['href_register'] = SITE_URL . '/' . $this->url['our_component_name'] . '/register';
+		$this->data['href_login'] = SITE_URL . '/' . $this->url['our_component_name'] . '/login';
 		
 		$this->data['page_name'] = $this->component_info['name'];
 	
@@ -45,7 +45,7 @@ class controller_component_core_users extends component {
 	
 	public function action_register() {
 		if ($this->get_global_data('user')) { // юзер залогинен
-			$this->redirect(SITE_URL . '/' . $this->url['component']);
+			$this->redirect(SITE_URL . '/' . $this->url['our_component_name']);
 		}
 		if (isset($_POST['users_register'])) {
 			if ($this->validate_register()) {
@@ -68,7 +68,7 @@ class controller_component_core_users extends component {
 					$redirect = $_SESSION['users_redirect'];
 					unset($_SESSION['users_redirect']);
 				} else {
-					$redirect = SITE_URL . '/' . $this->url['component'];
+					$redirect = SITE_URL . '/' . $this->url['our_component_name'];
 				}
 				
 				$this->redirect($redirect);
@@ -100,8 +100,8 @@ class controller_component_core_users extends component {
 		
 		$this->load_helper('breadcrumbs');
 		$this->helper_breadcrumbs->add('Главная', SITE_URL);
-		$this->helper_breadcrumbs->add($this->component_info['name'], SITE_URL . '/' . $this->url['component']);
-		$this->helper_breadcrumbs->add('Регистрация', SITE_URL . '/' . $this->url['component'] . '/register');
+		$this->helper_breadcrumbs->add($this->component_info['name'], SITE_URL . '/' . $this->url['our_component_name']);
+		$this->helper_breadcrumbs->add('Регистрация', SITE_URL . '/' . $this->url['our_component_name'] . '/register');
 		
 		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->render();
 		
@@ -115,7 +115,7 @@ class controller_component_core_users extends component {
 	
 	public function action_login() {
 		if ($this->get_global_data('user')) { // юзер залогинен
-			$this->redirect(SITE_URL . '/' . $this->url['component']);
+			$this->redirect(SITE_URL . '/' . $this->url['our_component_name']);
 		}
 	
 		if (isset($_POST['users_login'])) {
@@ -133,7 +133,7 @@ class controller_component_core_users extends component {
 						$redirect = $_SESSION['users_redirect'];
 						unset($_SESSION['users_redirect']);
 					} else {
-						$redirect = SITE_URL . '/' . $this->url['component'];
+						$redirect = SITE_URL . '/' . $this->url['our_component_name'];
 					}
 					
 					$this->redirect($redirect);
@@ -187,7 +187,7 @@ class controller_component_core_users extends component {
         if (isset($_POST['email'])) {
             if($this->model->password_recovery_request($_POST['email'])){
                 $_SESSION['success_pass_request'] = true;
-                $this->redirect(SITE_URL . '/' . $this->url['component'] . '/' . $this->url['actions'][0]);
+                $this->redirect(SITE_URL . '/' . $this->url['our_component_name'] . '/' . $this->url['actions'][0]);
             }else{
                 $errors[] = 'Неправильный адрес электронной почты или пользователь с таким адресом не существует на сайте';
             }
@@ -216,7 +216,7 @@ class controller_component_core_users extends component {
         		$new_password = trim(htmlspecialchars(strip_tags($_POST['password'])));
 	            if($this->model->reset_password($_GET['p'], $new_password)){
 	            	$_SESSION['success_password_change'] = 1;
-	            	$this->redirect(SITE_URL . '/' . $this->url['component'] . '/' . $this->url['actions'][0] . '/?p=');
+	            	$this->redirect(SITE_URL . '/' . $this->url['our_component_name'] . '/' . $this->url['actions'][0] . '/?p=');
 	            }else{
 	            	$errors[] = 'Ошибка при изменении пароля. Обратитесь к администратору';
 	            }

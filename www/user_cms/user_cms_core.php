@@ -131,9 +131,9 @@ class user_cms_core {
 	}
 	
 	function get_component_data() {
-   		if (!empty($this->url['component'])) {
+   		if (!empty($this->url['our_component_name'])) {
     		if (END_NAME == 'front_end') {
-	    		$sql = "SELECT * FROM `main` WHERE `url` = '" . $this->url['component'] . "'";
+	    		$sql = "SELECT * FROM `main` WHERE `url` = '" . $this->url['our_component_name'] . "'";
 		    	$count = $this->dbh->query_count($sql);
 				
 		    	if ($count == 0) {
@@ -177,7 +177,7 @@ class user_cms_core {
 		    	}
     		} else {
     			// загружаем компоненты из админки (активация им не требуется)
-    			$this->component['name']   = $this->url['component'];
+    			$this->component['name']   = $this->url['our_component_name'];
 
                 if (method_exists('controller_component_' . $this -> component['name'], 'action_' . $this->url['actions'][0])) {
                     $this->component['action'] = $this->url['actions'][0];
@@ -197,7 +197,7 @@ class user_cms_core {
 	
    	function load_component() {
 		if(END_NAME == 'back_end' && ((!isset($_SESSION['auth']) || $_SESSION['auth']===0) || (isset($_SESSION['access']) && $_SESSION['access'] < 1))){
-			if($this->url['component'] != 'users' ||  ($this->url['component']=='users' && $this->url['actions'][0] != 'login')) {
+			if($this->url['our_component_name'] != 'users' ||  ($this->url['our_component_name']=='users' && $this->url['actions'][0] != 'login')) {
 				$protocol = (!isset($_SERVER['HTTPS']) || empty($_SERVER['HTTPS']) || $_SERVER['HTTPS'] == 'off') ? 'http://' : 'https://';
                 $subject = $protocol . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 				$_SESSION['backend_route'] = str_replace(SITE_URL, '', $subject); // будет использоваться в компоненте users для редиректа пользователя после авторизации.
@@ -384,7 +384,7 @@ class user_cms_core {
 
 	protected function parse_url() {
 		$url = array();
-		$url['component'] = '';
+		$url['our_component_name'] = '';
 		$url['actions'] = array();
 		$url['params'] = array();
 		
@@ -424,15 +424,15 @@ class user_cms_core {
 		if($pre[1] == 'admin') {
 			define('END_NAME', 'back_end');
 			if( ! isset($pre[2])) {
-				$url['component']='pages';
+				$url['our_component_name']='pages';
 			} else {
-				$url['component'] = $pre[2];
+				$url['our_component_name'] = $pre[2];
 			}
 			$i=3;
 		} else {
 			define('END_NAME', 'front_end');
 			if (strpos($pre[1], '=') === false) {
-				$url['component'] = $pre[1];
+				$url['our_component_name'] = $pre[1];
 				$i=2;
 			} else {
 				$i=1;
@@ -455,7 +455,7 @@ class user_cms_core {
 			$url['actions'][0]='index';
 		}
 		// склеиваем index.php, index.html, index.htm, index c /
-		if($url['component'] == 'index.php' or $url['component'] == 'index.html' or $url['component'] == 'index.htm' or $url['component'] == 'index' ) {
+		if($url['our_component_name'] == 'index.php' or $url['our_component_name'] == 'index.html' or $url['our_component_name'] == 'index.htm' or $url['our_component_name'] == 'index' ) {
 			header('HTTP/1.1 301 Moved Permanently');
 			header('Location: ' . $this->config['site_url']); 
 			exit();
@@ -563,7 +563,7 @@ class user_cms_core {
 		
 		$sections = unserialize($sections);
 		
-		if (empty($this->url['component'])) { // главная
+		if (empty($this->url['our_component_name'])) { // главная
 			$main_id = 1;			
 		} elseif (($this->component['name'] == 'pages' && $this->component['action'] == 404) || !$this->component['info']) {
 			$main_id = 0;
