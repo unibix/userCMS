@@ -263,6 +263,16 @@ class controller_component_core_menus_manager extends component {
 		} else {
 			$item['url'] = '';
 		}
+
+		if(isset($_POST['item_class'])) {
+			if(!empty($_POST['item_class'])) {
+				$item['class'] = $_POST['item_class'];
+			} else {
+				$item['class'] = '';
+			}
+		} else {
+			$item['class'] = '';
+		}		
 		
 		if(isset($_POST['item_sort'])) {
 			$item['sort'] = $_POST['item_sort'];
@@ -329,6 +339,14 @@ class controller_component_core_menus_manager extends component {
 			}
 		}
 		
+		if(isset($_POST['item_class'])) {
+			if(!empty($_POST['item_class'])) {
+				$item['class'] = $_POST['item_class'];
+			} else {
+				$item['class'] = '';
+			}
+		}
+
 		if (isset($_POST['parent_id']) && $_POST['parent_id'] != $item['parent_id']) {
 			$count_items_sort = true;
 			$item['parent_id'] = $_POST['parent_id'];

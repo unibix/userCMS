@@ -92,8 +92,8 @@ class model_component_core_menus_manager extends model {
 			$data['sort'] = 1;
 		}
 		
-		$sql = "INSERT INTO menus_items (parent_id, menu_id, name, url, sort)
-					VALUES ('" . (int)$data['parent_id'] . "', '" . (int)$data['menu_id'] . "', '" . $this->dbh->escape($data['name']) . "', '" . $this->dbh->escape($data['url']) . "', '" . $data['sort'] . "')";
+		$sql = "INSERT INTO menus_items (parent_id, menu_id, name, url, sort, class)
+					VALUES ('" . (int)$data['parent_id'] . "', '" . (int)$data['menu_id'] . "', '" . $this->dbh->escape($data['name']) . "', '" . $this->dbh->escape($data['url']) . "', '" . $data['sort'] . "', '" . $data['class'] . "')";
 		
 		$this->dbh->exec($sql);
 		
@@ -106,7 +106,8 @@ class model_component_core_menus_manager extends model {
 					parent_id = '" . (int)$data['parent_id'] . "',
 					name = '" . $this->dbh->escape($data['name']) . "',
 					url = '" . $this->dbh->escape($data['url']) . "',
-					sort = '" . (int)$data['sort'] . "'
+					sort = '" . (int)$data['sort'] . "',
+					class = '" . $data['class'] . "'
 				WHERE id = '" . (int)$data['id'] . "'";
 				
 		return $this->dbh->exec($sql);
