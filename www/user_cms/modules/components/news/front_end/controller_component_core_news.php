@@ -7,9 +7,9 @@ class controller_component_core_news extends component
         
         $this->data['img_folder'] = 'news';
         if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {;
-            $this->data['base_url'] = SITE_URL.'/'.$this->url['component'];
+            $this->data['base_url'] = SITE_URL.'/'.$this->url['our_component_name'];
         } else {
-            $this->data['base_url'] = SITE_URL.'/'.$this->url['component'].'/'.implode('/', $this->url['actions']);
+            $this->data['base_url'] = SITE_URL.'/'.$this->url['our_component_name'].'/'.implode('/', $this->url['actions']);
         }
         $this->page['head'] = $this->add_css_file('/user_cms/modules/components/'.$this->data['img_folder'].'/front_end/views/style.css');
         $this->page['head'] .= $this->add_css('#content .article-preview img {max-width:'.$this->component_config['image_thumb_width'].'px}');
@@ -74,7 +74,7 @@ class controller_component_core_news extends component
             return $this->show_category(0); // корневая категория
         } else {
             $result = $this->model->find_by_actions($this->url['actions']);
-            $breadcrumbs_url = SITE_URL . '/' . $this->url['component'];
+            $breadcrumbs_url = SITE_URL . '/' . $this->url['our_component_name'];
             foreach($result['labels'] as $key_lb => $label){
                 $breadcrumbs_url .= '/' . $this->url['actions'][$key_lb];
                 $this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs($label, $breadcrumbs_url);

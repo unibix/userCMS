@@ -41,15 +41,15 @@ class component extends module {
 		$this->load_helper('breadcrumbs');
 		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs(
 			array('Главная', (isset($this->component_config['name'])?$this->component_config['name']:(isset($this->component_info['name'])?$this->component_info['name']:'')) ),
-			array(SITE_URL . (END_NAME == 'back_end'?'/admin':''), SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['component']) 
+			array(SITE_URL . (END_NAME == 'back_end'?'/admin':''), SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['our_component_name']) 
 			
 		);
 		//ссылки для постраничной навигации (pagination)
 		$this->load_helper('pagination');
 		if (count($this->url['actions']) == 1 && $this->url['actions'][0] == 'index') {;
-            $this->helper_pagination->url = SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['component'] . '/{page}' . (!empty($_SERVER['QUERY_STRING'])?'?'.$_SERVER['QUERY_STRING']:'');
+            $this->helper_pagination->url = SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['our_component_name'] . '/{page}' . (!empty($_SERVER['QUERY_STRING'])?'?'.$_SERVER['QUERY_STRING']:'');
         } else {
-            $this->helper_pagination->url = SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['component'] . '/' . implode('/', $this->url['actions']) . '/{page}' . (!empty($_SERVER['QUERY_STRING'])?'?' . $_SERVER['QUERY_STRING']:'');
+            $this->helper_pagination->url = SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['our_component_name'] . '/' . implode('/', $this->url['actions']) . '/{page}' . (!empty($_SERVER['QUERY_STRING'])?'?' . $_SERVER['QUERY_STRING']:'');
         }
 	}
 

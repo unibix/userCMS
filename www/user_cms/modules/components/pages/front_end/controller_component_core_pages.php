@@ -31,13 +31,13 @@ class controller_component_core_pages extends component {
 		$this->helper_breadcrumbs->add('Главная', SITE_URL);
 		$url = SITE_URL;
 		if($this->url['actions'][0] == 'index') {
-			$page_info = $this->model->get_page($this->url['component']);
+			$page_info = $this->model->get_page($this->url['our_component_name']);
 			$url .= '/' . $page_info['url'];
 			
 			$this->helper_breadcrumbs->add($page_info['name'], $url);
 			
 		} else {
-			$first = $this->model->get_main_info($this->url['component']);
+			$first = $this->model->get_main_info($this->url['our_component_name']);
 			$parent_id = $first['id'];
 			$url .= '/' . $first['url'];
 			$this->helper_breadcrumbs->add($first['name'], $url);
