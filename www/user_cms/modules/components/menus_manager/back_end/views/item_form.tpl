@@ -19,6 +19,9 @@
 		
 		<label for="item_url">Ссылка:</label><br>
 		<input id="item_url" type="text" name="item_url" value="<?php echo $item['url']; ?>">
+
+		<label for="item_class">Класс:</label><br>
+		<input id="item_class" type="text" name="item_class" value="<?php echo $item['class']; ?>">
 		
     <label for="items_list">Родительская ссылка</label>
     <select name="parent_id">

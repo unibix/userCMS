@@ -59,7 +59,6 @@ class controller_block_core_menu extends block {
 		} else {
 			$this->menu .= '<ul>';
 		}
-
 		foreach($items as $item) {
 			if (strpos($item['url'], '/') === 0) {
 				$item['url'] = SITE_URL . $item['url'];
@@ -81,7 +80,7 @@ class controller_block_core_menu extends block {
 			$a_attrs = ($item['children']) ? ' role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ' : '';
 			
 
-			$this->menu .= '<li class="'.$active.$li_children.'"><a href="' . $item['url'] . '" '.$a_attrs.' class="'.$a_children.'">' . $item['name'] . '</a>';
+			$this->menu .= '<li class="'.$active.' '.$item['class'].' '.$li_children.'"><a href="' . $item['url'] . '" '.$a_attrs.' class="'.$a_children.'">' . $item['name'] . '</a>';
 
 			if ($item['children']) {
 				$this->generate_menu($item['children'],'dropdown-menu');

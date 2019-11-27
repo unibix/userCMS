@@ -132,6 +132,7 @@ CREATE TABLE "menus_items" (
   "name" text NOT NULL,
   "url" text NOT NULL,
   "sort" text NOT NULL,
+  "class" text NULL,
   FOREIGN KEY ("menu_id") REFERENCES "menus" ("id") ON DELETE CASCADE
 );
 
