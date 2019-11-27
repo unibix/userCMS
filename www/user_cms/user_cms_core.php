@@ -600,7 +600,9 @@ function out2($var, $var_name = '') {
 	echo '</pre>';
 }
 
-function __autoload($class_name) {
+
+
+function autoloader($class_name) {
 	$core_dir        = '/user_cms';
 	$module_type_dir = '/components';
 	$module_name_dir = '/pages';
@@ -635,3 +637,5 @@ function __autoload($class_name) {
         }
     }
 } 
+
+spl_autoload_register('autoloader');
