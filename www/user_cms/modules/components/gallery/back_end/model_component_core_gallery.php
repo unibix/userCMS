@@ -72,9 +72,18 @@ class model_component_core_gallery extends model {
 	}
 	
 	public function add_item($data) {
-		$sql = "INSERT INTO gallery_items (category_id, image, text, date_add) VALUES (
-					'" . (int)$data['category_id'] . "', '" . $this->dbh->escape($data['image']) . "', '" . $this->dbh->escape($data['text']) . "', '" . time() . "'
-				)";
+		$sql = '';
+		if(!is_array($data['image'])) {
+			$sql = "INSERT INTO gallery_items (category_id, image, text, date_add) VALUES (
+						'" . (int)$data['category_id'] . "', '" . $this->dbh->escape($data['image']) . "', '" . $this->dbh->escape($data['text']) . "', '" . time() . "'
+					)";
+		} else {
+			foreach ($data['image'] as $key => $value) {
+				$sql .= "INSERT INTO gallery_items (category_id, image, text, date_add) VALUES (
+							'" . (int)$data['category_id'] . "', '" . $this->dbh->escape($data['image'][$key]) . "', '" . $this->dbh->escape($data['text']) . "', '" . time() . "'
+						);";
+			}
+		}
 		return $this->dbh->exec($sql);
 	}
 	

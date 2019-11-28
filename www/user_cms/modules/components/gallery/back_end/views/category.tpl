@@ -16,12 +16,11 @@
 	</div>
 	<?php 
 	} ?>
-  
 	<form method="post" action="" enctype="multipart/form-data" >
 		<label for="image_text">Описание:</label>
 		<input type="text" name="text">
-		<label for="page_name">Выберите файл загрузки или архив ZIP c изображениями внутри (максимальный размер файла: <b><?=$max_file_size?>МБ</b>)</label>
-		<input type="file"  name="image">
+		<label for="page_name">Выберите файл(ы) загрузки (максимальный размер файла: <b><?=$max_file_size?>МБ</b>)</label>
+		<input type="file"  name="images[]" multiple>
 		<input type="checkbox" name="stamp" /><label for="image_stamp">Применить водяной знак</label><br>
 		<input type="submit" name="submit" value="Закачать">
 	</form>
@@ -59,7 +58,7 @@ $( function() {
   } );
 </script>
 <style>
-	#sortable {display: flex;}
+	#sortable {display: flex; flex-wrap: wrap;}
 	#sortable .item{ text-align: center; margin: 5px 10px; padding: 5px; background: #FFFFFF; border-radius: 4px; box-shadow: 0 0 2px #999999;}
 </style>
 
