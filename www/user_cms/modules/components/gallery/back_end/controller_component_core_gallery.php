@@ -255,7 +255,6 @@ class controller_component_core_gallery extends component {
 	}
 	
 	public function action_category() {
-	
 		$this->load_helper('image');
 		$category = $this->model->get_category($this->url['actions'][1]);
 		$category['path'] = SITE_URL . '/uploads/modules/gallery/' . $category['dir'];
@@ -265,73 +264,34 @@ class controller_component_core_gallery extends component {
 			$data = array();
 			$data['text'] = $_POST['text'];
 			$data['category_id'] = $category['id'];
-			
-			if(is_uploaded_file($_FILES['image']['tmp_name'])) {
-				
-				if ($this->component_config['item_thumb_width'] > $this->component_config['item_image_width']) {
-					$mini_width = $this->component_config['item_thumb_width'];
-					$mini_height = $this->component_config['item_thumb_height'];
-				} else {
-					$mini_width = $this->component_config['item_image_width'];
-					$mini_height = round($mini_width / ($this->component_config['item_thumb_width'] / $this->component_config['item_thumb_height']));
-				}
-				
-				if (pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION) == 'zip'){
-					set_time_limit(3600);
-					$this->load_helper('zip');
+			if(!empty($_FILES['images']['name'])) {
+				foreach ($_FILES['images']['name'] as $key => $value) {
 					
-					// Архив будем закачивать в temp/zip-2016-09-20-15-03-58-III.zip
-					// Картинки будут в папке temp/zip-2016-09-20-15-03-58-III
-					// Всё-равно после распаковки всё удалим.
-					$zip_dir = 'zip' . date("Y-m-d-h-i-s", time()) . '-' . rand(0,1000); //название для директории и zip-файла( у последнего будет +.zip)
-					
-					$zip_name = $zip_dir . '.zip';  //имя zip-файла
-					$zip_name_full = ROOT_DIR .  '/temp/' . $zip_name; //полный путь zip-файла
-					 
-					 $tmp_folder = ROOT_DIR . '/temp/' . $zip_dir; // полный путь к директории
-					 //if (!is_dir($tmp_folder)) mkdir($tmp_folder);
-					 
-					move_uploaded_file($_FILES['image']['tmp_name'], $zip_name_full);
-					
-					$this->helper_zip->extract_zip_archive($zip_name_full, $tmp_folder);
-					
-					if ($dh = opendir(ROOT_DIR . '/temp/' . $zip_dir)) {
-						while (($next_file = readdir($dh)) !== false) {
-							set_time_limit(200);
-							if (($next_file=='.')or($next_file=='..')) continue;
-							$next_ext = strtolower(pathinfo($next_file, PATHINFO_EXTENSION));
-							if (($next_ext!='jpeg') && ($next_ext!='jpg') && ($next_ext!='png') && ($next_ext!='gif')) continue;
-							
-							$next_tmp_name = $this->helper_image->get_rand_name().'.'.$next_ext;
-							$this->helper_image->resize(ROOT_DIR . '/temp/' . $zip_dir . '/' . $next_file,  $upload_dir . '/' . $next_tmp_name, $this->component_config['item_full_width'], 0);
-							$this->helper_image->resize(ROOT_DIR . '/temp/' . $zip_dir . '/' . $next_file,  $upload_dir . '/mini/' . $next_tmp_name, $mini_width, $mini_height);
-							$data['image'] = $next_tmp_name;
-							
-							if (isset($_POST['stamp'])) { //Здесь ставится водяной знак
-								$this->helper_image->stamp(ROOT_DIR . '/uploads/modules/gallery/' . $category['dir'], $data['image']);
-							}
-							
-							$this->model->add_item($data);
-							
+					if(is_uploaded_file($_FILES['images']['tmp_name'][$key])) {
+						
+						if ($this->component_config['item_thumb_width'] > $this->component_config['item_image_width']) {
+							$mini_width = $this->component_config['item_thumb_width'];
+							$mini_height = $this->component_config['item_thumb_height'];
+						} else {
+							$mini_width = $this->component_config['item_image_width'];
+							$mini_height = round($mini_width / ($this->component_config['item_thumb_width'] / $this->component_config['item_thumb_height']));
 						}
+						
+						$data['image'] = $this->helper_image->img_upload('images', $this->component_config['item_full_width'], $upload_dir . '/', $mini_width, $mini_height, $this->component_config['item_full_height']);
+					
+						if (isset($_POST['stamp'])) { //Здесь ставится водяной знак
+							foreach ($data['image'] as $key => $value) {
+								$this->helper_image->stamp(ROOT_DIR . '/uploads/modules/gallery/' . $category['dir'], $data['image'][$key]);
+							}
+						}
+						$this->model->add_item($data);
 					}
-					
-					$this->helper_zip->deleteDirectory($tmp_folder);
-					unlink($zip_name_full);
-					
-				} else {
-					$data['image'] = $this->helper_image->img_upload('image', $this->component_config['item_full_width'], $upload_dir . '/', $mini_width, $mini_height, $this->component_config['item_full_height']);
-				
-					if (isset($_POST['stamp'])) { //Здесь ставится водяной знак
-						$this->helper_image->stamp(ROOT_DIR . '/uploads/modules/gallery/' . $category['dir'], $data['image']);
-					}
-					
-					$this->model->add_item($data);
 				}
-			
-				$this->redirect(SITE_URL . '/admin/gallery/category/' . $category['id'] . '/success=added');
-				exit;
-			}
+				if(empty($errors)) {
+					$this->redirect(SITE_URL . '/admin/gallery/category/' . $category['id'] . '/success=added');
+					exit;
+				} else {/*Ничего*/}
+			} else {/*Ничего*/}
 		}
 
 		if (isset($_POST['save_order'])) {

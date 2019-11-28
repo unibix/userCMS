@@ -36,53 +36,105 @@ class helper_image {
 			else return '';
 		}
 
-		$final_extension = pathinfo($_FILES[$input_name]['name'], PATHINFO_EXTENSION);
-		// генерируем имя
-		$img_name = $this->get_rand_name().'.'.$final_extension;
-		// полный путь
-		$img_name_full = $img_path . $img_name;
-
-		// проверка формата изображения
-		if ($_FILES[$input_name]['type'] != "image/jpeg" AND $_FILES[$input_name]['type'] != "image/png" AND $_FILES[$input_name]['type'] != "image/gif" ) {
-			if($debug) {$error .='Неправильный формат фотографий, только JPG, PNG, GIF<br>';  }
-			else return false;
-		}
 		// проверка папки на существование
 		if(!is_dir($img_path)) {
 			if($debug) {$error .='Папки "'.$img_path.'" не существует.<br>';  }
 			else return false;
 			//mkdir($img_path);
 		}
-		if ( !move_uploaded_file($_FILES[$input_name]['tmp_name'], $img_name_full) ) {
-			if($debug) { $error .='Не удалось переместить изображение в папку '.$img_path.' (проверьте права на запись)<br>';  }
-			else return false;
-		} else {
-			// делаем превьюху
-			if($new_width_thrumb!=0) {
-				$thrumb_name_full = $img_path .'mini/'. $img_name;  // полный путь до превьюхи
-				// проверка папки на существование, если нет, создаем
-				if(!is_dir($img_path .'mini/')) {
-					if(!mkdir($img_path .'mini/') ) {
-						if($debug) { $error .='Не удалось создать папку для превью: "'.$img_path .'mini/<br>';  }
+
+		if(!is_array($_FILES[$input_name]['name'])) {
+			$final_extension = pathinfo($_FILES[$input_name]['name'], PATHINFO_EXTENSION);
+			// генерируем имя
+			$img_name = $this->get_rand_name().'.'.$final_extension;
+			// полный путь
+			$img_name_full = $img_path . $img_name;
+
+			// проверка формата изображения
+			if ($_FILES[$input_name]['type'] != "image/jpeg" AND $_FILES[$input_name]['type'] != "image/png" AND $_FILES[$input_name]['type'] != "image/gif" ) {
+				if($debug) {$error .='Неправильный формат фотографий, только JPG, PNG, GIF<br>';  }
+				else return false;
+			}
+
+			if ( !move_uploaded_file($_FILES[$input_name]['tmp_name'], $img_name_full) ) {
+				if($debug) { $error .='Не удалось переместить изображение в папку '.$img_path.' (проверьте права на запись)<br>';  }
+				else return false;
+			} else {
+				// делаем превьюху
+				if($new_width_thrumb!=0) {
+					$thrumb_name_full = $img_path .'mini/'. $img_name;  // полный путь до превьюхи
+					// проверка папки на существование, если нет, создаем
+					if(!is_dir($img_path .'mini/')) {
+						if(!mkdir($img_path .'mini/') ) {
+							if($debug) { $error .='Не удалось создать папку для превью: "'.$img_path .'mini/<br>';  }
+							else return false;
+						}
+					}
+
+					// генерация
+					if (!$this->resize($img_name_full, $thrumb_name_full, $new_width_thrumb, $new_height_thrumb) ) {
+						if($debug) {$error .='Не удалось уменьшить до превью<br>';  }
 						else return false;
 					}
 				}
+		
+				// уменьшаем
+				if (!$this->resize($img_name_full, $img_name_full, $new_width, $new_height)) {
+					if($debug) {$error .='Не удалось уменьшить до макси<br>'; }
+					else return false;
+				};
 
-				// генерация
-				if (!$this->resize($img_name_full, $thrumb_name_full, $new_width_thrumb, $new_height_thrumb) ) {
-					if($debug) {$error .='Не удалось уменьшить до превью<br>';  }
+				return $img_name;
+			}
+		} else { // если мультизагрузка
+			$img_names = [];
+			foreach ($_FILES['images']['name'] as $key => $value) {
+				$final_extension = pathinfo($_FILES[$input_name]['name'][$key], PATHINFO_EXTENSION);
+				// генерируем имя
+				$img_name = $this->get_rand_name().'.'.$final_extension;
+				// полный путь
+				$img_name_full = $img_path . $img_name;
+
+				// проверка формата изображения
+				if ($_FILES[$input_name]['type'][$key] != "image/jpeg" AND $_FILES[$input_name]['type'][$key] != "image/png" AND $_FILES[$input_name]['type'][$key] != "image/gif" ) {
+					if($debug) {$error .='Неправильный формат фотографий, только JPG, PNG, GIF<br>';  }
 					else return false;
 				}
-			}
-		
-			// уменьшаем
-			if (!$this->resize($img_name_full, $img_name_full, $new_width, $new_height)) {
-				if($debug) {$error .='Не удалось уменьшить до макси<br>'; }
-				else return false;
-			};
 
-			return $img_name;
+				if ( !move_uploaded_file($_FILES[$input_name]['tmp_name'][$key], $img_name_full) ) {
+					if($debug) { $error .='Не удалось переместить изображение в папку '.$img_path.' (проверьте права на запись)<br>';  }
+					else return false;
+				} else {
+					// делаем превьюху
+					if($new_width_thrumb!=0) {
+						$thrumb_name_full = $img_path .'mini/'. $img_name;  // полный путь до превьюхи
+						// проверка папки на существование, если нет, создаем
+						if(!is_dir($img_path .'mini/')) {
+							if(!mkdir($img_path .'mini/') ) {
+								if($debug) { $error .='Не удалось создать папку для превью: "'.$img_path .'mini/<br>';  }
+								else return false;
+							}
+						}
+
+						// генерация
+						if (!$this->resize($img_name_full, $thrumb_name_full, $new_width_thrumb, $new_height_thrumb) ) {
+							if($debug) {$error .='Не удалось уменьшить до превью<br>';  }
+							else return false;
+						}
+					}
+				
+					// уменьшаем
+					if (!$this->resize($img_name_full, $img_name_full, $new_width, $new_height)) {
+						if($debug) {$error .='Не удалось уменьшить до макси<br>'; }
+						else return false;
+					};
+
+					$img_names[] = $img_name;
+				}
+			}
+			return $img_names;
 		}
+
 		if(!empty($error)) {
 			die ('<div class="notice error" style="font-size:30px;">'.$error.'</div>');
 		}
