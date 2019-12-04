@@ -23,17 +23,26 @@
 		<label for="item_class">Класс:</label><br>
 		<input id="item_class" type="text" name="item_class" value="<?php echo $item['class']; ?>">
 		
-    <label for="items_list">Родительская ссылка</label>
-    <select name="parent_id">
-      <option value="0">Нет</option>
-    <?php foreach ($items as $parent_item) { ?>
-      <?php if (isset($item['parent_id']) && $parent_item['id'] == $item['parent_id']) { ?>
-      <option selected value="<?php echo $parent_item['id']; ?>"><?php echo $parent_item['name']; ?></option>
-      <?php } else { ?>
-      <option value="<?php echo $parent_item['id']; ?>"><?php echo $parent_item['name']; ?></option>
-      <?php } ?>
-    <?php } ?>
-    </select>
+	    <label for="items_list">Родительская ссылка</label>
+	    <select name="parent_id">
+	      <option value="0">Нет</option>
+	    <?php foreach ($items as $parent_item) { ?>
+	      <?php if (isset($item['parent_id']) && $parent_item['id'] == $item['parent_id']) { ?>
+	      <option selected value="<?php echo $parent_item['id']; ?>"><?php echo $parent_item['name']; ?></option>
+	      <?php } else { ?>
+	      <option value="<?php echo $parent_item['id']; ?>"><?php echo $parent_item['name']; ?></option>
+	      <?php } ?>
+	    <?php } ?>
+	    </select>
+
+	    <label for="pages_list">Выбор страницы</label>
+	    <select id="pages_list" name="show_page">
+	      <option value="-1">Нет</option>
+	      <?php foreach ($pages as $key => $page) { ?>
+	      	<option <?php foreach($show_pages as $value) { if($value['show_page'] != -1 && $value['show_page'] == $page['id']) { echo 'selected'; } } ?> value="<?=$page['id']?>"><?=$page['name']?></option>
+	      <?php } ?>
+	    </select>
+
 		<input type="submit" value="<?php echo $text_submit; ?>" name="submit">
 	<form>
 </div>

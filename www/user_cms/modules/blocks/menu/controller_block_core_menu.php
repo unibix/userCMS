@@ -61,12 +61,19 @@ class controller_block_core_menu extends block {
 		}
 		foreach($items as $item) {
 			if (strpos($item['url'], '/') === 0) {
-				$item['url'] = SITE_URL . $item['url'];
+				if($item['show_page'] != -1) {
+					$item['url'] = SITE_URL . $this->model_component_pages->get_page_url($item['show_page']);;
+				} else {
+					$item['url'] = SITE_URL . $item['url'];
+				}
 			} elseif (strpos($item['url'], '%') === 0) {
 				// ссылка на страницу page_id
 				$page_id = (int)str_replace('%', '', $item['url']);
-				
-				$item['url'] = SITE_URL . $this->model_component_pages->get_page_url($page_id);
+				if($item['show_page'] != -1) {
+					$item['url'] = SITE_URL . $this->model_component_pages->get_page_url($item['show_page']);;
+				} else {
+					$item['url'] = SITE_URL . $this->model_component_pages->get_page_url($page_id);
+				}
 				
 				if ($item['url'] === null) {
 					$item['url'] = SITE_URL;
@@ -78,7 +85,6 @@ class controller_block_core_menu extends block {
 			$li_children = ($item['children']) ? 'nav-item dropdown' : 'nav-item'; // классы для LI
 			$a_children = ($item['children']) ? 'nav-link dropdown-toggle' : 'nav-link';
 			$a_attrs = ($item['children']) ? ' role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ' : '';
-			
 
 			$this->menu .= '<li class="'.$active.' '.$item['class'].' '.$li_children.'"><a href="' . $item['url'] . '" '.$a_attrs.' class="'.$a_children.'">' . $item['name'] . '</a>';
 

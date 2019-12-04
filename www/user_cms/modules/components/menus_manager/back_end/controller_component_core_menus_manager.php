@@ -285,6 +285,12 @@ class controller_component_core_menus_manager extends component {
 		} else {
 			$item['parent_id'] = 0;
 		}
+
+		if(isset($_POST['show_page'])) {
+			$item['show_page'] = $_POST['show_page'];
+		} else {
+			$item['show_page'] = -1;
+		}
 		
 		if(!$this->data['errors'] && isset($_POST['submit'])) {
 			if($item_id = $this->model->add_menu_item($item)) {
@@ -298,6 +304,8 @@ class controller_component_core_menus_manager extends component {
 		$this->data['items'] = $this->model->get_items_list($item['menu_id']);
 		$this->data['item'] = $item;
 		
+		$this->data['pages'] = $this->model->get_pages();
+		$this->data['show_pages'] = $this->model->get_show_page($item['menu_id']);
 		$this->data['menu'] = $this->model->get_menu($item['menu_id']);
 		$this->data['page_name'] = 'Добавление элемента в меню "' . $this->data['menu']['name'] . '"';
 		$this->data['text_submit'] = 'Добавить';
@@ -353,6 +361,12 @@ class controller_component_core_menus_manager extends component {
 		} else {
 			$count_items_sort = false;
 		}
+
+		if(isset($_POST['show_page'])) {
+			$item['show_page'] = $_POST['show_page'];
+		} else {
+			$item['show_page'] = -1;
+		}
 		
 		if(!$this->data['errors'] && isset($_POST['submit'])) {
 			if($item_id = $this->model->edit_menu_item($item)) {
@@ -368,6 +382,8 @@ class controller_component_core_menus_manager extends component {
 		$this->data['items'] = $this->model->get_items_list($item['menu_id'], 0, true, array(), $item['id']); // исключаем из списка выводимый элемент и его дочерние элементы
 		$this->data['item'] = $item;
 	
+		$this->data['pages'] = $this->model->get_pages();
+		$this->data['show_pages'] = $this->model->get_show_page($item['menu_id']);
 		$this->data['menu'] = $this->model->get_menu($item['menu_id']);
 		$this->data['page_name'] = 'Изменение элемента меню "' . $this->data['menu']['name'] . '"';
 		$this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs(
@@ -428,7 +444,7 @@ class controller_component_core_menus_manager extends component {
 				
 			}
 				$menu .= '<td class="page_name" style="padding-left: ' . $level * 10 . 'px;">' . $item['name'] . '</td>';
-				$menu .= '<td class="td_170">' . $item['url'] . '</td>';
+				$menu .= '<td class="td_170">' . (($item['show_page'] != -1) ? ('%' . $item['show_page']) : $item['url']) . '</td>';
 				$menu .= '<td class="sort td_115"><span class="before">↑</span> <span class="after">↓</span></td>';
 				$menu .= '<td class="td_190 actions">';
 					$menu .= '[<a href="' . SITE_URL . '/admin/menus_manager/edit_item/' . $item['id'] . '">изменить</a> | ';

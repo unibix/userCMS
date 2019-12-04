@@ -92,8 +92,8 @@ class model_component_core_menus_manager extends model {
 			$data['sort'] = 1;
 		}
 		
-		$sql = "INSERT INTO menus_items (parent_id, menu_id, name, url, sort, class)
-					VALUES ('" . (int)$data['parent_id'] . "', '" . (int)$data['menu_id'] . "', '" . $this->dbh->escape($data['name']) . "', '" . $this->dbh->escape($data['url']) . "', '" . $data['sort'] . "', '" . $data['class'] . "')";
+		$sql = "INSERT INTO menus_items (parent_id, menu_id, name, url, sort, class, show_page)
+					VALUES ('" . (int)$data['parent_id'] . "', '" . (int)$data['menu_id'] . "', '" . $this->dbh->escape($data['name']) . "', '" . $this->dbh->escape($data['url']) . "', '" . $data['sort'] . "', '" . $data['class'] . "', '" . $data['show_page'] . "')";
 		
 		$this->dbh->exec($sql);
 		
@@ -107,7 +107,8 @@ class model_component_core_menus_manager extends model {
 					name = '" . $this->dbh->escape($data['name']) . "',
 					url = '" . $this->dbh->escape($data['url']) . "',
 					sort = '" . (int)$data['sort'] . "',
-					class = '" . $data['class'] . "'
+					class = '" . $data['class'] . "',
+					show_page = '" . $data['show_page'] . "'
 				WHERE id = '" . (int)$data['id'] . "'";
 				
 		return $this->dbh->exec($sql);
@@ -177,5 +178,15 @@ class model_component_core_menus_manager extends model {
 			return $res;
 		}
 	}
+
+	public function get_pages() {
+		$sql = "SELECT id, name FROM main";
+		return $this->dbh->query($sql);
+	}
 	
+	public function get_show_page($menu_id) {
+		$sql = "SELECT show_page FROM menus_items WHERE menu_id = {$menu_id}";
+		return $this->dbh->query($sql);
+	}
+
 }
