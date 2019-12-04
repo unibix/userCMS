@@ -91,7 +91,11 @@ class controller_component_core_users extends component {
 		
 		if (!$this->is_first_try()) {
 			$this->data['captcha'] = true;
-			$this->data['src_captcha'] = SITE_URL . '/user_cms/helpers/captcha.php?suffix=' . $this->captcha_suffix;
+			if(file_exists(ROOT_DIR . '/modules/helpers/captcha.php')) {
+				$this->data['src_captcha'] = SITE_URL . '/modules/helpers/captcha.php?suffix=' . $this->captcha_suffix;
+			} else {
+				$this->data['src_captcha'] = SITE_URL . '/user_cms/modules/helpers/captcha.php?suffix=' . $this->captcha_suffix;
+			}
 		} else {
 			$this->data['captcha'] = false;
 		}
@@ -153,7 +157,11 @@ class controller_component_core_users extends component {
 		
 		if (!$this->is_first_try()) {
 			$this->data['captcha'] = true;
-			$this->data['src_captcha'] = SITE_URL . '/user_cms/helpers/captcha.php?suffix=' . $this->captcha_suffix;
+			if(file_exists(ROOT_DIR . '/modules/helpers/captcha.php')) {
+				$this->data['src_captcha'] = SITE_URL . '/modules/helpers/captcha.php?suffix=' . $this->captcha_suffix;
+			} else {
+				$this->data['src_captcha'] = SITE_URL . '/user_cms/modules/helpers/captcha.php?suffix=' . $this->captcha_suffix;
+			}
 		} else {
 			$this->data['captcha'] = false;
 		}
