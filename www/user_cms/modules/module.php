@@ -33,8 +33,11 @@ class module {
 	
 	protected function load_helper($name) {
 		$helper = 'helper_' . $name;
-		if(file_exists(ROOT_DIR . '/user_cms/helpers/' . $helper . '.php')){
-			require_once(ROOT_DIR . '/user_cms/helpers/' . $helper . '.php');
+		if(file_exists(ROOT_DIR . '/modules/helpers/' . $helper . '.php')){
+			require_once(ROOT_DIR . '/modules/helpers/' . $helper . '.php');
+			$this->$helper = new $helper;
+		} elseif(file_exists(ROOT_DIR . '/user_cms/modules/helpers/' . $helper . '.php')) {
+			require_once(ROOT_DIR . '/user_cms/modules/helpers/' . $helper . '.php');
 			$this->$helper = new $helper;
 		}
 	}

@@ -465,7 +465,13 @@ class user_cms_core {
 	}
 
 	function db_connect() {
-		require_once(ROOT_DIR . '/user_cms/helpers/sqlite_pdo.php');
+		$helper_path = '';
+		if(file_exists(ROOT_DIR . '/modules/helpers/sqlite_pdo.php')) {
+			$helper_path = ROOT_DIR . '/modules/helpers/sqlite_pdo.php';
+		} else {
+			$helper_path = ROOT_DIR . '/user_cms/modules/helpers/sqlite_pdo.php';
+		}
+		require_once($helper_path);
 		$dbh = new DB("sqlite:". ROOT_DIR ."/db.sqlite");
 		if($this->config['db_error_reporting']){
 			$dbh->error = true;

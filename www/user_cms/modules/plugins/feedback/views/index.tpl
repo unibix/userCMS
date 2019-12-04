@@ -63,7 +63,7 @@
                 
             <?php } elseif ($field['type'] == 'captcha'){?>
                 <div style="margin:10px 0">
-                    <img id="img-captcha" src="<?=SITE_URL;?>/user_cms/helpers/captcha.php?suffix=<?=$plugin_id;?>" width="<?=isset($field['option_list']['captcha_width'])&&$field['option_list']['captcha_width']?$field['option_list']['captcha_width']:'150';?>px" height="<?=isset($field['option_list']['captcha_height'])&&$field['option_list']['captcha_height']?$field['option_list']['captcha_height']:'35';?>px">
+                    <img id="img-captcha" src="<?=SITE_URL;?><?=$helper_path;?>captcha.php?suffix=<?=$plugin_id;?>" width="<?=isset($field['option_list']['captcha_width'])&&$field['option_list']['captcha_width']?$field['option_list']['captcha_width']:'150';?>px" height="<?=isset($field['option_list']['captcha_height'])&&$field['option_list']['captcha_height']?$field['option_list']['captcha_height']:'35';?>px">
                     <label for="captcha">Введите символы с картинки: </label>
                     <input type="text" class="form-control" id="captcha" name="captcha" >
                     <?php if ($field['error']) { ?><span class="text-danger"><?=$field['error']?></span><?php } ?> 

@@ -81,7 +81,13 @@ class model_component_core_users extends model {
 
 	public function send_email($addr, $subject, $text)
     {
-        require_once(ROOT_DIR.'/user_cms/helpers/helper_mail.php');
+    	$helper_path = '';
+    	if(file_exists(ROOT_DIR.'/modules/helpers/helper_mail.php')) {
+			$helper_path = ROOT_DIR.'/modules/helpers/helper_mail.php'
+    	} else {	
+    		$helper_path = ROOT_DIR.'/user_cms/modules/helpers/helper_mail.php';
+    	}
+        require_once($helper_path);
         $this->helper_mail = new helper_mail;
         $this->helper_mail->from_name = 'Робот ' . SITE_NAME;
         $this->helper_mail->from_email = 'robot@'.$_SERVER['HTTP_HOST'];

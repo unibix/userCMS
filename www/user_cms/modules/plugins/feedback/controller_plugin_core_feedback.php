@@ -101,6 +101,12 @@ class controller_plugin_core_feedback extends plugin
             }
         
             $this->data['fields'] = array();
+
+            if(file_exists(ROOT_DIR . '/modules/helpers/captcha.php')) {
+                $this->data['helper_path'] = '/modules/helpers/';
+            } else {
+                $this->data['helper_path'] = '/user_cms/modules/helpers/';
+            }
             
             foreach ($params['fields'] as $i => $field) {
                 if ($field['type'] == 'submit') {
