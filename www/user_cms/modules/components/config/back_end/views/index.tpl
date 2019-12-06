@@ -45,6 +45,14 @@
         
         <label for="e_reporting">Вывод ошибок:<a class="help" href="http://php.net/manual/ru/errorfunc.constants.php" target="_blank"></a></label><br>
         <input id="e_reporting" type="text" name="error_reporting" value="<?php echo $config['error_reporting']; ?>" >
+
+        <label for="s_zone">Временная зона:</label><br>
+        <select id="s_zone" name="timezone">
+            <?php foreach ($zones as $key => $zone) { ?>
+                <option <?php if(date_default_timezone_get() == $zone) { echo 'selected'; } ?> value="<?=$zone?>"><?=$zone?></option>
+            <?php } ?>
+        </select>
+
         <label for="db_e_reporting">Вывод ошибок базы данных:</label>
         <input id="db_e_reporting" type="checkbox" name="db_error_reporting" value="1" <?php if((int)$config['db_error_reporting'] > 0) { ?> checked <?php } ?> ><br>
         <label for="maintenance">Временно закрыть сайт на обслуживание:</label>

@@ -21,13 +21,14 @@ class user_cms_core {
 	function __construct() {
        	
 	session_start();
-	date_default_timezone_set('Europe/Kaliningrad');
 
        	$this -> html = '';
 	$this -> config = parse_ini_file(ROOT_DIR . '/config.ini');
 	if (!isset($this->config['site_url'])) {
 		$this->config['site_url'] = 'http://' . $_SERVER['HTTP_HOST'];
 	}
+
+	date_default_timezone_set($this->config['timezone']);
 
 	define('SITE_URL', $this->config['site_url']);
 	define('SITE_NAME', $this->config['site_name']);

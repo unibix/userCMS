@@ -13,6 +13,8 @@ class controller_component_core_config extends component {
         //$config = $this->model->get_config();
         $this->data['errors'] = array();
         
+        $this->data['zones'] = DateTimeZone::listIdentifiers();
+
         if(!$data = $this->model->get_config()) {
             $this->data['errors'][] = 'Не удалось загрузить файл с настройками';
         }
@@ -65,12 +67,19 @@ class controller_component_core_config extends component {
             } else {
                 $data['error_reporting'] = '0';
             }
+
+            if(isset($_POST['timezone']) && !empty($_POST['timezone'])) {
+                $data['timezone'] = $_POST['timezone'];
+            } else {
+                $data['timezone'] = 'Europe/Moscow';
+            }
             
             if(isset($_POST['db_error_reporting']) && !empty($_POST['db_error_reporting'])) {
                 $data['db_error_reporting'] = $_POST['db_error_reporting'];
             } else {
                 $data['db_error_reporting'] = '0';
             }
+
             if(isset($_POST['maintenance']) && !empty($_POST['maintenance'])) {
                 $data['maintenance'] = $_POST['maintenance'];
             } else {
