@@ -1,7 +1,8 @@
 <?php 
 
 class controller_block_core_menu extends block {
-	
+	public $level_menu = 1;	
+
 	public function action_index($block) {
 		$menu_id = unserialize($block['params']);
 		
@@ -82,13 +83,18 @@ class controller_block_core_menu extends block {
 			// добавляем класс если текущая страница (точнее два класса active и current)
 			$active = ($this->is_active($item['url'])) ? ' active current ' : '';
 			// добавляем класс если есть дочерние элементы 
-			$li_children = ($item['children']) ? 'nav-item dropdown' : 'nav-item'; // классы для LI
+			if($this->level_menu > 1) {
+				$li_children = ($item['children']) ? 'nav-item dropdown dropdown-submenu' : 'nav-item'; // классы для LI
+			} else {
+				$li_children = ($item['children']) ? 'nav-item dropdown' : 'nav-item'; // классы для LI
+			}
 			$a_children = ($item['children']) ? 'nav-link dropdown-toggle' : 'nav-link';
-			$a_attrs = ($item['children']) ? ' role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" ' : '';
+			$a_attrs = ($item['children']) ? ' data-toggle="dropdown" ' : '';
 
 			$this->menu .= '<li class="'.$active.' '.$item['class'].' '.$li_children.'"><a href="' . $item['url'] . '" '.$a_attrs.' class="'.$a_children.'">' . $item['name'] . '</a>';
 
 			if ($item['children']) {
+				$this->level_menu++;
 				$this->generate_menu($item['children'],'dropdown-menu');
 			}
 			
