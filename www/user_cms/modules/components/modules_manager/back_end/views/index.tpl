@@ -27,7 +27,7 @@
         <?php if ($module['type'] == 'block') { 
                 $module['position'] = '[position=<span class="module-position">' . $module['position'] . '</span>]';
               } elseif ($module['type'] == 'plugin') {
-                $module['position'] = '<span>{</span>plugin:<span class="module-position">' . $module['position'] . '</span>=params}';
+                $module['position'] = '<span class="btn-copy">copy</span><span class="sibl"><span>{</span>plugin:<span class="module-position">' . $module['position'] . '</span>=' . $module['id'] . '}</span>';
               } ?>
         <?php echo $module['position']; ?>
       </td>
@@ -57,7 +57,7 @@
         <?php if ($module['type'] == 'block') { 
                 $module['position'] = '[position=<span class="module-position">' . $module['position'] . '</span>]';
               } elseif ($module['type'] == 'plugin') {
-                $module['position'] = '<span>{</span>plugin:<span class="module-position">' . $module['position'] . '</span>=params}';
+                $module['position'] = '<span class="btn-copy">copy</span><span class="sibl"><span>{</span>plugin:<span class="module-position">' . $module['position'] . '</span>=' . $module['id'] . '}</span>';
               } ?>
         <?php echo $module['position']; ?>
       </td>
@@ -76,6 +76,18 @@
           ? this.before(s).remove()
           : jQuery("<p>").append(this.eq(0).clone()).html();
     };
+
+    $('.btn-copy').each(function() {
+      this.addEventListener('click', function() {
+          let copy_text = $(this).siblings('.sibl').text();
+          let temp = document.createElement('input');
+          temp.value = copy_text;
+          document.body.append(temp);
+          temp.select();
+          document.execCommand('copy'); 
+          document.body.removeChild(temp);
+      });
+    });
     
     $('table.main').on('click', '.sort span', function(event) {
       var search_row = $(this).closest('tr');
@@ -137,3 +149,16 @@
     });
   </script>
 </div>
+<style>
+  .btn-copy {
+    background: lightgray;
+    border-radius: 5px;
+    padding: 5px;
+    color: gray;
+  }
+  .btn-copy:hover {
+    transition: all 0.2s;
+    color: white;
+    cursor: pointer;
+  }
+</style>
