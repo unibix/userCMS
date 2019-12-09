@@ -163,6 +163,7 @@ class controller_component_core_modules_manager extends component {
 		if (!class_exists($class_name, true)) {
 			$class_name = 'controller_' . $module_info['type'] . '_core_' . $module_info['dir'];				
 		}
+
 		$obj = new $class_name($this->config, $this->url, $module_info['dir'], $this->dbh);
 		if (method_exists($obj, 'action_activate')) {
 			$page = $obj->action_activate();
