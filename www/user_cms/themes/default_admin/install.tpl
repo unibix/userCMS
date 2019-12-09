@@ -20,7 +20,8 @@
             <input type="text" name="login" value="<?php echo $config['login'] ; ?>"  />
             <label for="password">Пароль администратора:</label><br>
             <input type="password" name="password" value="<?php echo $config['password'] ; ?>"  />
-
+            <label for="demo">Установить демоданные</label>
+            <input id="demo" type="checkbox" name="demo_data" value="1"><br>
             <input type="submit" name="form_install" value="Установить" /><br>
         </form>
     </div>

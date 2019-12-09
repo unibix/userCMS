@@ -69,17 +69,24 @@ if (!file_exists('db.sqlite') && !file_exists('install.sql')) {
 if(count($errors) == 0) {
     if (!file_exists('db.sqlite')) file_put_contents('db.sqlite', '');
     $dbh = new PDO('sqlite:db.sqlite');
-    if (file_exists('install.sql')) {
-        $dbh->exec(file_get_contents('install.sql'));
-        unlink('install.sql');
-    }
 
     $show_form = TRUE;
 	$config = parse_ini_file('config.ini');
-	
     if(isset($_POST['site_name'])) {
         $config['site_name'] = $_POST['site_name'];
         $config['site_url'] = 'http://' . rtrim($_POST['site_url'], '/')  ;;
+        
+        if(isset($_POST['demo_data'])) {
+            $install_sql = 'install_demo.sql';
+        } else {
+            $install_sql = 'install.sql';
+        }
+
+        if (file_exists($install_sql)) {
+            $dbh->exec(file_get_contents($install_sql));
+            unlink($install_sql);
+            ($install_sql == 'install.sql') ? unlink('install_demo.sql') : unlink('install.sql');
+        }
         
         // Обновляем config.ini
         update_config($config);
