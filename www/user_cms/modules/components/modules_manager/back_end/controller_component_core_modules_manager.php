@@ -172,10 +172,11 @@ class controller_component_core_modules_manager extends component {
 		}
 		
 		if(isset($_POST['activate'])) {
-			$modules = $this->model->get_activated_modules();
+			// Получаем максимальное значение сортировки, чтобы sort был max(sort) + 1 
+			$modules = $this->model->get_activated_modules(array(), true);
 			if ($modules) {
-				$last_module = array_pop($modules);
-				$sort = $last_module['sort']+1;
+				$module = $modules[0]; // Берём первый элемент, но тут неважно какой, главное - его наличие
+				$sort = $module['max_sort'] + 1;
 			} else {
 				$sort = 1;
 			}
@@ -362,8 +363,8 @@ class controller_component_core_modules_manager extends component {
 		$this->page['theme']['file'] = 'ajax';
 		$this->page['html'] = 0;
 		
-		if (isset($this->url['params']['module_id']) && isset($this->url['params']['direction']) && isset($this->url['params']['back_end'])) {
-			$result = $this->model->change_activated_module_sort($this->url['params']['module_id'], $this->url['params']['direction'], $this->url['params']['back_end']);
+		if (isset($this->url['params']['module_id']) && isset($this->url['params']['direction']) && isset($this->url['params']['back_end']) && isset($this->url['params']['module_replace_id'])) {
+			$result = $this->model->change_activated_module_sort($this->url['params']['module_id'], $this->url['params']['direction'], $this->url['params']['back_end'], $this->url['params']['module_replace_id']);
 			
 			if ($result) {
 				$this->page['html'] .= 1;

@@ -5,8 +5,14 @@
 
 class model_component_core_modules_manager extends model {
 
-	public function get_activated_modules($data = array()){
-		$sql = "SELECT * FROM activated_modules ";
+	public function get_activated_modules($data = array(), $with_max_sort_value = false){
+		if($with_max_sort_value) {
+			$max = ", MAX(sort) as max_sort";
+		} else {
+			$max = '';
+		}
+
+		$sql = "SELECT * {$max} FROM activated_modules ";
 		
 		if (isset($data['back_end'])) {
 			$sql .= "WHERE back_end = '" . $data['back_end'] . "'";
@@ -17,8 +23,34 @@ class model_component_core_modules_manager extends model {
 		} else {
 			$sql .= "ORDER BY sort ASC, type, position, back_end";
 		}
-		
-		return $this->dbh->query($sql);
+
+		$r = $this->dbh->query($sql);
+
+		// Чтобы ещё и по алфавиту сортировалось
+		usort($r, function($a, $b){
+		    if($a['position'] === $b['position'])
+		        return 0;
+		        
+		    return $a['position'] > $b['position'] ? 1 : -1;
+		});
+
+		$addons = [];
+		$blocks = [];
+		$plugins = [];
+
+		foreach ($r as $module) {
+			if($module['type'] == 'addon') {
+				$addons[] = $module;
+			}
+			if($module['type'] == 'plugin') {
+				$plugins[] = $module;
+			}
+			if($module['type'] == 'block') {
+				$blocks[] = $module;
+			}
+		}
+
+		return array_merge($addons, $plugins, $blocks);
 	}
 	
 	public function get_installed_modules(){
@@ -140,35 +172,18 @@ class model_component_core_modules_manager extends model {
 		}
 	}
 	
-	public function change_activated_module_sort($item_id, $direction = 'before', $back_end = 0) {
-		$items = $this->dbh->query("SELECT * FROM activated_modules WHERE back_end = '" . (int)$back_end . "' ORDER BY sort ASC");
-		if ($items) {
-			for ($i=0; $i<count($items); $i++) {
-				// ищем элемент, с которым нужно поменяться местами
-				if ($items[$i]['id'] == $item_id) {
-					if ($direction == 'before') {
-						if ($i===0) { // попытка сдвинуть первый элемент еще ниже
-							return false;
-						}
-						
-						$replace_item = $items[($i-1)];
-						
-					} else {
-						if ($i+1 >= count($items)) { // попытка сдвинуть последний элемент еще дальше
-							return false;
-						}
-						
-						$replace_item = $items[($i+1)];
-					}
-					
-					$search_item = $items[$i];
-					
-					$sql = "UPDATE activated_modules SET sort = '" . $search_item['sort'] . "' WHERE id = '" . $replace_item['id'] . "';
-							UPDATE activated_modules SET sort = '" . $replace_item['sort'] . "' WHERE id = '" . $search_item['id'] . "'";
-					
-					return $this->dbh->exec($sql);
+	public function change_activated_module_sort($item_id, $direction = 'before', $back_end = 0, $replace_item_id) {
+		$items = $this->dbh->query("SELECT id, sort FROM activated_modules WHERE back_end = '" . (int)$back_end . "' AND (id = {$item_id} OR id = $replace_item_id) ORDER BY sort ASC");
+		$sql = "";
+		if(!empty($items)) {
+			foreach ($items as $module) {
+				if($module['id'] == $replace_item_id) {
+					$sql .= "UPDATE activated_modules SET sort = '" . $module['sort'] . "' WHERE id = '" . $item_id . "';";
+				} elseif($module['id'] == $item_id) {
+					$sql .= "UPDATE activated_modules SET sort = '" . $module['sort'] . "' WHERE id = '" . $replace_item_id . "';";
 				}
 			}
+			return $this->dbh->exec($sql);
 		}
 	}
 	
