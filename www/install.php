@@ -73,8 +73,13 @@ if(count($errors) == 0) {
     $show_form = TRUE;
 	$config = parse_ini_file('config.ini');
     if(isset($_POST['site_name'])) {
+        if(isset($_POST['protocol'])) {
+            $protocol = $config['protocol'] = $_POST['protocol'];
+        } else {
+            $protocol = $config['protocol'];
+        }
         $config['site_name'] = $_POST['site_name'];
-        $config['site_url'] = 'http://' . rtrim($_POST['site_url'], '/')  ;;
+        $config['site_url'] = $protocol . '://' . rtrim($_POST['site_url'], '/')  ;;
         
         if(isset($_POST['demo_data'])) {
             $install_sql = 'install_demo.sql';

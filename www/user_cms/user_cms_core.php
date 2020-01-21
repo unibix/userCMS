@@ -25,7 +25,8 @@ class user_cms_core {
        	$this -> html = '';
 	$this -> config = parse_ini_file(ROOT_DIR . '/config.ini');
 	if (!isset($this->config['site_url'])) {
-		$this->config['site_url'] = 'http://' . $_SERVER['HTTP_HOST'];
+		$protocol = $this->config['protocol'];
+		$this->config['site_url'] = $protocol . '://' . $_SERVER['HTTP_HOST'];
 	}
 
 	date_default_timezone_set($this->config['timezone']);

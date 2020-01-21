@@ -14,6 +14,9 @@
         <form method="post" action="">
             <label for="login">Название сайта:</label><br>
             <input type="text" name="site_name" value="<?php echo $config['site_name'] ; ?>" placeholder="Например: usermaster" />
+            <label>Протокол сайта:</label>
+            <label>http <input checked type="radio" name="protocol" value="http"></label>
+            <label>https <input type="radio" name="protocol" value="https"></label><br>
             <label for="password">URL сайта:</label><br>
             <input type="text" name="site_url" value="<?php echo $config['site_url'] ; ?>" placeholder="Например: http://www.usercms.ru" />
             <label for="login">Логин администратора:</label><br>
