@@ -212,7 +212,7 @@ class controller_component_core_menus_manager extends component {
 		$menu_id = $this->url['actions'][1];
 		
 		$this->data['menu'] = $this->model->get_menu($menu_id);
-		$this->data['items'] = $this->model->get_menu_items($menu_id, array('tree'=>true, 'parent_id'=>0, 'sort'=>'sort ASC'));
+		$this->data['items'] = $this->model->get_menu_items($menu_id, array('tree'=>true, 'parent_id'=>0, 'sort'=>'sort ASC, id ASC'));
 		
 		$this->data['menu_table_body'] = $this->build_menu_table($this->data['items']);
 		$this->data['page_name'] = 'Элементы меню "' . $this->data['menu']['name'] . '"';
