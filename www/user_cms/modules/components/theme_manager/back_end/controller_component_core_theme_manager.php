@@ -74,7 +74,9 @@ class controller_component_core_theme_manager extends component
 			);
 			
 			if(is_uploaded_file($_FILES['theme']['tmp_name'])) {
-				if(in_array($_FILES['theme']['type'], $archive_types)) {
+				$expansion = explode('.', $_FILES['theme']['name']);
+				$expansion = end($expansion);
+				if($expansion == 'zip') {
 					move_uploaded_file($_FILES['theme']['tmp_name'], ROOT_DIR . '/temp/' .$_FILES['theme']['name']);
 					
 					$zip = new ZipArchive;
@@ -90,7 +92,7 @@ class controller_component_core_theme_manager extends component
 						$this->data['errors'][] = 'Не удалось открыть архив';
 					}
 				} else {
-					
+					$this->data['errors'][] = 'Файл должен быть архивом с расширением zip';
 				}
 			} else {
 				$this->data['errors'][] = '';
