@@ -1,8 +1,10 @@
 <?php class controller_plugin_core_custom_script extends plugin {
 
-	public $dir = ROOT_DIR . '/uploads/modules/custom_script';
+	public $dir;
 
 	function action_index($plugin) {
+		$this->dir = ROOT_DIR . '/uploads/modules/custom_script';
+
 		if($this->run_params != $plugin['id'])return;
 		$file = $this->dir . '/' . $plugin['params'] . '.php';
 		if(file_exists($file)){
@@ -16,6 +18,7 @@
 	}
 
 	function action_activate() {
+		$this->dir = ROOT_DIR . '/uploads/modules/custom_script';
 		if(!is_dir($this->dir))mkdir($this->dir);
 		$this->data['file_name'] = rand();
 		$this->data['code'] = '';
@@ -29,7 +32,9 @@
 		$this->page['html'] = $this->load_view('form');
 		return $this->page;
 	}
+
 	public function action_settings($plugin) {
+		$this->dir = ROOT_DIR . '/uploads/modules/custom_script';
 		$file_name = $this->dir . '/' . $plugin['params'] . '.php';
 		
 		if(isset($_POST['custom_script'])) {
@@ -50,7 +55,9 @@
 		$this->page['html'] = $this->load_view('form');
 		return $this->page;
 	}
+
 	public function action_deactivate($plugin) {
+		$this->dir = ROOT_DIR . '/uploads/modules/custom_script';
 		$file_name = $this->dir . '/' . $plugin['params'] . '.php';
 		if(file_exists($file_name)) {
 			unlink($file_name);
