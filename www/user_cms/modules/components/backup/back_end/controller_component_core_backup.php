@@ -96,7 +96,7 @@ class controller_component_core_backup extends component
 
     public function action_create_backup()
     {
-        $this->data['get_process_status_url'] = str_replace(ROOT_DIR, SITE_URL, __DIR__.'/process.json');
+        $this->data['get_process_status_url'] = SITE_URL . '/temp/process.json';
         $this->data['do_backup_url'] = SITE_URL.'/admin/backup/ajax_do_backup_process';
         $this->page['title'] = $this->data['page_name'] = 'Резервное копирование';
         $this->data['breadcrumbs'] = $this->helper_breadcrumbs->make_breadcrumbs('Создание резервной копии', '');

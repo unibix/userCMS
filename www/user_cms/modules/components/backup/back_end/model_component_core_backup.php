@@ -164,11 +164,11 @@ class model_component_core_backup extends model
 
     protected function set_process_info($process) {
         $process['timestamp'] = time();
-        return file_put_contents(__DIR__.'/process.json', json_encode($process));
+        return file_put_contents(ROOT_DIR . '/temp/process.json', json_encode($process));
     }
 
     protected function get_process_info() {
-        if (file_exists(__DIR__.'/process.json')) return json_decode(file_get_contents(__DIR__.'/process.json'), true);
+        if (file_exists(ROOT_DIR . '/temp/process.json')) return json_decode(file_get_contents(ROOT_DIR . '/temp/process.json'), true);
         else return array();
     }
 
