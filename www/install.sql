@@ -81,7 +81,7 @@ INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_a
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (33, 'Блок выполняемого кода',   'plugin',    'custom_script',  '1.0',  1533821211, 'Модуль позволяет добавлять на станицу пользовательский выполняемый код');
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (34, 'Блок выполняемого кода',   'block',    'custom_script',  '1.0',  1533821211, 'Модуль позволяет добавлять на станицу пользовательский выполняемый код');
 INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (35, 'Галерея BOX', 'plugin', 'gallery_box', '1.0', 1533821211, 'Плагин Галерея BOX');
-
+INSERT INTO "installed_modules" ("id", "name", "type", "dir", "version", "date_add", "description") VALUES (36, 'Валидация форм', 'addon', 'form_validation', '1.0', 1533821212, 'Валидация форм');
 
 
 CREATE TABLE "main" (
