@@ -90,6 +90,27 @@ a:hover{text-decoration:none;}
     margin: 5px 0;
 }
 
+#menu ul li > ul {
+    display: block;
+    width: 100%;
+    border-radius: 0;
+    font-size: 13px;
+    border: none;
+    background-color: #2C2C2C;
+}
+
+#menu ul li > ul li a {
+    color: yellowgreen;
+    transition: all 0.2s;
+    margin: 0;
+    padding-left: 25px;
+}
+
+
+#menu ul li > ul li a:hover {
+    background-color: rgba(0, 0, 0, 0.452);
+}
+
 .usefull-btns ul li a {
     display: block;
     text-decoration: none;
@@ -97,6 +118,10 @@ a:hover{text-decoration:none;}
     font-weight: bold;
     border: none;
     padding: 10px 5px 10px 10px;
+}
+
+.dropdown-menu {
+    position: relative;
 }
 
 .usefull-btns ul li {
@@ -437,6 +462,16 @@ ol.breadcrumb{background: #f8f8f8;}
         display: inline-block;
         
         margin-top: 10px;
+    }
+
+    #menu ul li > ul li {
+        text-align: center;
+    }
+
+
+    #menu ul li > ul li a {
+        padding-left: 10px;
+        padding-right: 5px;
     }
 }
 
