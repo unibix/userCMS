@@ -152,6 +152,9 @@ class controller_component_core_pages extends component {
 		}
 		
 		$page_views = array_merge($this->model->get_views(ROOT_DIR . '/modules/components/' . $this->component_name . '/front_end/views'), $this->model->get_views(ROOT_DIR . '/user_cms/modules/components/' . $this->component_name . '/front_end/views'));
+		if(file_exists(ROOT_DIR . '/themes/' . $this->config['site_theme'] . '/pages')) {
+			$page_views = array_merge($page_views, $this->model->get_views(ROOT_DIR . '/themes/' . $this->config['site_theme'] . '/pages'));
+		}
 		$theme_views = array_merge($this->model->get_views(ROOT_DIR . '/themes/' . $this->config['site_theme']), $this->model->get_views(ROOT_DIR . '/user_cms/themes/' . $this->config['site_theme']));
 	
 		$this->data['page_views'] = array_unique($page_views);		
@@ -247,6 +250,7 @@ class controller_component_core_pages extends component {
 			$this->data['url'] = '';
 		}
 		
+
 		if (isset($_POST['page_view'])) {
 			$this->data['page_view'] = $_POST['page_view'];
 		} else {
