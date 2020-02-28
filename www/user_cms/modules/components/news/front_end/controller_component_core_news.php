@@ -31,7 +31,7 @@ class controller_component_core_news extends component
         if ($current_page > $pages_count) $current_page = $pages_count;
         elseif ($current_page < 1) $current_page = 1;
         $items = $this->model->fetch_childrens($parent_id, ($current_page-1)*$items_per_page, $items_per_page);
-        if ($parent_id != 0) $category = $this->model->get($parent_id);
+        if ($parent_id != 0) $category = $this->model->get($parent_id); else $category =null;
         $this->data = array_merge($this->data, compact('items_count', 'pages_count', 'current_page', 'items', 'category'));
         
         $this->page['title'] = $this->data['page_header'] = isset($category) ? $category['header'] : 'Все новости';
