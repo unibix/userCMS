@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="zxx">
 <head>
-
+   <meta name="viewport" content="width=device-width, initial-scale=1">
    [head]
    
 </head>
@@ -16,7 +16,7 @@
 								<a href="<?php echo SITE_URL; ?>/admin">User<span>CMS</span></a>
 							</h5>
 							<p class="col-12 text-white  font-weight-bold"><?php echo $this->config['site_name']; ?></p>
-							<div class="btn d-lg-none close-open-menu col-12" data-toggle="collapse" data-target="#close_menu" aria-expanded="false" aria-controls="collapseExample">
+							<div role="navigation" class="btn d-lg-none close-open-menu col-12" data-toggle="collapse" data-target="#close_menu" aria-expanded="false" >
 								Открыть меню
 							</div>
 						</div>

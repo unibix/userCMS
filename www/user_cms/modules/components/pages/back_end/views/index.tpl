@@ -31,7 +31,7 @@
 		<tr class="row_<?php echo $page['id']; ?>">
 			<td class="page_name">
 				<?php if($page['children_count']) { ?>
-				<span class="parent-page" parent_id="<?php echo $page['id']; ?>">
+				<span class="parent-page" data-parent_id="<?php echo $page['id']; ?>">
 				</span>
 				<?php } ?>
         <?php echo $page['name']; ?>
@@ -90,11 +90,11 @@
   </table>
   <?php } ?>
 </div>
-<script type="text/javascript">
+<script >
 $(document).ready(function() {
 	$('table.main').on('click', '.parent-page', function(){
 		if($('table.main tr td div:animated').length == 0){
-			var parent_id = $(this).attr('parent_id');
+			var parent_id = $(this).data('parent_id');
 			var children = $('.children_'+parent_id);
 			$(this).parents('.row_'+parent_id).toggleClass('parent_row'); // добавляем тень к родительской строке
 			if($(children).length > 0){

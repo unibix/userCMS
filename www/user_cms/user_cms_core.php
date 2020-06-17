@@ -1,6 +1,6 @@
 <?php
 
-define('USER_CMS_VERSION', '2.6.2');
+define('USER_CMS_VERSION', '2.8.0');
 
 
 /**
@@ -283,7 +283,7 @@ class user_cms_core {
 					$js_files = explode(',', $value);
 					foreach ($js_files as $filename) {
 						if(!empty($filename)) {
-							$js .= "\t\t" . '<script src="' . $theme_url . '/' . trim($filename) . '" type="text/javascript"></script>' . "\n";
+							$js .= "\t\t" . '<script src="' . $theme_url . '/' . trim($filename) . '"></script>' . "\n";
 						}
 					}
 					
