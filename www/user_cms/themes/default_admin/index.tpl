@@ -61,7 +61,7 @@
 				<a href="<?php echo SITE_URL ; ?>/admin/backup" >Бэкап</a> /
 				<a href="http://usercms.ru/forum" target="_blank">Оф. форум</a> /
 				<a href="http://usercms.ru/documentation" target="_blank">Оф. документация</a> /
-				<a href="http://usercms.ru" target="_blank">User CMS <?php echo USER_CMS_VERSION; ?> Сборка <?php echo USER_CMS_EDITION; ?></a> © 2010-2013. 
+				<a href="http://usercms.ru" target="_blank">User CMS <?php echo USER_CMS_VERSION; ?> Сборка <?php echo USER_CMS_EDITION; ?></a> © 2010-<?=date('Y')?>. 
 			</p>
 		</div>
 	</div>
