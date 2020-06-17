@@ -1,6 +1,6 @@
 <?php
 
-define('USER_CMS_VERSION', '2.7.0');
+define('USER_CMS_VERSION', '2.8.0');
 
 
 /**
