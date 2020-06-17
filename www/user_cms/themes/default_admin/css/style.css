@@ -14,7 +14,7 @@ a{color:#107710; cursor: pointer; text-decoration: underline;}
 a:hover{text-decoration:none;}
 
 .left-side {
-    flex: 0 0 185px;
+    flex: 0 0 310px;
     background: rgba(0, 0, 0, 0.822);
 }
 
