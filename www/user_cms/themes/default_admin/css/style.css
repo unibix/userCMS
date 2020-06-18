@@ -274,7 +274,7 @@ fieldset{
     border: 1px solid #dedede;
     border-radius: 2px;
 }
-#left_side { background: #F8F8F8;    border-: 1px solid #E7DFD7; padding: 20px 10px 5px; width: 165px;}
+#left_side { background: #F8F8F8;    border-right: 1px solid #E7DFD7; padding: 20px 10px 5px; width: 165px;}
 #left_side ul { list-style: none outside none; padding: 0;  margin: 0;}
 #left_side > ul li:first-child a { border: 0;  box-shadow: none;}
 #left_side > ul li { display: block; margin: 0 0 2px;}
