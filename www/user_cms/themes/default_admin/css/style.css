@@ -274,49 +274,15 @@ fieldset{
     border: 1px solid #dedede;
     border-radius: 2px;
 }
-#left_side {
-    background: none repeat scroll 0 0 #F8F8F8;
-    border: 1px solid #E7DFD7;
-    border-radius: 8px 8px 8px 8px;
-    box-shadow: 0 0 0 2px #F0F0F0;
-    margin: 2px;
-    padding: 10px;
-    width: 165px;
-    margin-top: 155px;
-    margin-left: 20px;
-    margin-bottom: 25px;
-}
-#left_side ul {
-    list-style: none outside none;
-    padding: 0;
-    margin: 0;
-}
-#left_side > ul li:first-child a {
-    border: 0;
-    box-shadow: none;
-}
-#left_side > ul li {
-    display: block;
-    margin: 0 0 2px;
-}
-#left_side > ul li a {
-    color: #666666;
-    font-size: 15px;
-    text-decoration: none;
-    display: block;
-    padding: 3px 5px 4px;
-    border-top: 1px solid #FFFFFF;
-    box-shadow: 0 -1px #DDDDDD;
-}
-#left_side > ul li:hover {
-    background: #BCCBCB;
-    color: #FFFFFF;
-}
-#left_side > ul > li:hover a {
-    color: #555;
-}
+#left_side { background: #F8F8F8;    border-: 1px solid #E7DFD7; padding: 20px 10px 5px; width: 165px;}
+#left_side ul { list-style: none outside none; padding: 0;  margin: 0;}
+#left_side > ul li:first-child a { border: 0;  box-shadow: none;}
+#left_side > ul li { display: block; margin: 0 0 2px;}
+#left_side > ul li a { color: #666666; font-size: 15px; text-decoration: none; display: block;  padding: 3px 5px 4px; border-top: 1px solid #FFFFFF;}
+#left_side > ul > li:hover a { color: #555; background: #BCCBCB;}
 #left_side > ul > li:first-child:hover {border-radius: 2px 2px 0 0;}
 #left_side > ul > li:last-child:hover {border-radius: 0 0 2px 2px;}
+
 #tab_seo label{display: block;}
 #tab_seo label span {float: right; color: #929292;}
 #content .warning-text {color: #FF0000;}
