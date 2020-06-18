@@ -51,3 +51,99 @@ function uncheckAll(selector) {
 	return false;
 }
 
+function confirmDelete() {
+	if (confirm("Вы уверены?")) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+let confirmButton = $(".confirmButton");
+
+if(confirmButton != null) {
+confirmButton.on('click', function(){
+	return confirmDelete();
+});
+}
+
+
+$(document).ready(function () {     
+let additional_menu_btn = $('.additional-menu-btn');    
+let left_menu = $('.component-block #left_side');   
+
+if($(document).width() <= 745 && (left_menu.length > 0)) {
+	if(additional_menu_btn != null) {
+		additional_menu_btn.css({
+			display: 'block'
+		});
+	} 
+} else if(left_menu.length > 0) {
+	if(additional_menu_btn != null) {
+		additional_menu_btn.css({
+			display: 'none'
+		});
+	} 		
+}
+
+if($(window).width() <= 974) {
+	$('#close_menu.collapse').removeClass('show');
+} else {
+	$('#close_menu.collapse').addClass('show');
+}
+
+$(window).resize(function() {
+	if($(window).width() <= 745) {
+		if(additional_menu_btn != null && left_menu.length > 0) {
+			additional_menu_btn.css({
+				display: 'block'
+			});
+		} 			
+	} else {
+		if(additional_menu_btn != null && left_menu.length > 0) {
+			additional_menu_btn.css({
+				display: 'none'
+			});
+		} 					
+	}
+
+	if($(window).width() <= 974) {
+		$('#close_menu.collapse').removeClass('show');
+	} else {
+		$('#close_menu.collapse').addClass('show');
+	}
+
+});
+
+let was_click_menu = false
+
+$('.additional-menu-btn').on('click', function() {
+	let left_menu = $('.component-block #left_side');
+	
+
+	if(left_menu != null) {
+		if(was_click_menu) {
+			$('.additional-menu-btn').animate({
+				left: -40 + 'px'
+			}, 150);
+
+			left_menu.animate({
+				left: -185 + 'px'
+			}, 150);
+
+			was_click_menu = false;
+		} else {
+			$('.additional-menu-btn').animate({
+				left: 129 + 'px'
+			}, 150);
+
+			left_menu.animate({
+				left: 0
+			}, 150);
+
+			was_click_menu = true;
+		}
+	}
+});
+
+});  
