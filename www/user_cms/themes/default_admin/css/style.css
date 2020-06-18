@@ -110,7 +110,7 @@ a:hover{text-decoration:none;}
 .special-border {border: none !important;}
 #middle{overflow:hidden;min-width:980px; max-width: 1200px; margin:0 auto;padding:30px 0;}
 
-#leftside{width:230px;margin-right:10px;color:#787878;border:1px solid #E7DFD7;border-radius:8px;background:#F8F8F8;padding:40px 30px 0;}
+#leftside{width:230px;color:#787878;border-right:1px solid #E7DFD7;background:#F8F8F8;padding:30px 10px 5px;}
 #leftside ul{list-style:none;margin:0;padding:0;}
 #leftside li{margin:0;padding:0;}
 #leftside li ul{padding-bottom:50px;margin:0;}
