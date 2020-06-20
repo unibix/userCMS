@@ -13,7 +13,7 @@ a:hover{text-decoration:none;}
 /* scructure */
 #header{width:980px;margin:0 auto;}
 #rightside {width:653px;}
-.left-side { flex: 0 0 310px; background: rgba(0, 0, 0, 0.822); }
+.left-side { flex: 0 0 310px; background: rgba(0, 0, 0, 0.822); min-height: 93vh;}
 .right-side { min-height: 400px; overflow-x: auto; overflow-y: hidden;}
 
 /* left side */
