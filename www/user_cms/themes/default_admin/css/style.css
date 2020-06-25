@@ -14,11 +14,9 @@ a:hover{text-decoration:none;}
 .right-side{min-height:400px;overflow-x:auto;overflow-y:hidden;}
 #logo{color:#000;margin:0;padding:0;}
 #logo h5{font-size:3em;color:#323030;margin:0;padding:0;}
-#logo h5 span{transition:all .2s;text-shadow:0 0 10px #fff;color:#25ad25;}
+#logo h5 span{color:#25ad25;}
 #logo p{text-transform:uppercase;color:#3B3B3B;margin:0;padding:0;}
-#logo a{transition:all .2s;text-shadow:0 0 3px #fff;font-weight:700;border:none;background:none;text-decoration:none;color:#fff;}
-#logo a:hover{text-shadow:0 0 15px #fff;}
-#logo a:hover span{text-shadow:0 0 15px #fff;}
+#logo a{font-weight:700;border:none;background:none;text-decoration:none;color:#fff;}
 #aside ul,.usefull-btns ul{margin:0;padding:0;list-style-type:none;display:flex;flex-direction:column;}
 #aside ul li{transition:all .2s;}
 #aside ul a:hover{background-color:rgba(130,200,133,0.63);}
