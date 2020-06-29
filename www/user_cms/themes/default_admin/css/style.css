@@ -71,7 +71,7 @@ a:hover{text-decoration:none;}
 #leftside a:hover{text-decoration:underline;}
 #middle{overflow:hidden;min-width:980px;max-width:1200px;margin:0 auto;padding:30px 0;}
 .component-block{display:flex;}
-.component-block #content{width:100%;}
+.component-block #content{width:100%;height: 93vh;}
 .component-block #left_side{color:#fff;background-color:rgba(0,0,0,0.747);}
 .component-block #left_side a{color:#fff;}
 #content{padding:30px 40px;text-align:justify;}
