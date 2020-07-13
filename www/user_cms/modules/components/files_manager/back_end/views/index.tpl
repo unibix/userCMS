@@ -15,6 +15,8 @@
 	table a:hover{text-decoration: underline;}
 	.archiving-buttons{padding:20px; background: yellow; border: 1px solid black; position: fixed; top:5px; right: 20%; border-radius: 2px;}
 </style>
+<div class="content component file">
+
 <h1>Менеджер файлов</h1>
 <?=$breadcrumbs;?>
 <?php if (count($errors) > 0){?>
@@ -115,4 +117,5 @@
 </div>
 <?php } ?>
 </form>
+</div>
 </div>
