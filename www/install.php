@@ -25,8 +25,8 @@ if( ! file_exists('config.ini')) {
 	$errors  = array( );
 $php_modules = get_loaded_extensions();
 
-if (PHP_VERSION_ID < 50200) { 
-            $errors[] = 'Версия php менее 5.2.0';
+if (PHP_VERSION_ID < 50445) { 
+            $errors[] = 'Версия php менее 5.4.0';
 }
 
 $need_modules = array('SimpleXML', 'sqlite3', 'PDO', 'curl', 'pdo_sqlite', 'zip' ,'gd' ,'mbstring'  );
