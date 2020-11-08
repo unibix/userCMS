@@ -19,7 +19,7 @@ class component extends module {
 	
 	function __construct($config, $url, $component, $dbh) {
 		parent::__construct($config, $url, $component, $dbh);
-		
+
 		$this->view   = $component['view'];
   		$this->view_dir_core    = ROOT_DIR . '/user_cms/modules/components/'.$component['name'].'/'.END_NAME.'/views';
   		$this->view_dir         = ROOT_DIR .          '/modules/components/'.$component['name'].'/'.END_NAME.'/views';
@@ -50,7 +50,7 @@ class component extends module {
             $this->helper_pagination->url = SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['our_component_name'] . '/{page}' . (!empty($_SERVER['QUERY_STRING'])?'?'.$_SERVER['QUERY_STRING']:'');
         } else {
             $this->helper_pagination->url = SITE_URL . (END_NAME == 'back_end'?'/admin':'') . '/' . $this->url['our_component_name'] . '/' . implode('/', $this->url['actions']) . '/{page}' . (!empty($_SERVER['QUERY_STRING'])?'?' . $_SERVER['QUERY_STRING']:'');
-        }
+		}
 	}
 
 	public function action_index() {
@@ -66,7 +66,17 @@ class component extends module {
 	}
 
 	public function action_else() {
-		return $this->action_404();
+		if(mb_stripos($this->url['request_uri'], '/admin/') !== false) {
+			$action = 'action_' . $this->url['actions'][0];
+			if(!method_exists($this, $action)) {
+				$this->data['page_name'] = 'Метод отсутствует';
+				$this->page['html'] = '<p style="margin: 20px; font-weight: bold;">Такого метода нет</p>';
+				$this->page['head'] = '';
+				return $this->page;
+			}
+		} else {
+			return $this->action_404();
+		}
 	}
 
 	public function action_404($view_name = '404_not_found') {
