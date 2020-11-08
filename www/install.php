@@ -79,7 +79,17 @@ if(count($errors) == 0) {
 	
     if(isset($_POST['site_name'])) {
         $config['site_name'] = $_POST['site_name'];
-        $config['site_url'] = 'http://' . rtrim($_POST['site_url'], '/')  ;;
+
+        $protocol = 'http://';
+
+        if(mb_stripos($_POST['site_url'], 'https://') !== false) {
+            $config['site_url'] = rtrim($_POST['site_url'], '/');
+        } elseif(mb_stripos($_POST['site_url'], 'http://') !== false) {
+            $config['site_url'] = rtrim($_POST['site_url'], '/');
+        } else {
+            $config['site_url'] = $protocol . rtrim($_POST['site_url'], '/');
+        }
+        
         
         // Обновляем config.ini
         update_config($config);
@@ -153,9 +163,18 @@ function update_htaccess() {
     // нужно ли раскомментить RewriteBase
     if(rtrim($_POST['site_url'], '/') != $_SERVER['HTTP_HOST'] ) {
         if ( file_exists('.htaccess') ) {
-            $dir = str_replace($_SERVER['HTTP_HOST'], '', rtrim($_POST['site_url'], '/'));
-            //echo $dir;
             $t = file_get_contents('.htaccess');
+
+            if(mb_stripos($_POST['site_url'], 'https://') !== false) {
+                $dir = str_replace(('https://' . $_SERVER['HTTP_HOST']), '', rtrim($_POST['site_url'], '/'));
+                $t = str_replace('# RewriteCond %{SERVER_PORT} !^443$', 'RewriteCond %{SERVER_PORT} !^443$', $t);
+                $t = str_replace('# RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]', 'RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]', $t);
+            } elseif(mb_stripos($_POST['site_url'], 'http://') !== false) {
+                $dir = str_replace(('http://' . $_SERVER['HTTP_HOST']), '', rtrim($_POST['site_url'], '/'));
+            } else {
+                $dir = str_replace($_SERVER['HTTP_HOST'], '', rtrim($_POST['site_url'], '/'));
+            }
+            //echo $dir;
             $t = str_replace('# RewriteBase /test', 'RewriteBase ' . $dir .'/', $t, $count);
             $fp = fopen('.htaccess',"w");
             fwrite($fp, $t);
