@@ -218,6 +218,27 @@ class user_cms_core {
 		if (class_exists($component_full_name, true)) {
 			$c = new $component_full_name($this -> config, $this -> url,$this -> component, $this -> dbh);
 		} else {
+			if(!class_exists($component_full_name_core, true)) {
+				$contoller_text = '<?php class controller_component_core_' . $this->component['name'] . ' extends component {
+					public function action_index() {
+						$this->data["page_name"] = "' . $this->component['name'] . '";
+						$this->page["title"] = "' . $this->component['name'] . '";
+						$this->page["keywords"] = "' . $this->component['name'] . '";
+						$this->page["description"] = "' . $this->component['name'] . '";
+						$this->page["html"]  = $this->load_view();
+						return $this->page;
+					}
+				}';
+	
+				$model_text = '<?php class model_component_core_' . $this->component['name'] . ' extends model {}';
+				if(!file_exists(ROOT_DIR . '/user_cms/modules/components/' . $this->component['name'] . '/back_end/views')) {
+					mkdir(ROOT_DIR . '/user_cms/modules/components/' . $this->component['name'] . '/back_end/views', 0777, true);
+				}
+				file_put_contents(ROOT_DIR . '/user_cms/modules/components/' . $this->component['name'] . '/back_end/views/index.tpl', 'Управление недоступно');
+				file_put_contents(ROOT_DIR . '/user_cms/modules/components/' . $this->component['name'] . '/back_end/' . $component_full_name_core . '.php', $contoller_text);
+				file_put_contents(ROOT_DIR . '/user_cms/modules/components/' . $this->component['name'] . '/back_end/' . 'model_component_core_' . $this->component['name'] . '.php', $model_text);
+			} 
+			
 			$c = new $component_full_name_core($this -> config, $this -> url,$this -> component, $this -> dbh);			
 		}
 		$component_action_name = 'action_' . $this -> component['action'];
