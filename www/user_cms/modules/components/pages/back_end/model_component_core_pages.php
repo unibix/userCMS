@@ -91,7 +91,7 @@ class model_component_core_pages extends model {
 	}
 	
 	public function add_page($data = array()){
-		$sql = "INSERT INTO main (name, title, keywords, description, component, url, view, theme_view, date_add, parent_id)
+		$sql = "INSERT INTO main (name, title, keywords, description, component, url, view, theme_view, date_add, date_edit, parent_id)
 					VALUES(
 					'" . $this->dbh->escape($data['name']) . "',
 					'" . $this->dbh->escape($data['title']) . "',
@@ -101,6 +101,7 @@ class model_component_core_pages extends model {
 					'" . $this->dbh->escape($data['url']) . "',
 					'" . $this->dbh->escape($data['page_view']) . "',
 					'" . $this->dbh->escape($data['theme_view']) . "',
+					'" . time() . "',
 					'" . time() . "',
 					'" . (int)$data['parent_id'] . "'
 					)";
