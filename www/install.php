@@ -74,6 +74,13 @@ if(count($errors) == 0) {
         unlink('install.sql');
     }
 
+    if(isset($_POST['demo_data'])) {
+        if (file_exists('install_demo.sql')) {
+            $dbh->exec(file_get_contents('install_demo.sql'));
+            unlink('install_demo.sql');
+        }
+    }
+
     $show_form = TRUE;
 	$config = parse_ini_file('config.ini');
 	

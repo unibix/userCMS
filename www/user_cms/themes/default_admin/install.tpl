@@ -36,10 +36,10 @@
                     <label for="password">Пароль администратора:</label>
                     <input class="form-control" type="password" name="password" value="<?php echo $config['password'] ; ?>"  /> 
                 </div>
-                <!-- <div class="form-group col-12">
+                <div class="form-group col-12">
                     <label for="demo">Установить демоданные</label>
                     <input id="demo" type="checkbox" name="demo_data" value="1">
-                </div> -->
+                </div>
                 <div class="form-group col-12">
                     <input class="btn btn-success" type="submit" name="form_install" value="Установить" />
                 </div>
