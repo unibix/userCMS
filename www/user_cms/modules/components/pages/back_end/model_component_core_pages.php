@@ -10,11 +10,11 @@ class model_component_core_pages extends model {
 	}
 	
 	/*
-	* возвращает дочерние страницы 1го уровня вложенности
+	* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ 1пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	* params:
-	*   children_count - join column with count of children / добавляет к выборке столбец с количеством дочерних страниц
-	*   content - join `pages` table with page content / добавляет к выборке таблицу `pages` с контентом
-	*   sort - set 'sort by' value / указывает порядок сортировки
+	*   children_count - join column with count of children / пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	*   content - join `pages` table with page content / пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ `pages` пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+	*   sort - set 'sort by' value / пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	*
 	*/
 	public function get_pages_by_parent_id($parent_id = 0, $params = array()){
@@ -42,7 +42,7 @@ class model_component_core_pages extends model {
 	}
 	
 	/*
-	* возвращает дерево\список всех дочерних страниц любого уровня вложенности
+	* пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ\пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	*	
 	*
 	*/
@@ -73,8 +73,8 @@ class model_component_core_pages extends model {
 		return $retval;
 	}
 	/*
-		удаление страницы.
-		(bool) recursive - удаление дочерних страниц
+		пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+		(bool) recursive - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	*/
 	public function delete_page($page_id = 0, $recursive = false){
 		//$page = $this->dbh->row("SELECT * FROM pages WHERE main_id = '" . (int)$page_id . "'");
@@ -140,7 +140,7 @@ class model_component_core_pages extends model {
 		$this->dbh->query($sql);
 	}
 	/*
-		возвращает строку с урлом страницы
+		пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	*/
 	public function get_page_url($page_id, $url = '') {
 		$sql = "SELECT parent_id, url FROM main WHERE id = '" . (int)$page_id . "'";
@@ -157,8 +157,8 @@ class model_component_core_pages extends model {
 	}
 	
 	/*
-		метод для проверки существования урла.
-		id - идентификатор страницы, которая исключается их проверки
+		пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ.
+		id - пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	*/
 	public function url_exists($url, $id = null) {
 		$sql = "SELECT * FROM main WHERE url = '" . $this->dbh->escape($url) . "'";
@@ -172,12 +172,16 @@ class model_component_core_pages extends model {
 	}
 	
 	/*
-		метод для преобразования урла
+		пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 	*/
 	public function url_modify($url, $id = null, $i = 2) {
-		if($this->url_exists(rtrim($url, "0..9") . $i, $id)) {
-			$this->url_modify($url, $id, $i++);
+
+
+		while($this->url_exists($url . $i, $id)) {
+			$i = rand(3, 10000);
+			$this->url_modify($url, $id, $i);
 		}
+
 		return $url . $i;
 	}
 	
