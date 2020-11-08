@@ -3,10 +3,10 @@
     <label>Направление отправки (можно указать несколько адресов через запятую):</label><br>
     <label>
     <?php if(SITE_EMAIL){?>
-      Site e-mail1<input type="checkbox" id='site-email-1' value="<?=SITE_EMAIL?>" checked class="check-email" onchange="addDefaultEmails()">
+      Site e-mail1<input type="checkbox" id='site-email-1' value="<?=SITE_EMAIL?>"  class="check-email" onchange="addDefaultEmails()">
     <?php } ?>
     <?php if(SITE_EMAIL2){?>
-      Site e-mail2<input type="checkbox" id='site-email-2' value="<?=SITE_EMAIL2;?>" checked class="check-email" onchange="addDefaultEmails()">
+      Site e-mail2<input type="checkbox" id='site-email-2' value="<?=SITE_EMAIL2;?>" class="check-email" onchange="addDefaultEmails()">
     <?php } ?>
     </label>
     <input type="text" name="mail_to" value="<?php echo $mail_to; ?>" id="mail-to"> 
@@ -230,7 +230,15 @@
    function addDefaultEmails(){
      var emails = [];//тут будут адреса сайта по умолчанию(помеченые галочкой)
      var insertedEmails = typeof $('#mail-to').val() != 'undefined'?$('#mail-to').val().split(','):false;//адреса которые добавлены в поле вручную
-     insertedEmails.splice(insertedEmails.indexOf(' '), 1);//удаляем пустой
+    // console.log(insertedEmails);
+    if(insertedEmails.indexOf(' ') !== -1) {
+      insertedEmails.splice(insertedEmails.indexOf(' '), 1);//удаляем пустой
+    }
+
+    if(insertedEmails.indexOf('') !== -1) {
+      insertedEmails.splice(insertedEmails.indexOf(''), 1);//удаляем пустой
+    }
+
      $('.check-email').each(function(){
         if($(this).is(':checked')){
           if(emails.indexOf($(this).val()) == -1)emails.push($(this).val());//если выбран и нет в списке добавляем
@@ -244,5 +252,4 @@
      emailsResult = emails.concat(insertedEmails);//получаем то что было введено вручную и то что отмечено галочкой
      $('#mail-to').val((emailsResult.length>1?emailsResult.join(','):(emailsResult.length==1?emailsResult[0]:'')));
    }
-   addDefaultEmails();
 </script>
