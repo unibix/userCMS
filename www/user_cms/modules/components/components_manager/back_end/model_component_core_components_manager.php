@@ -28,9 +28,23 @@ class model_component_core_components_manager {
 									$config = parse_ini_file($file, true);
 								}
 								else {
-									$config=array('name'=>$entry,'dir'=>$entry);
+									$config=array('name' => $entry, 'dir' => $entry);
 								}
 								$list[$i]['name']=$config['name'];
+
+								$tmp_config = [];
+								foreach ($config as $key => $config_v) {
+									if (is_array($config_v) && isset($config_v['name']) && isset($config_v['value'])) {
+										$tmp_config[$key] = $config_v;
+									}
+								}
+
+								if(empty($tmp_config)) {
+									$list[$i]['no_settings'] = true;
+								}
+								unset($tmp_config);
+
+
 								foreach($config as $key => $value) {
 									$list[$i][$key]=$value;
 								}
