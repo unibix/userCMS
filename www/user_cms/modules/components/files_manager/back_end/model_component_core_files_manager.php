@@ -2,7 +2,7 @@
 
 	//проверка является ли ОС windows
 	public function is_windows(){
-		return stripos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows')?true:false;
+		return stripos(strtolower($_SERVER['HTTP_USER_AGENT']), 'windows') ? true : false;
 	}
 
 	/**
@@ -13,7 +13,8 @@
 	*/
 	public function win_to_utf($var, $utf_to_win = false){
 		if($this->is_windows()){
-			return $utf_to_win?iconv('utf-8', 'windows-1251', $var): iconv('windows-1251', 'utf-8',  $var);
+			$encoding = mb_detect_encoding($var);
+			return $utf_to_win ? iconv($encoding, 'utf-8', $var) : iconv($encoding, 'utf-8',  $var);
 		}else{
 			return $var;
 		}
@@ -107,24 +108,109 @@
 
 	}
 
+	public function addFileRecursion($zip, $dir, $start = '')
+	{
+		if (empty($start)) {
+			$start = $dir;
+		}
+		
+		if ($objs = glob($dir . '/*')) {
+			foreach($objs as $obj) { 
+				if (is_dir($obj)) {
+					$this->addFileRecursion($zip, $obj, $start);
+				} else {
+					$zip->addFile($obj, str_replace(dirname($start) . '/', '', $obj));
+				}
+			}
+		}
+	}
+
+	public function recursiveRemoveDir($dir) {
+
+		$includes = new FilesystemIterator($dir);
+	
+		foreach ($includes as $include) {
+	
+			if(is_dir($include) && !is_link($include)) {
+	
+				$this->recursiveRemoveDir($include);
+			}
+	
+			else {
+	
+				unlink($include);
+			}
+		}
+	
+		rmdir($dir);
+	}
+
 	/**
  	* Создает .zip архив с выбранными файлами
  	* @param array $files массив с названиями файлов для архивации
  	* @param string $path путь к каталогу
  	* @return название архива при успехе, false если возникла ошибка
 	*/
-	public function pack_archive($files, $path){
-		if(!is_array($files) || empty($path) || !is_dir($path) || count($files) < 1)return false;
+	public function pack_archive($files, $path, $delete = false){
+		if(!is_array($files) || empty($path) || count($files) < 1) {
+			return false;
+		}
+
 		$zip = new ZipArchive;
 		$zipname = time() . '_' . rand();
 		if ($zip->open($path . '/' . $zipname . '.zip', ZipArchive::CREATE) === true){
 			foreach ($files as $key => $file) {
 				if(is_file($path . '/' . $this->win_to_utf($file, true)))$zip->addFile($path . '/' . $file, $file);
+
+				if(is_dir($path . '/' . $this->win_to_utf($file, true))) {
+					$this->addFileRecursion($zip, $path . '/' . $file);
+				}
 			}
-			return $zip->close()?$zipname:false;
+
+			if($delete) {
+				if($zip->close()) {
+					// заставляем браузер показать окно сохранения файла
+					header('Content-Description: File Transfer');
+					header('Content-Type: application/octet-stream');
+					header('Content-Disposition: attachment; filename=' . basename($path . '/' . $zipname . '.zip'));
+					header('Content-Transfer-Encoding: binary');
+					header('Expires: 0');
+					header('Cache-Control: must-revalidate');
+					header('Pragma: public');
+					header('Content-Length: ' . filesize($path . '/' . $zipname . '.zip'));
+					// читаем файл и отправляем его пользователю
+					out($path . '/' . $zipname);
+					readfile($path . '/' . $zipname . '.zip');
+					unlink($path . '/' . $zipname . '.zip');
+					exit;
+				} else {
+					return false;
+				}
+			} else {
+				return $zip->close() ? $zipname : false;
+			}
 		}else{
 			return false;
 		}
+	}
+
+	public function delete_files($files, $path){
+		if(count($files) < 1) {
+			return false;
+		}
+
+		foreach ($files as $key => $file) {
+
+			if(is_file($path . '/' . $this->win_to_utf($file, true))) {
+				unlink($path . '/' . $this->win_to_utf($file, true));
+			}
+
+			if(is_dir($path . '/' . $this->win_to_utf($file, true))) {
+				$this->recursiveRemoveDir($path . '/' . $this->win_to_utf($file, true));
+			}
+		}
+
+		return true;
 	}
 
 	/**

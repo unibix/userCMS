@@ -54,6 +54,12 @@
 			// $_SESSION['path'] = ROOT_DIR;
 		}
 
+		if(isset($_GET['name']) && isset($_GET['change'])){ //выбор элемента
+			$index_str = mb_strrpos($_SESSION['path'], $_GET['name']) + mb_strlen($_GET['name']);
+			$_SESSION['path'] = mb_substr($this->model->win_to_utf($_SESSION['path']), 0, $index_str);
+			$_SESSION['path'] = $this->model->win_to_utf($_SESSION['path'], true);
+		}
+
 		$path = $_SESSION['path'];//текущий путь к директории
 		$url_fm = str_replace(ROOT_DIR, SITE_URL . '/admin/' . $this->component_name, $path);//текущий адрес
 		//получаем содержание папки
@@ -85,18 +91,22 @@
 
 		//загрузка файла
 		if(isset($_POST['upload'])){
-			if($_FILES['file']['error'] == 4){
-				$this->errors[] = 'Файл не выбран';
+			if($_FILES['files']['error'][0] == 4){
+				$this->errors[] = 'Ошибка загрузки.';
 			}
-			if(count($this->errors) == 0 && $_FILES['file']['error'] === 0){
-				if(move_uploaded_file($_FILES['file']['tmp_name'], $path . '/' . $this->model->win_to_utf($_FILES['file']['name'], true)) ){
-					$this->redirect( SITE_URL . '/admin/' . $this->component_name . ($this->get_query?'?'.$this->get_query.'&success=f_upl':'?success=f_upl'));
-				}else{
-					$this->errors[] = 'Ошибка при загрузке файла';
+
+			if(isset($_FILES['files']['name'][0]) && !empty($_FILES['files']['name'][0])) {
+				foreach($_FILES['files']['name'] as $key => $name) {
+					if(!move_uploaded_file($_FILES['files']['tmp_name'][$key], $path . '/' . $this->model->win_to_utf($name, true))) {
+						$this->errors[] = 'Ошибка при загрузке файла';
+					}
 				}
-			}else{
-				$this->errors[] = 'Ошибка при загрузке файла';
+
+				if(!count($this->errors)) {
+					$this->redirect( SITE_URL . '/admin/' . $this->component_name . ($this->get_query?'?'.$this->get_query.'&success=f_upl':'?success=f_upl'));
+				}
 			}
+
 		}
 
 		//удаление
@@ -140,6 +150,29 @@
 			}	
 		}
 
+		//скачивание
+		if(isset($_POST['download'])){
+			if(isset($_POST['files_to_archiving']) && !empty($_POST['files_to_archiving'])) {
+				if($this->model->pack_archive($_POST['files_to_archiving'], $path, true)){
+					// out($zipname);
+				}else{
+					$this->errors[] = 'Ошибка скачивания';
+				}	
+			} else {
+				$this->errors[] = 'Ошибка скачивания';
+			}
+		}
+
+		//удаление
+		if(isset($_POST['delete'])){
+			if(isset($_POST['files_to_archiving'])){
+				$this->model->delete_files($_POST['files_to_archiving'], $path);
+				$this->redirect(SITE_URL . '/admin/' . $this->component_name . '?success=del');
+			}else{
+				$this->errors[] = 'Нет файлов для удаления';
+			}	
+		}
+
 		if(isset($_GET['unpack']) && !empty($_GET['unpack'])){
 			if($this->model->unpack_archive($_GET['unpack'], $path)){
 				$this->redirect(SITE_URL . '/admin/' . $this->component_name . '?success=upk');
@@ -153,7 +186,9 @@
 			unset($_GET['cancel_arch']);
 			$this->redirect(SITE_URL . '/admin/' . $this->component_name);
 		}
- 		
+
+
+		$this->data['root_dir'] = str_replace('\\', '\\\\', $this->model->dbh->escape(ROOT_DIR));
  		if(count($this->errors) > 0)$this->success=false;
 		$this->data['errors'] = $this->errors;
 		$this->data['success'] = $this->success;
