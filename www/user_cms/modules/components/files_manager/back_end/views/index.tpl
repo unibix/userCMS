@@ -175,6 +175,7 @@
 	
 	let breadcrumbs_generated = document.getElementById('breadcrumbs_generated');
 	let root_dir = '<?=$root_dir?>' + '\\';
+	let site_url = '<?=SITE_URL?>';
 
 	if(breadcrumbs_generated) {
 		let path = breadcrumbs_generated.innerHTML;
@@ -188,10 +189,10 @@
 		new_path = new_path.slice(root_dir.length);
 
 		let new_parts = new_path.split('\\');
-		let new_html = '<a href="/userCMS/www/admin/files_manager?change=1&name=.">Корневой каталог</a>';
+		let new_html = '<a href="' + site_url + '/admin/files_manager?change=1&name=.">Корневой каталог</a>';
 		new_parts.forEach(function(item, index) {
 			if(item && item != '.') {
-				let item_html = '<a href="/userCMS/www/admin/files_manager?change=1&name=' + item + '">' + item + '</a>';
+				let item_html = '<a href="' + site_url + '/admin/files_manager?change=1&name=' + item + '">' + item + '</a>';
 				new_html += ' / ' + item_html;
 			}
 		});
