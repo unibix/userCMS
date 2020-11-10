@@ -5,6 +5,8 @@
 	table, tr, td, th{border:1px solid black; border-collapse: collapse;padding:10px;}
 	textarea{overflow: scroll; border-radius: 2px; box-shadow: 0px 0px 10px 0px grey; padding:10px;}
 	.main-table{clear: both; width: 100%;}
+	.add-file { display: flex; align-items: center; }
+	.add-file input { margin: 0 !important; padding: 12px !important; }
 	.add-file, .editor{margin:20px 5px;}
 	.errors{padding:5px 10px; background: #ff4444; border-radius: 2px; box-shadow: 0px 0px 10px 0px rgba(184,0,15,0.7);}
 	.success{padding:20px; background: #00C851; border-radius: 2px; box-shadow: 0px 0px 10px 0px rgba(0,150,23,0.7);}
@@ -14,8 +16,9 @@
 	#naming-archive button {margin-right: 5px;}
 	table a:hover{text-decoration: underline;}
 	.archiving-buttons{padding:20px; background: yellow; border: 1px solid black; position: fixed; top:5px; right: 20%; border-radius: 2px;}
+	#content table td { padding: 0px; }
+	#content table td, #content table th, #content table a { font-size: 12px; text-decoration: none;}
 </style>
-<div class="content component file">
 
 <h1>Менеджер файлов</h1>
 <?=$breadcrumbs;?>
@@ -41,15 +44,13 @@
 <hr>
 <?php } ?>
 <form method="POST" enctype="multipart/form-data" class="add-file">
-	<input type="file" name="file">
-	<input type="submit" value="Загрузить файл в текущую папку" name="upload">
+	<input type="file" multiple name="files[]">
+	<input type="submit" value="Загрузить файлы в текущую папку" name="upload">
 </form>
-<p><?=str_replace(['. /', './'], '', str_replace(['\\', '/'], ' / ', $this->model->win_to_utf($path) ));?></p>
-
-<button class="arch_button"><a href="?for_arch=1">Выбрать файлы для архивации</a></button>
-
+<p id="breadcrumbs_generated"><?=str_replace(['. /', './'], '', str_replace(['\\', '/'], ' / ', $this->model->win_to_utf($path) ));?></p>
 <table class="main-table">
 	<tr>
+		<th class="text-center p-1" align="center"><input type="checkbox" id="all_check"></th>
 		<th>Имя файла или папки</th>
 		<th>Размер</th>
 		<th>Действия</th>
@@ -58,6 +59,7 @@
 	<?php foreach ($dir as $key => $item) {?>
 		<?php if($item != '.' || $path != ROOT_DIR){?>
 		<tr>
+		<td class="text-center p-1" align="center"><?php if($item != '.') { ?> <input type="checkbox" name="files_to_archiving[<?=$key;?>]" value="<?=$item;?>" <?=isset($_POST['files_to_archiving'][$key])?'checked':'';?>> <?php } ?></td>
 			<td>
 				<?php if(isset($_GET['rename_item']) && $_GET['rename_item'] == $item && !isset($_POST['cancel'])){?>
 					<form>
@@ -67,17 +69,12 @@
 						<input type="submit" value="&#10003;" title="Применить" name="rename">
 					</form>
 				<?php }else if(in_array(strtolower(pathinfo($path . '/' . $item, PATHINFO_EXTENSION)), $image_extensions)){?>
-				<?php if(isset($_GET['for_arch']) && $item != '.' && is_file($path . '/' . $this->model->win_to_utf($item, true))){?>
-					<input type="checkbox" name="files_to_archiving[<?=$key;?>]" value="<?=$item;?>" <?=isset($_POST['files_to_archiving'][$key])?'checked':'';?>>
-					<?php } ?>
 				<a href="<?=$url.'/'.$this->model->win_to_utf($item);?>" target="_blank">&#x1f5b9;<?=$item;?></a>
 				<?php }else{?>
 				<?php if(!isset($_GET['for_arch'])){?>
 				<a href="?name=<?=$item;?>" <?=$item=='.'?'class="back"':'';?> >
 				<?php }?>
-					<?php if(isset($_GET['for_arch']) && $item != '.' && is_file($path . '/' . $this->model->win_to_utf($item, true))){?>
-					<input type="checkbox" name="files_to_archiving[<?=$key;?>]" value="<?=$item;?>" <?=isset($_POST['files_to_archiving'][$key])?'checked':'';?>>
-					<?php } ?>
+					
 					<?=is_dir($path . '/' . $this->model->win_to_utf($item, true))&&$this->model->win_to_utf($item)!='.'?'&#x1f4c1;':
 					(is_file($path . '/' . $this->model->win_to_utf($item, true))?'&#x1f5b9;':'');?>
 					<?=$item=='.'?'&#x21e6; назад':$item;?>
@@ -110,12 +107,14 @@
 	<?php } 
 		}?>
 </table>
-<?php if(isset($_GET['for_arch'])){ ?>
-<div class="archiving-buttons">
-	<button class="archivate"><a href="<?=SITE_URL  . '/admin/' . $this->url['our_component_name'] . '?cancel_arch=1';?>">Отмена</a></button>
-	<input class="archivate" type="submit" value="Создать архив" name="archivate" >
-</div>
-<?php } ?>
+<label for="select_action">Действия</label>
+<select class="w-50 mt-3" id="select_action">
+	<option value="">Выберите</option>
+	<option value="archivate">Архивировать</option>
+	<option value="delete">Удалить</option>
+	<option value="download">Скачать</option>
+</select>
+<input id="do_submit" class="archivate py-1 px-2" type="submit" value="Применить" name="">
 </form>
 </div>
 </div>

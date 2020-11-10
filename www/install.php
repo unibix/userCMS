@@ -25,8 +25,8 @@ if( ! file_exists('config.ini')) {
 	$errors  = array( );
 $php_modules = get_loaded_extensions();
 
-if (PHP_VERSION_ID < 50200) { 
-            $errors[] = 'Версия php менее 5.2.0';
+if (PHP_VERSION_ID < 50445) { 
+            $errors[] = 'Версия php менее 5.4.0';
 }
 
 $need_modules = array('SimpleXML', 'sqlite3', 'PDO', 'curl', 'pdo_sqlite', 'zip' ,'gd' ,'mbstring'  );
@@ -74,12 +74,29 @@ if(count($errors) == 0) {
         unlink('install.sql');
     }
 
+    if(isset($_POST['demo_data'])) {
+        if (file_exists('install_demo.sql')) {
+            $dbh->exec(file_get_contents('install_demo.sql'));
+            unlink('install_demo.sql');
+        }
+    }
+
     $show_form = TRUE;
 	$config = parse_ini_file('config.ini');
 	
     if(isset($_POST['site_name'])) {
         $config['site_name'] = $_POST['site_name'];
-        $config['site_url'] = 'http://' . rtrim($_POST['site_url'], '/')  ;;
+
+        $protocol = 'http://';
+
+        if(mb_stripos($_POST['site_url'], 'https://') !== false) {
+            $config['site_url'] = rtrim($_POST['site_url'], '/');
+        } elseif(mb_stripos($_POST['site_url'], 'http://') !== false) {
+            $config['site_url'] = rtrim($_POST['site_url'], '/');
+        } else {
+            $config['site_url'] = $protocol . rtrim($_POST['site_url'], '/');
+        }
+        
         
         // Обновляем config.ini
         update_config($config);
@@ -153,9 +170,18 @@ function update_htaccess() {
     // нужно ли раскомментить RewriteBase
     if(rtrim($_POST['site_url'], '/') != $_SERVER['HTTP_HOST'] ) {
         if ( file_exists('.htaccess') ) {
-            $dir = str_replace($_SERVER['HTTP_HOST'], '', rtrim($_POST['site_url'], '/'));
-            //echo $dir;
             $t = file_get_contents('.htaccess');
+
+            if(mb_stripos($_POST['site_url'], 'https://') !== false) {
+                $dir = str_replace(('https://' . $_SERVER['HTTP_HOST']), '', rtrim($_POST['site_url'], '/'));
+                $t = str_replace('# RewriteCond %{SERVER_PORT} !^443$', 'RewriteCond %{SERVER_PORT} !^443$', $t);
+                $t = str_replace('# RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]', 'RewriteRule .* https://%{SERVER_NAME}%{REQUEST_URI} [R=301,L]', $t);
+            } elseif(mb_stripos($_POST['site_url'], 'http://') !== false) {
+                $dir = str_replace(('http://' . $_SERVER['HTTP_HOST']), '', rtrim($_POST['site_url'], '/'));
+            } else {
+                $dir = str_replace($_SERVER['HTTP_HOST'], '', rtrim($_POST['site_url'], '/'));
+            }
+            //echo $dir;
             $t = str_replace('# RewriteBase /test', 'RewriteBase ' . $dir .'/', $t, $count);
             $fp = fopen('.htaccess',"w");
             fwrite($fp, $t);
