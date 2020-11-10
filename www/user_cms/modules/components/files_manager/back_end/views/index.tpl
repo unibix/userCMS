@@ -19,7 +19,7 @@
 	#content table td { padding: 0px; }
 	#content table td, #content table th, #content table a { font-size: 12px; text-decoration: none;}
 </style>
-<div id="content">
+
 <h1>Менеджер файлов</h1>
 <?=$breadcrumbs;?>
 <?php if (count($errors) > 0){?>
@@ -118,84 +118,3 @@
 </form>
 </div>
 </div>
-
-<script>
-	let do_submit_btn = document.getElementById('do_submit');
-	let select_action = document.getElementById('select_action');
-
-	if(do_submit_btn) {
-		do_submit_btn.classList.add('d-none');
-	}
-
-	if(select_action) {
-		select_action.addEventListener('change', function() {
-			do_submit_btn.setAttribute('name', this.value);
-			do_submit_btn.onclick = function() {};
-			let action = ((this.value === 'delete') ? 'удаление' : 'архивацию');
-
-			if(this.value == '') {
-				do_submit_btn.classList.add('d-none');
-			} else {
-				do_submit_btn.classList.remove('d-none');
-			}
-
-			if(this.value === 'delete' || this.value === 'archivate') {
-				do_submit_btn.onclick = function() {
-					if(!confirm('Точно выполнить ' + action + '?')) {
-						return false;
-					}
-				};
-			} else {
-				do_submit_btn.onclick = function() {};
-			}
-
-		});
-	}
-
-
-	let all_check = document.getElementById('all_check');
-	if(all_check) {
-		all_check.addEventListener('change', function() {
-			let input_elems = document.querySelectorAll('input[type="checkbox"]');
-			if(this.checked) {
-				input_elems.forEach(function(item, index) {
-					if(index) {
-						item.checked = true;
-					}
-				});
-			} else {
-				input_elems.forEach(function(item, index) {
-					if(index) {
-						item.checked = false;
-					}
-				});
-			}
-		});
-	}
-	
-	let breadcrumbs_generated = document.getElementById('breadcrumbs_generated');
-	let root_dir = '<?=$root_dir?>' + '\\';
-	let site_url = '<?=SITE_URL?>';
-
-	if(breadcrumbs_generated) {
-		let path = breadcrumbs_generated.innerHTML;
-		let parts = path.split('/');
-		let new_path = '';
-		parts.forEach(function(item, index) {
-			item = item.trim();
-			new_path += item + '\\';
-		});
-
-		new_path = new_path.slice(root_dir.length);
-
-		let new_parts = new_path.split('\\');
-		let new_html = '<a href="' + site_url + '/admin/files_manager?change=1&name=.">Корневой каталог</a>';
-		new_parts.forEach(function(item, index) {
-			if(item && item != '.') {
-				let item_html = '<a href="' + site_url + '/admin/files_manager?change=1&name=' + item + '">' + item + '</a>';
-				new_html += ' / ' + item_html;
-			}
-		});
-		breadcrumbs_generated.innerHTML = new_html;
-	}
-</script>
