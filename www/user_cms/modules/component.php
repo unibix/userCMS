@@ -66,10 +66,10 @@ class component extends module {
 	}
 
 	public function action_else() {
-		if(mb_stripos($this->url['request_uri'], '/admin/') !== false) {
+		if(END_NAME == 'back_end') {
 			$action = 'action_' . $this->url['actions'][0];
 			if(!method_exists($this, $action)) {
-				$this->data['page_name'] = 'Метод отсутствует';
+				$this->data['page_name'] = $this->page['title'] = 'Метод отсутствует';
 				$this->page['html'] = '<p style="margin: 20px; font-weight: bold;">Такого метода нет</p>';
 				$this->page['head'] = '';
 				return $this->page;
