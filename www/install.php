@@ -122,7 +122,7 @@ if(count($errors) == 0) {
     if($show_form) {
         // выводим форму для заполнения
         $config['site_name'] = $config['site_name'];
-        $config['site_url'] =   check_url(rtrim($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], '/'));
+        $config['site_url'] = rtrim($_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], '/');
 		$config['login'] = (isset($_POST['login'])) ? $_POST['login'] : 'admin';
         $config['password'] = (isset($_POST['password'])) ? $_POST['password'] : 'admin';
         require('user_cms/themes/default_admin/install.tpl');

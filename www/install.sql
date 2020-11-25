@@ -24,7 +24,7 @@ INSERT INTO "activated_modules" ("id", "name", "type", "position", "back_end", "
 INSERT INTO "activated_modules" ("id", "name", "type", "position", "back_end", "sort", "module_id", "module_dir", "params", "sections", "date_edit") VALUES (19,	'Главное меню админки',	'block',	'main_menu',	1,	4,	14,	'menu',	's:1:"2";',	NULL,	(julianday('now') - 2440587.5)*86400.0);
 INSERT INTO "activated_modules" ("id", "name", "type", "position", "back_end", "sort", "module_id", "module_dir", "params", "sections", "date_edit") VALUES (29,	'Главное меню сайта',	'block',	'top_menu',	'0',	5,	14,	'menu',	's:1:"4";',	'',	(julianday('now') - 2440587.5)*86400.0);
 INSERT INTO "activated_modules" ("id", "name", "type", "position", "back_end", "sort", "module_id", "module_dir", "params", "sections", "date_edit") VALUES (40,	'301 редирект',	'addon',	'before',	'0',	1,	25,	'redirect_301',	'/test|/kontakty',	'',	(julianday('now') - 2440587.5)*86400.0);
-
+INSERT INTO "activated_modules" ("id", "name", "type", "position", "back_end", "sort", "module_id", "module_dir", "params", "sections", "date_edit") VALUES (41,	'Текстовый редактор jodit',	'addon',	'after',	1,	6,	28,	'jodit',	'',	'',	(julianday('now') - 2440587.5)*86400.0);
 INSERT INTO "activated_modules" ("id", "name", "type", "position", "back_end", "sort", "module_id", "module_dir", "params", "sections", "date_edit") VALUES (46,	'Боковое меню',	'block',	'aside',	'0',	4,	14,	'menu',	's:1:"7";',	'',	(julianday('now') - 2440587.5)*86400.0);
 
 CREATE TABLE "gallery_categories" (
