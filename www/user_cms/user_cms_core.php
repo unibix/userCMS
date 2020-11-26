@@ -1,6 +1,6 @@
 <?php
 
-define('USER_CMS_VERSION', '2.8.0');
+define('USER_CMS_VERSION', '2.9.0');
 
 
 /**
@@ -20,18 +20,18 @@ class user_cms_core {
 	
 	function __construct() {
        	
-	session_start();
+		session_start();
 
        	$this -> html = '';
-	$this -> config = parse_ini_file(ROOT_DIR . '/config.ini');
-	if (!isset($this->config['site_url'])) {
-		$this->config['site_url'] = 'http://' . $_SERVER['HTTP_HOST'];
-	}
+		$this -> config = parse_ini_file(ROOT_DIR . '/config.ini');
+		if (!isset($this->config['site_url'])) {
+			$this->config['site_url'] = 'http://' . $_SERVER['HTTP_HOST'];
+		}
 
-	date_default_timezone_set($this->config['timezone']);
+		date_default_timezone_set($this->config['timezone']);
 
-	define('SITE_URL', $this->config['site_url']);
-	define('SITE_NAME', $this->config['site_name']);
+		define('SITE_URL', $this->config['site_url']);
+		define('SITE_NAME', $this->config['site_name']);
         define('SITE_SLOGAN', $this->config['site_slogan']);
         define('SITE_EMAIL', $this->config['site_email']);
         define('SITE_EMAIL2', $this->config['site_email2']);
@@ -39,20 +39,20 @@ class user_cms_core {
         define('SITE_PHONE_F', $this->config['site_phone_f']);
         define('SITE_ADDRESS', $this->config['site_address']);
 
-	if (is_dir(ROOT_DIR . '/user_cms/themes/' . $this->config['site_theme'])) {
-		define('THEME_URL', SITE_URL . '/user_cms/themes/' . $this->config['site_theme']);
-            $logo = '/user_cms/themes/'.$this->config['site_theme'].'/images/logo.png';
-	} else {
-			define('THEME_URL', SITE_URL . '/themes/' . $this->config['site_theme']);
-            $logo = '/themes/'.$this->config['site_theme'].'/images/logo.png';
-	}
+		if (is_dir(ROOT_DIR . '/user_cms/themes/' . $this->config['site_theme'])) {
+			define('THEME_URL', SITE_URL . '/user_cms/themes/' . $this->config['site_theme']);
+	            $logo = '/user_cms/themes/'.$this->config['site_theme'].'/images/logo.png';
+		} else {
+				define('THEME_URL', SITE_URL . '/themes/' . $this->config['site_theme']);
+	            $logo = '/themes/'.$this->config['site_theme'].'/images/logo.png';
+		}
 
         if (file_exists(ROOT_DIR.$logo)) define('SITE_LOGO', '<img src="'.$logo.'" alt="Логотип '.SITE_NAME.'">');
         else define('SITE_LOGO', SITE_NAME);
 
 
-	$this -> set_error_reporting();
-	$this -> url = $this -> parse_url();
+		$this -> set_error_reporting();
+		$this -> url = $this -> parse_url();
 
         if ($this->config['maintenance'] == 1) {
             if (END_NAME == 'front_end' && (!isset($_SESSION['auth']) || $_SESSION['auth'] == 0 || $_SESSION['access'] < 2)) {
@@ -383,6 +383,8 @@ class user_cms_core {
 		<meta charset="utf-8">
 		<meta name="keywords" content="' . $this -> page['keywords'] . '">
 		<meta name="description" content="' . $this -> page['description'] . '">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    	<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="icon" href="' . $this -> config['site_url'] . '/favicon.ico" type="image/x-icon">
 		<link rel="shortcut icon" href="' . $this -> config['site_url'] . '/favicon.ico" type="image/x-icon">';
 		$head .= "\n" . $this -> head;

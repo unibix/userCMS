@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     [head]
 </head>
 <body>
@@ -47,10 +45,10 @@
             </div>
             <div class="col-sm-3 col-xs-6">
                 <a href="<?=SITE_URL?>/map">Карта сайта</a><br>
-                <a href="<?=SITE_URL?>/dir">Написать директору</a>
+                
             </div>
             <div class="col-sm-3 col-xs-6">
-                Место для счетчиков
+                 
             </div>
             <div class="col-sm-3 col-xs-6">
                 Работает на <a href="http://usercms.ru">UserCMS <?=USER_CMS_VERSION?></a>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zxx">
 <head>
-   <meta name="viewport" content="width=device-width, initial-scale=1">
+   
    [head]
    
 </head>
@@ -35,14 +35,15 @@
 							<div class="col text-lg-left text-center">
 								<ul>
 									<li>
+										<a href="<?=SITE_URL?>" target="_blank">Перейти на сайт</a>
+									</li>
+									<li>
 										<a href="<?=SITE_URL?>/admin/users" >Добро пожаловать, <?php echo $_SESSION['login']; ?></a>
 									</li>
 									<li>
 										<a href="<?=SITE_URL?>/admin/users/logout" >Выйти</a>
 									</li>
-									<li>
-										<a href="<?=SITE_URL?>" target="_blank">Перейти на сайт</a>
-									</li>
+									
 								</ul>
 							</div>
 						</div>
