@@ -181,13 +181,13 @@ function update_htaccess() {
             } else {
                 $dir = str_replace($_SERVER['HTTP_HOST'], '', rtrim($_POST['site_url'], '/'));
             }
-            //echo $dir;
+            // edit RewriteBase
             $t = str_replace('# RewriteBase /test', 'RewriteBase ' . $dir .'/', $t, $count);
             $fp = fopen('.htaccess',"w");
             fwrite($fp, $t);
             fclose($fp);
             if($count==0) {
-                exit('Не найдена запись RewriteBase в файле .htaccess. Отройте его самостоятельно и вставьте после RewriteEngine On строку "#RewriteBase /dir/", а другие RewriteBase удалите и повторите установку.');
+                exit('Не найдена запись "# RewriteBase /test" (без кавычек) в файле .htaccess. Отройте его самостоятельно и вставьте после RewriteEngine On строку "# RewriteBase /test", а другие RewriteBase удалите и повторите установку.');
             }
             else {
                 //chmod('.htaccess', 0400);
