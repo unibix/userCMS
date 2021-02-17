@@ -183,6 +183,10 @@ function update_htaccess() {
             }
             // edit RewriteBase
             $t = str_replace('# RewriteBase /test', 'RewriteBase ' . $dir .'/', $t, $count);
+            if(!$count) {
+                // При восстановлении бэкапа
+                $t = preg_replace('#RewriteBase /(.*)+#', ('RewriteBase ' . $dir .'/'), $t, -1, $count);
+            }
             $fp = fopen('.htaccess',"w");
             fwrite($fp, $t);
             fclose($fp);
