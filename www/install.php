@@ -191,7 +191,7 @@ function update_htaccess() {
             fwrite($fp, $t);
             fclose($fp);
             if($count==0) {
-                exit('Не найдена запись "# RewriteBase /test" (без кавычек) в файле .htaccess. Отройте его самостоятельно и вставьте после RewriteEngine On строку "# RewriteBase /test", а другие RewriteBase удалите и повторите установку.');
+                exit('Не найдена запись "# RewriteBase /dir" (без кавычек) в файле .htaccess. Отройте его самостоятельно и вставьте после RewriteEngine On строку "# RewriteBase /test", а другие RewriteBase удалите и повторите установку.');
             }
             else {
                 //chmod('.htaccess', 0400);
